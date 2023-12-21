@@ -1,0 +1,33 @@
+name: teacher
+description: 'A new Flutter project.'
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  table_calendar: #カレンダー設定
+  device_preview: #各デバイス画面のプレビューの設定
+  freezed_annotation:
+  go_router: #画面遷移の設定
+  flutter_riverpod: #状態管理の設定
+  riverpod_annotation:
+
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  freezed:
+  build_runner:
+  json_serializable:
+  riverpod_generator:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
