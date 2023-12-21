@@ -9,6 +9,7 @@ import 'package:teacher/page_Home.dart';
 import 'package:teacher/page_check_list.dart';
 // import 'package:teacher/page_setting.dart';
 // import 'package:teacher/side_menu.dart';
+//gitレポジトリ移動後の動作確認
 
 main() {
   // 画面
