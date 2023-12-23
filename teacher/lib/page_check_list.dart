@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teacher/subject.dart';
+import 'package:teacher/subject_2.dart';
+
+// SubjectNotifier2
 
 class PageCheckList extends StatelessWidget {
   const PageCheckList({super.key});
@@ -15,6 +18,7 @@ class PageCheckList extends StatelessWidget {
             style: const TextStyle(color: Colors.black, fontSize: 32),
           ),
           const SubjectDropdown(),
+          const SubjectDropdown2(),
         ],
       );
       rows.add(row);
@@ -48,7 +52,7 @@ class SubjectDropdown extends ConsumerWidget {
   const SubjectDropdown({super.key});
 
   @override
-  Widget build(BuildContext contex, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     //今の選択されている授業科目
     final subject = ref.watch(subjectNotifierProvider);
 
@@ -89,6 +93,57 @@ class SubjectDropdown extends ConsumerWidget {
           items: items,
           onChanged: (newSubject) {
             final notifier = ref.read(subjectNotifierProvider.notifier);
+            notifier.updateSubject(newSubject!);
+          },
+        ));
+  }
+}
+
+class SubjectDropdown2 extends ConsumerWidget {
+  const SubjectDropdown2({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    //今の選択されている授業科目
+    final subject = ref.watch(subjectNotifier2Provider);
+
+    //授業の選択肢
+    final items = [
+      const DropdownMenuItem(
+        alignment: Alignment.center,
+        value: Subject2.japanese, //enum
+        child: Text('国語'), //表示するText
+      ),
+      const DropdownMenuItem(
+        value: Subject2.math, //enum
+        child: Text('算数'), //表示するText
+      ),
+      const DropdownMenuItem(
+        value: Subject2.science, //enum
+        child: Text('理科'), //表示するText
+      ),
+      const DropdownMenuItem(
+        value: Subject2.society, //enum
+        child: Text('社会'), //表示するText
+      ),
+      const DropdownMenuItem(
+        value: Subject2.english, //enum
+        child: Text('英語'), //表示するText
+      ),
+    ];
+
+    return SizedBox(
+        // fontSize: 38,
+        height: 100,
+        width: 200,
+        child: DropdownButton(
+          style: const TextStyle(fontSize: 32),
+          // alignment: Alignment.center,
+          isExpanded: true,
+          value: subject,
+          items: items,
+          onChanged: (newSubject) {
+            final notifier = ref.read(subjectNotifier2Provider.notifier);
             notifier.updateSubject(newSubject!);
           },
         ));

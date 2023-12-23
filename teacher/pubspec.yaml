@@ -9,6 +9,7 @@ environment:
   sdk: '>=3.2.3 <4.0.0'
 
 dependencies:
+  http:
   table_calendar: #カレンダー設定
   device_preview: #各デバイス画面のプレビューの設定
   freezed_annotation:

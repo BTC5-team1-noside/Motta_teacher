@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:teacher/main_screen.dart';
 import 'dart:collection';
+import 'package:teacher/page_check_list.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   Map<DateTime, List> _eventsList = {};
-
   DateTime _focused = DateTime.now();
   DateTime? _selected;
 
@@ -26,7 +26,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     _selected = _focused;
     _eventsList = {
-      DateTime.now().subtract(const Duration(days: 2)): ['Test A', 'Test B'],
+      DateTime.now().subtract(const Duration(days: 3)): [
+        'Test A',
+        'Test B',
+        'c'
+      ],
       DateTime.now(): ['Test C', 'Test D', 'Test E', 'Test F'],
     };
   }
@@ -42,11 +46,6 @@ class _MyHomePageState extends State<MyHomePage> {
       return events[day] ?? [];
     }
 
-    // 進むボタンを押したとき
-    push(BuildContext context) {
-      context.go('/a');
-    }
-
     return Scaffold(
         body: Column(children: [
       TableCalendar(
@@ -59,7 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
         onDaySelected: (selected, focused) {
           if (!isSameDay(_selected, selected)) {
             debugPrint('here');
-            push(context);
             setState(() {
               _selected = selected;
               _focused = focused;
@@ -68,16 +66,14 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         focusedDay: _focused,
       ),
-      //--追記--------------------------------------------------------------
-      ListView(
-        shrinkWrap: true,
-        children: getEvent(_selected!)
-            .map((event) => ListTile(
-                  title: Text(event.toString()),
-                ))
-            .toList(),
-      )
-      //--------------------------------------------------------------------
+      // ListView(
+      //   shrinkWrap: true,
+      //   children: getEvent(_selected!)
+      //       .map((event) => ListTile(
+      //             title: Text(event.toString()),
+      //           ))
+      //       .toList(),
+      // )
     ]));
   }
 }
