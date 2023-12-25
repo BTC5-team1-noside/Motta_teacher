@@ -13,7 +13,7 @@ enum Subject2 {
 class SubjectNotifier2 extends _$SubjectNotifier2 {
   @override
   Subject2 build() {
-    return Subject2.japanese;
+    return Subject2.math;
   }
 
   void updateSubject(Subject2 subject) {

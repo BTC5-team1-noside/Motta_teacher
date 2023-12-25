@@ -9,12 +9,13 @@ environment:
   sdk: '>=3.2.3 <4.0.0'
 
 dependencies:
-  http:
+  http: #エンドポイントへ接続の設定
   table_calendar: #カレンダー設定
   device_preview: #各デバイス画面のプレビューの設定
   freezed_annotation:
   go_router: #画面遷移の設定
   flutter_riverpod: #状態管理の設定
+  riverpod:
   riverpod_annotation:
 
   flutter:
@@ -32,3 +33,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/

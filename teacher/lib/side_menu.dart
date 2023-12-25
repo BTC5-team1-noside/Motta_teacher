@@ -10,9 +10,8 @@ class SideMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //今の選択されている授業科目
     var pageId = ref.watch(editScreenNotifierProvider);
-    debugPrint('here is side_menu;pageId=$pageId');
+    // debugPrint('here is side_menu;pageId=$pageId');
 
     return ListView(
       // padding: const EdgeInsets.all(100),
@@ -26,7 +25,7 @@ class SideMenu extends ConsumerWidget {
           ),
           onTap: () {
             //実行したい関数を設定
-            pageId = 1;
+            pageId = 0;
             final notifier = ref.read(editScreenNotifierProvider.notifier);
             notifier.updateScreen(pageId);
             debugPrint('Tap on list tile A:$pageId');
@@ -38,7 +37,7 @@ class SideMenu extends ConsumerWidget {
             style: TextStyle(color: Colors.black, fontSize: 25),
           ),
           onTap: () {
-            pageId = 0;
+            pageId = 1;
             final notifier = ref.read(editScreenNotifierProvider.notifier);
             notifier.updateScreen(pageId);
             debugPrint('Tap on list tile B');
@@ -50,6 +49,9 @@ class SideMenu extends ConsumerWidget {
             style: TextStyle(color: Colors.black, fontSize: 25),
           ),
           onTap: () {
+            pageId = 2;
+            final notifier = ref.read(editScreenNotifierProvider.notifier);
+            notifier.updateScreen(pageId);
             debugPrint('Tap on list tile C');
           },
         ),
@@ -59,6 +61,9 @@ class SideMenu extends ConsumerWidget {
             style: TextStyle(color: Colors.black, fontSize: 25),
           ),
           onTap: () {
+            pageId = 3;
+            final notifier = ref.read(editScreenNotifierProvider.notifier);
+            notifier.updateScreen(pageId);
             debugPrint('Tap on list tile C');
           },
         ),
@@ -68,6 +73,9 @@ class SideMenu extends ConsumerWidget {
             style: TextStyle(color: Colors.black, fontSize: 25),
           ),
           onTap: () {
+            pageId = 4;
+            final notifier = ref.read(editScreenNotifierProvider.notifier);
+            notifier.updateScreen(pageId);
             debugPrint('Tap on list tile D');
           },
         ),

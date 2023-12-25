@@ -4,11 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'; //#9_rivepod_状態管�
 import 'package:flutter/foundation.dart'; //#13_BottomNavigationBar
 import 'package:device_preview/device_preview.dart'; //#25_reponsive design
 import 'package:teacher/main_screen.dart';
-import 'package:http/http.dart' as http; //エンドポイントからJSONマップを取得できる
 
 main() {
-  const app = MaterialApp(home: MainScreen());
+  const app =
+      MaterialApp(debugShowCheckedModeBanner: false, home: MainScreen());
   // プロバイダースコープでアプリを囲む
+
   const scope = ProviderScope(child: app);
 
   if (kIsWeb) {

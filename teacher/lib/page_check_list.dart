@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teacher/subject.dart';
 import 'package:teacher/subject_2.dart';
-
+import 'package:http/http.dart' as http; //エンドポイントからJSONマップを取得できる
 // SubjectNotifier2
 
 class PageCheckList extends StatelessWidget {
@@ -28,11 +28,27 @@ class PageCheckList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final timetable = Column(
-      children: generateRows().toList(),
+    const timetable = Column(
+      // children: generateRows().toList(),
+      children: [
+        Row(children: [
+          Text(
+            "1時間目: ",
+            style: TextStyle(color: Colors.black, fontSize: 32),
+          ),
+          SubjectDropdown(),
+        ]),
+        Row(children: [
+          Text(
+            "2時間目: ",
+            style: TextStyle(color: Colors.black, fontSize: 32),
+          ),
+          SubjectDropdown2(),
+        ]),
+      ],
     );
     const belongings = Belongings();
-    return Scaffold(
+    return const Scaffold(
         body: Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
