@@ -12,7 +12,8 @@ class SideMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var pageId = ref.watch(editScreenNotifierProvider);
     // debugPrint('here is side_menu;pageId=$pageId');
-
+//final Daybelongiongs a = getApiData();
+//a.
     return ListView(
       // padding: const EdgeInsets.all(100),
       children: [

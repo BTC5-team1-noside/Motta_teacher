@@ -22,15 +22,15 @@ class MainScreen extends ConsumerWidget {
     //アップバー
     final appBar = makeAppBar();
 
-    // フローティングアクションボタン (FAB)
-    final fab = FloatingActionButton(
-      onPressed: () {
-        ref.read(indexProvider.notifier).state = 1;
-        // debugPrint('FAB が押されました');
-      },
-      child:
-          const Icon(Icons.fact_check), // label: '持ち物登録'//const Text('持ち物登録'),
-    );
+    // // フローティングアクションボタン (FAB)
+    // final fab = FloatingActionButton(
+    //   onPressed: () {
+    //     ref.read(indexProvider.notifier).state = 1;
+    //     // debugPrint('FAB が押されました');
+    //   },
+    //   child:
+    //       const Icon(Icons.fact_check), // label: '持ち物登録'//const Text('持ち物登録'),
+    // );
 
     //ボトムバー
     const items = [
@@ -60,7 +60,7 @@ class MainScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: appBar,
-      floatingActionButton: fab, // フローティングアクションボタン (FAB)
+      // floatingActionButton: fab, // フローティングアクションボタン (FAB)
       body: pages[index],
       bottomNavigationBar: bar,
     );

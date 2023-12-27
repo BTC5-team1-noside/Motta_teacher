@@ -6,21 +6,21 @@ part of 'subject.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$subjectNotifierHash() => r'f7f9d05c85ba7b21b84854d5b97f62ab6299c91c';
+String _$subject1NotifierHash() => r'876c186fd65312340760a635e7684c8813285727';
 
-/// See also [SubjectNotifier].
-@ProviderFor(SubjectNotifier)
-final subjectNotifierProvider =
-    AutoDisposeNotifierProvider<SubjectNotifier, Subject>.internal(
-  SubjectNotifier.new,
-  name: r'subjectNotifierProvider',
+/// See also [Subject1Notifier].
+@ProviderFor(Subject1Notifier)
+final subject1NotifierProvider =
+    AutoDisposeNotifierProvider<Subject1Notifier, Subject1>.internal(
+  Subject1Notifier.new,
+  name: r'subject1NotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$subjectNotifierHash,
+      : _$subject1NotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$SubjectNotifier = AutoDisposeNotifier<Subject>;
+typedef _$Subject1Notifier = AutoDisposeNotifier<Subject1>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

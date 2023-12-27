@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'subject.g.dart';
 
-enum Subject {
+enum Subject1 {
   japanese,
   math,
   science,
@@ -10,13 +10,13 @@ enum Subject {
 }
 
 @riverpod
-class SubjectNotifier extends _$SubjectNotifier {
+class Subject1Notifier extends _$Subject1Notifier {
   @override
-  Subject build() {
-    return Subject.japanese;
+  Subject1 build() {
+    return Subject1.japanese;
   }
 
-  void updateSubject(Subject subject) {
+  void updateSubject(Subject1 subject) {
     state = subject;
   }
 }

@@ -8,6 +8,7 @@ part of 'belongings.dart';
 
 _$DayBelongingsImpl _$$DayBelongingsImplFromJson(Map<String, dynamic> json) =>
     _$DayBelongingsImpl(
+      isHistoryData: json['isHistoryData'] as bool,
       selectedDate: json['selectedDate'] as String,
       subjects: (json['subjects'] as List<dynamic>)
           .map((e) => Subject.fromJson(e as Map<String, dynamic>))
@@ -21,6 +22,7 @@ _$DayBelongingsImpl _$$DayBelongingsImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$DayBelongingsImplToJson(_$DayBelongingsImpl instance) =>
     <String, dynamic>{
+      'isHistoryData': instance.isHistoryData,
       'selectedDate': instance.selectedDate,
       'subjects': instance.subjects,
       'itemNames': instance.itemNames,

@@ -20,6 +20,7 @@ DayBelongings _$DayBelongingsFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$DayBelongings {
+  bool get isHistoryData => throw _privateConstructorUsedError;
   String get selectedDate => throw _privateConstructorUsedError;
   List<Subject> get subjects => throw _privateConstructorUsedError;
   List<String> get itemNames => throw _privateConstructorUsedError;
@@ -38,7 +39,8 @@ abstract class $DayBelongingsCopyWith<$Res> {
       _$DayBelongingsCopyWithImpl<$Res, DayBelongings>;
   @useResult
   $Res call(
-      {String selectedDate,
+      {bool isHistoryData,
+      String selectedDate,
       List<Subject> subjects,
       List<String> itemNames,
       List<String> additionalItemNames});
@@ -57,12 +59,17 @@ class _$DayBelongingsCopyWithImpl<$Res, $Val extends DayBelongings>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isHistoryData = null,
     Object? selectedDate = null,
     Object? subjects = null,
     Object? itemNames = null,
     Object? additionalItemNames = null,
   }) {
     return _then(_value.copyWith(
+      isHistoryData: null == isHistoryData
+          ? _value.isHistoryData
+          : isHistoryData // ignore: cast_nullable_to_non_nullable
+              as bool,
       selectedDate: null == selectedDate
           ? _value.selectedDate
           : selectedDate // ignore: cast_nullable_to_non_nullable
@@ -92,7 +99,8 @@ abstract class _$$DayBelongingsImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String selectedDate,
+      {bool isHistoryData,
+      String selectedDate,
       List<Subject> subjects,
       List<String> itemNames,
       List<String> additionalItemNames});
@@ -109,12 +117,17 @@ class __$$DayBelongingsImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isHistoryData = null,
     Object? selectedDate = null,
     Object? subjects = null,
     Object? itemNames = null,
     Object? additionalItemNames = null,
   }) {
     return _then(_$DayBelongingsImpl(
+      isHistoryData: null == isHistoryData
+          ? _value.isHistoryData
+          : isHistoryData // ignore: cast_nullable_to_non_nullable
+              as bool,
       selectedDate: null == selectedDate
           ? _value.selectedDate
           : selectedDate // ignore: cast_nullable_to_non_nullable
@@ -141,7 +154,8 @@ class _$DayBelongingsImpl
     with DiagnosticableTreeMixin
     implements _DayBelongings {
   const _$DayBelongingsImpl(
-      {required this.selectedDate,
+      {required this.isHistoryData,
+      required this.selectedDate,
       required final List<Subject> subjects,
       required final List<String> itemNames,
       required final List<String> additionalItemNames})
@@ -152,6 +166,8 @@ class _$DayBelongingsImpl
   factory _$DayBelongingsImpl.fromJson(Map<String, dynamic> json) =>
       _$$DayBelongingsImplFromJson(json);
 
+  @override
+  final bool isHistoryData;
   @override
   final String selectedDate;
   final List<Subject> _subjects;
@@ -181,7 +197,7 @@ class _$DayBelongingsImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'DayBelongings(selectedDate: $selectedDate, subjects: $subjects, itemNames: $itemNames, additionalItemNames: $additionalItemNames)';
+    return 'DayBelongings(isHistoryData: $isHistoryData, selectedDate: $selectedDate, subjects: $subjects, itemNames: $itemNames, additionalItemNames: $additionalItemNames)';
   }
 
   @override
@@ -189,6 +205,7 @@ class _$DayBelongingsImpl
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'DayBelongings'))
+      ..add(DiagnosticsProperty('isHistoryData', isHistoryData))
       ..add(DiagnosticsProperty('selectedDate', selectedDate))
       ..add(DiagnosticsProperty('subjects', subjects))
       ..add(DiagnosticsProperty('itemNames', itemNames))
@@ -200,6 +217,8 @@ class _$DayBelongingsImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DayBelongingsImpl &&
+            (identical(other.isHistoryData, isHistoryData) ||
+                other.isHistoryData == isHistoryData) &&
             (identical(other.selectedDate, selectedDate) ||
                 other.selectedDate == selectedDate) &&
             const DeepCollectionEquality().equals(other._subjects, _subjects) &&
@@ -213,6 +232,7 @@ class _$DayBelongingsImpl
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      isHistoryData,
       selectedDate,
       const DeepCollectionEquality().hash(_subjects),
       const DeepCollectionEquality().hash(_itemNames),
@@ -234,7 +254,8 @@ class _$DayBelongingsImpl
 
 abstract class _DayBelongings implements DayBelongings {
   const factory _DayBelongings(
-      {required final String selectedDate,
+      {required final bool isHistoryData,
+      required final String selectedDate,
       required final List<Subject> subjects,
       required final List<String> itemNames,
       required final List<String> additionalItemNames}) = _$DayBelongingsImpl;
@@ -242,6 +263,8 @@ abstract class _DayBelongings implements DayBelongings {
   factory _DayBelongings.fromJson(Map<String, dynamic> json) =
       _$DayBelongingsImpl.fromJson;
 
+  @override
+  bool get isHistoryData;
   @override
   String get selectedDate;
   @override
