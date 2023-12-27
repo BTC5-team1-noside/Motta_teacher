@@ -1,3 +1,5 @@
+// import 'dart:ffi';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
@@ -7,6 +9,7 @@ part 'belongings.g.dart';
 @freezed
 class DayBelongings with _$DayBelongings {
   const factory DayBelongings({
+    required bool isHistoryData,
     required String selectedDate,
     required List<Subject> subjects,
     required List<String> itemNames,

@@ -9,6 +9,7 @@ environment:
   sdk: '>=3.2.3 <4.0.0'
 
 dependencies:
+  intl: #時間表示の編集
   http: #エンドポイントへ接続の設定
   table_calendar: #カレンダー設定
   device_preview: #各デバイス画面のプレビューの設定
