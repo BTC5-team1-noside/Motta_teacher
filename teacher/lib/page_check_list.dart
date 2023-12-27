@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 class PageCheckList extends StatelessWidget {
   const PageCheckList({super.key});
+  // late;
 
   List<Widget> generateTimeTable(DayBelongings pathData) {
     List<Widget> rows = [];
@@ -90,7 +91,8 @@ class PageCheckList extends StatelessWidget {
                     debugPrint('ここにPOSTメソッドでバックエンドへデータを送付');
                   },
                   child: const Text('登録'),
-                )
+                ),
+                SubjectDropdown(pathData: data),
               ],
             ),
           ));
@@ -169,64 +171,157 @@ class Belongings extends ConsumerWidget {
 }
 
 //ドロップダウン選択で選べるように検討中=====================================
-//１時間目のドロップダウン
-class SubjectDropdown extends ConsumerWidget {
+// //１時間目のドロップダウン
+// class SubjectDropdown extends ConsumerWidget {
+//   const SubjectDropdown({super.key, required this.pathData});
+//   final DayBelongings pathData;
+
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     //今の選択されている授業科目
+//     final subject = ref.watch(subject1NotifierProvider);
+
+//     //授業の選択肢
+//     final items = [
+//       const DropdownMenuItem(
+//         alignment: Alignment.center,
+//         value: Subject1.japanese, //enum
+//         child: Text('国語'), //表示するText
+//       ),
+//       const DropdownMenuItem(
+//         value: Subject1.math, //enum
+//         child: Text('算数'), //表示するText
+//       ),
+//       const DropdownMenuItem(
+//         value: Subject1.science, //enum
+//         child: Text('理科'), //表示するText
+//       ),
+//       const DropdownMenuItem(
+//         value: Subject1.society, //enum
+//         child: Text('社会'), //表示するText
+//       ),
+//       const DropdownMenuItem(
+//         value: Subject1.english, //enum
+//         child: Text('英語'), //表示するText
+//       ),
+//     ];
+//     return SizedBox(
+//         // fontSize: 38,
+//         height: 100,
+//         width: 200,
+//         child: Row(
+//           children: [
+//             Text(
+//               pathData.subjects[0].subject_name,
+//               style: const TextStyle(fontSize: 32),
+//             ),
+//             DropdownButton(
+//               style: const TextStyle(fontSize: 32),
+//               // alignment: Alignment.center,
+//               isExpanded: true,
+//               value: subject,
+//               items: items,
+//               onChanged: (newSubject) {
+//                 final notifier = ref.read(subject1NotifierProvider.notifier);
+//                 debugPrint('nweSubject : $newSubject');
+//                 notifier.updateSubject(newSubject!);
+//               },
+//             )
+//           ],
+//         ));
+//   }
+// }
+
+class SubjectDropdown extends StatefulWidget {
   const SubjectDropdown({super.key, required this.pathData});
   final DayBelongings pathData;
+  // String data;
+  @override
+  State<SubjectDropdown> createState() => _SubjectDropdownState();
+}
+
+class _SubjectDropdownState extends State<SubjectDropdown> {
+  late DayBelongings _pathData;
+  String subject = "";
+  String _data = "";
+  @override
+  void initState() {
+    super.initState();
+    _pathData = widget.pathData;
+    subject = _pathData.subjects[0].subject_name;
+    _data = subject;
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    //今の選択されている授業科目
-    final subject = ref.watch(subject1NotifierProvider);
-
-    //授業の選択肢
+  Widget build(BuildContext context) {
     final items = [
       const DropdownMenuItem(
-        alignment: Alignment.center,
-        value: Subject1.japanese, //enum
-        child: Text('国語'), //表示するText
+        // alignment: Alignment.center,
+        value: "こくご", //enum
+        child: Text(
+          '国語',
+          style: TextStyle(color: Colors.black),
+        ), //表示するText
       ),
       const DropdownMenuItem(
-        value: Subject1.math, //enum
-        child: Text('算数'), //表示するText
+        value: "さんすう", //enum
+        child: Text(
+          '算数',
+          style: TextStyle(color: Colors.black),
+        ), //表示するText
       ),
       const DropdownMenuItem(
-        value: Subject1.science, //enum
-        child: Text('理科'), //表示するText
+        value: "りか", //enum
+        child: Text(
+          '理科',
+          style: TextStyle(color: Colors.black),
+        ), //表示するText
       ),
       const DropdownMenuItem(
-        value: Subject1.society, //enum
-        child: Text('社会'), //表示するText
+        value: "しゃかい", //enum
+        child: Text(
+          '社会',
+          style: TextStyle(color: Colors.black),
+        ), //表示するText
       ),
       const DropdownMenuItem(
-        value: Subject1.english, //enum
-        child: Text('英語'), //表示するText
+        value: " えいご", //enum
+        child: Text(
+          '英語',
+          style: TextStyle(color: Colors.black),
+        ), //表示するText
       ),
     ];
-    return SizedBox(
-        // fontSize: 38,
-        height: 100,
-        width: 200,
-        child: Row(
-          children: [
-            Text(
-              pathData.subjects[0].subject_name,
-              style: const TextStyle(fontSize: 32),
-            ),
-            DropdownButton(
+
+    return Row(
+      children: [
+        Text(
+          subject,
+          style: const TextStyle(fontSize: 32),
+        ),
+        SizedBox(
+            // fontSize: 38,
+            height: 100,
+            width: 200,
+            child: DropdownButton(
               style: const TextStyle(fontSize: 32),
               // alignment: Alignment.center,
               isExpanded: true,
               value: subject,
               items: items,
               onChanged: (newSubject) {
-                final notifier = ref.read(subject1NotifierProvider.notifier);
-                debugPrint('nweSubject : $newSubject');
-                notifier.updateSubject(newSubject!);
+                debugPrint("$newSubject");
+                setState(() {
+                  subject = newSubject!;
+                  _data = subject;
+                });
+                // final notifier = ref.read(subject1NotifierProvider.notifier);
+                // debugPrint('nweSubject : $newSubject');
+                // notifier.updateSubject(newSubject!);
               },
-            )
-          ],
-        ));
+            )),
+      ],
+    );
   }
 }
 

@@ -2,7 +2,7 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
-
+import "package:riverpod_annotation/riverpod_annotation.dart";
 part 'belongings.freezed.dart';
 part 'belongings.g.dart';
 
@@ -30,4 +30,45 @@ class Subject with _$Subject {
 
   factory Subject.fromJson(Map<String, dynamic> json) =>
       _$SubjectFromJson(json);
+}
+
+@riverpod
+class DayBelongingsNotifier extends _$DayBelongingsNotifier {
+  @override
+  DayBelongings build() {
+    // 最初のデータ
+    return const DayBelongings(
+      isHistoryData: false,
+      selectedDate: "2023-12-25",
+      subjects: [
+        Subject(
+          period: 1,
+          subject_name: "こくご",
+          belongings: ["こくごのきょうかしょ", "こくごのノート", "かんじドリル"],
+        ),
+        Subject(
+          period: 2,
+          subject_name: "さんすう",
+          belongings: ["さんすうのきょうかしょ", "さんすうのノート", "さんすうセット"],
+        ),
+        Subject(
+          period: 3,
+          subject_name: "たいいく",
+          belongings: ["たいそうふく"],
+        ),
+        Subject(
+          period: 4,
+          subject_name: "こくご",
+          belongings: ["かんじドリル", "こくごのノート", "こくごのきょうかしょ"],
+        ),
+      ],
+      itemNames: ["ふでばこ", "はしセット", "うわばき", "エプロン"],
+      additionalItemNames: [],
+    );
+  }
+
+  // データを変更する関数
+  void updateState(newState) {
+    state = newState;
+  }
 }

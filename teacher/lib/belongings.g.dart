@@ -44,3 +44,27 @@ Map<String, dynamic> _$$SubjectImplToJson(_$SubjectImpl instance) =>
       'subject_name': instance.subject_name,
       'belongings': instance.belongings,
     };
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+String _$dayBelongingsNotifierHash() =>
+    r'd4216ef5024f6588028acd1ec25a79822a88561e';
+
+/// See also [DayBelongingsNotifier].
+@ProviderFor(DayBelongingsNotifier)
+final dayBelongingsNotifierProvider =
+    AutoDisposeNotifierProvider<DayBelongingsNotifier, DayBelongings>.internal(
+  DayBelongingsNotifier.new,
+  name: r'dayBelongingsNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$dayBelongingsNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$DayBelongingsNotifier = AutoDisposeNotifier<DayBelongings>;
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
