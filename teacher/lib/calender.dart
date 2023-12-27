@@ -46,34 +46,61 @@ class _MyHomePageState extends State<MyHomePage> {
       return events[day] ?? [];
     }
 
-    return Scaffold(
-        body: Column(children: [
-      TableCalendar(
-        firstDay: DateTime.utc(2022, 4, 1),
-        lastDay: DateTime.utc(2025, 12, 31),
-        eventLoader: getEvent, //追記
-        selectedDayPredicate: (day) {
-          return isSameDay(_selected, day);
-        },
-        onDaySelected: (selected, focused) {
-          if (!isSameDay(_selected, selected)) {
-            debugPrint('here');
-            setState(() {
-              _selected = selected;
-              _focused = focused;
-            });
-          }
-        },
-        focusedDay: _focused,
-      ),
-      // ListView(
-      //   shrinkWrap: true,
-      //   children: getEvent(_selected!)
-      //       .map((event) => ListTile(
-      //             title: Text(event.toString()),
-      //           ))
-      //       .toList(),
-      // )
-    ]));
+    return TableCalendar(
+      firstDay: DateTime.utc(2022, 4, 1),
+      lastDay: DateTime.utc(2025, 12, 31),
+      eventLoader: getEvent, //追記
+      selectedDayPredicate: (day) {
+        return isSameDay(_selected, day);
+      },
+      onDaySelected: (selected, focused) {
+        if (!isSameDay(_selected, selected)) {
+          debugPrint('here');
+          setState(() {
+            _selected = selected;
+            _focused = focused;
+          });
+        }
+      },
+      focusedDay: _focused,
+    );
+    // ListView(
+    //   shrinkWrap: true,
+    //   children: getEvent(_selected!)
+    //       .map((event) => ListTile(
+    //             title: Text(event.toString()),
+    //           ))
+    //       .toList(),
+    // )
+
+    // return Scaffold(
+    //     body: Column(children: [
+    //   TableCalendar(
+    //     firstDay: DateTime.utc(2022, 4, 1),
+    //     lastDay: DateTime.utc(2025, 12, 31),
+    //     eventLoader: getEvent, //追記
+    //     selectedDayPredicate: (day) {
+    //       return isSameDay(_selected, day);
+    //     },
+    //     onDaySelected: (selected, focused) {
+    //       if (!isSameDay(_selected, selected)) {
+    //         debugPrint('here');
+    //         setState(() {
+    //           _selected = selected;
+    //           _focused = focused;
+    //         });
+    //       }
+    //     },
+    //     focusedDay: _focused,
+    //   ),
+    //   // ListView(
+    //   //   shrinkWrap: true,
+    //   //   children: getEvent(_selected!)
+    //   //       .map((event) => ListTile(
+    //   //             title: Text(event.toString()),
+    //   //           ))
+    //   //       .toList(),
+    //   // )
+    // ]));
   }
 }
