@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
-import 'package:teacher/belongings.dart';
+import 'package:teacher/models/belongings.dart';
 
 // void getApiData() async {
 Future<DayBelongings> getBelongingsApiData({String date = "2023-12-25"}) async {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:teacher/belongings.dart';
-import 'package:teacher/subject.dart';
-import 'package:teacher/subject_2.dart';
-import 'package:teacher/belongings_data.dart';
+import 'package:teacher/models/belongings.dart';
+import 'package:teacher/models/subject.dart';
+import 'package:teacher/models/subject_2.dart';
+import 'package:teacher/widgets/belongings_data.dart';
 import 'package:intl/intl.dart';
 
 class PageCheckList extends StatelessWidget {

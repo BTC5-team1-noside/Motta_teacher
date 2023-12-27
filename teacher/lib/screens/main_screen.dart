@@ -1,24 +1,13 @@
-import 'package:flutter/material.dart'; //必要
-import 'package:flutter_riverpod/flutter_riverpod.dart'; //#9_rivepod_状態管理
-import 'package:teacher/models/index.dart';
 // import 'package:go_router/go_router.dart'; //#11_g0_router_画面遷移
 // import 'package:flutter/foundation.dart'; //#13_BottomNavigationBar
 // import 'package:device_preview/device_preview.dart'; //#25_reponsive design
-
-import 'package:teacher/page_Home.dart';
-import 'package:teacher/page_check_list.dart';
-import 'package:teacher/page_check_list_gon.dart';
-import 'package:teacher/page_setting.dart';
-import "package:teacher/models/index.dart";
-
-// BottomNavの初期設定
-// final indexProvider = StateProvider((ref) {
-//   return 0;
-// });
-
-// final dateProvider = StateProvider((ref) {
-//   return "2023-12-25";
-// });
+import 'package:flutter/material.dart'; //必要
+import 'package:teacher/models/index.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; //#9_rivepod_状態管理
+import 'package:teacher/screens/page_home.dart';
+// import 'package:teacher/page_check_list.dart';
+import 'package:teacher/screens/page_check_list_gon.dart';
+import 'package:teacher/screens/page_setting.dart';
 
 //BottomNavの状態管理（選択した画面へ移動）
 class MainScreen extends ConsumerWidget {
@@ -61,7 +50,7 @@ class MainScreen extends ConsumerWidget {
     );
 
     final pages = [
-      const PageHome(),
+      PageHome(),
       // const PageCheckList(),
       const PageCheckListGon(),
       const PageSettings(),
