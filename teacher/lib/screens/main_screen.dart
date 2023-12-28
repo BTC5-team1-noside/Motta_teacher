@@ -6,7 +6,7 @@ import 'package:teacher/models/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; //#9_rivepod_状態管理
 import 'package:teacher/screens/page_home.dart';
 // import 'package:teacher/page_check_list.dart';
-import 'package:teacher/screens/page_check_list_gon.dart';
+import 'package:teacher/screens/page_check_list.dart';
 import 'package:teacher/screens/page_setting.dart';
 
 //BottomNavの状態管理（選択した画面へ移動）
@@ -52,7 +52,7 @@ class MainScreen extends ConsumerWidget {
     final pages = [
       PageHome(),
       // const PageCheckList(),
-      const PageCheckListGon(),
+      const PageCheckList(),
       const PageSettings(),
     ];
 

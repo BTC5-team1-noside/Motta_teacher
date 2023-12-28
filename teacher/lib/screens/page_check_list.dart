@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teacher/models/belongings.dart';
-import 'package:teacher/models/subject.dart';
-import 'package:teacher/models/subject_2.dart';
 import 'package:teacher/widgets/belongings_data.dart';
 import 'package:intl/intl.dart';
 import "package:teacher/models/date.dart";
 import "package:teacher/widgets/belongings.dart";
 import 'package:teacher/widgets/subject_dropdown.dart';
 
-class PageCheckListGon extends ConsumerWidget {
-  const PageCheckListGon({super.key});
+class PageCheckList extends ConsumerWidget {
+  const PageCheckList({super.key});
 
   List<Widget> generateTimeTable(DayBelongings pathData) {
     List<Widget> rows = [];
@@ -21,10 +19,8 @@ class PageCheckListGon extends ConsumerWidget {
             "${i + 1}時間目: ",
             style: const TextStyle(color: Colors.black, fontSize: 32),
           ),
-          Text(
-            pathData.subjects[i].subject_name,
-            style: const TextStyle(color: Colors.black, fontSize: 32),
-          )
+          //
+          SizedBox(width: 160, child: SubjectDropdown(i)),
         ],
       );
       rows.add(row);
@@ -34,12 +30,30 @@ class PageCheckListGon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dt = ref.watch(dateNotifierProvider);
+    ref.watch(dateNotifierProvider);
     final DayBelongings dayData = ref.watch(dayBelongingsNotifierProvider);
-    final timetable = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: generateTimeTable(dayData).toList());
-    final belongings = Belongings(pathData: dayData);
+    late List<Widget> registerMain;
+    late Widget timetable;
+    late Widget belongings;
+    if (dayData.subjects.isEmpty) {
+      registerMain = [
+        timetable = const Text(
+          "この日は授業が\nありません。",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 50),
+        ),
+      ];
+    } else {
+      registerMain = [
+        timetable = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: generateTimeTable(dayData).toList()),
+        belongings = Belongings(pathData: dayData)
+      ];
+    }
+
+    final timeF = DateTime.parse(dayData.selectedDate);
+    final day = '日月火水木金土日'[timeF.weekday];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,7 +83,7 @@ class PageCheckListGon extends ConsumerWidget {
             const SizedBox(
               width: 50,
             ),
-            Text(dayData.selectedDate,
+            Text("${dayData.selectedDate} ($day)",
                 style: const TextStyle(color: Colors.black, fontSize: 32)),
             const SizedBox(
               width: 50,
@@ -79,6 +93,8 @@ class PageCheckListGon extends ConsumerWidget {
                   debugPrint('日にちを増やす');
                   final timeF = DateTime.parse(dayData.selectedDate)
                       .add(const Duration(days: 1));
+                  debugPrint('日月火水木金土'[timeF.weekday - 1]);
+
                   final f = DateFormat('yyyy-MM-dd');
                   final afterDay = f.format(timeF);
                   ref.read(dateNotifierProvider.notifier).updateState(afterDay);
@@ -95,18 +111,48 @@ class PageCheckListGon extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            timetable,
-            belongings,
+            ...registerMain,
           ],
         ),
-        const Text('ここに追加アイテムの記入欄を表示させたい'),
+        const SizedBox(
+          height: 50,
+        ),
+        Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(),
+              ),
+              child: const SizedBox(
+                height: 100,
+                width: 200,
+                child: TextField(),
+              ),
+            ),
+          ],
+        ),
+        // TextField(),
+        // TextField(),
+
+        // Column(
+        //   children: [
+        // TextField(),
+        // TextField(),
+        //   ],
+        // ),
+        // Column(
+        // children: [
+        // TextField(),
+        // TextField(),
+        //   ],
+        // ),
+
         ElevatedButton(
           onPressed: () {
             debugPrint('ここにPOSTメソッドでバックエンドへデータを送付');
           },
           child: const Text('登録'),
         ),
-        const SizedBox(width: 200, child: SubjectDropdown()),
       ],
     );
   }
