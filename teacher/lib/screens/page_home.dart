@@ -26,6 +26,7 @@ Future<List<String>> getStudents() async {
 
     final studentNames = List<String>.from(
         data["studentsHistory"].map((el) => el["student_name"]));
+    // final studentNames = List<String>.from(data["studentsHistory"]);
     return studentNames;
   } catch (error) {
     debugPrint("エラーです！");
