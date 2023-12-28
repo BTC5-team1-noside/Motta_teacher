@@ -110,16 +110,30 @@ class PageHome extends ConsumerWidget {
                   final data = snapshot.data;
                   return Wrap(
                     children: data
-                            ?.map((el) => Column(children: [
-                                  SizedBox(
-                                    height: 100,
-                                    width: 200,
-                                    child: Container(
-                                      color: Colors.blue,
-                                      child: Center(child: Text(el)),
-                                    ),
+                            ?.map((el) => Container(
+                                  margin: const EdgeInsets.all(8.0),
+                                  height: 70,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      const Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Icon(Icons.person,
+                                            size: 24, color: Colors.white),
+                                      ),
+                                      const SizedBox(
+                                          height: 8), // アイコンとテキストの間にスペーシングを設定
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Text(el),
+                                      ),
+                                    ],
                                   ),
-                                ]))
+                                ))
                             .toList() ??
                         [],
                   );
