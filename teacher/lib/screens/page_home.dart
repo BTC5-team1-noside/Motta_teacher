@@ -10,6 +10,28 @@ import 'package:teacher/models/belongings.dart';
 import 'package:teacher/widgets/belongings_data.dart';
 import "package:teacher/models/index.dart";
 import "package:teacher/models/date.dart";
+import "package:http/http.dart" as http;
+import "dart:convert";
+
+Future<List<String>> getStudents() async {
+  final url = Uri.https("motta-9dbb2df4f6d7.herokuapp.com",
+      "/api/v1/teacher/home/history", {"date": "2024-12-21"});
+
+  try {
+    final res = await http.get(url);
+    final data = await json.decode(res.body);
+    debugPrint("うまくいってます！");
+    debugPrint("${data["selectedDate"]}");
+    // return data["studentsHistory"].map((el) => el["student_name"]);
+
+    final studentNames = List<String>.from(
+        data["studentsHistory"].map((el) => el["student_name"]));
+    return studentNames;
+  } catch (error) {
+    debugPrint("エラーです！");
+    throw Future.error("エラーが発生しました: $error");
+  }
+}
 
 class PageHome extends ConsumerWidget {
   PageHome({super.key});
@@ -40,46 +62,61 @@ class PageHome extends ConsumerWidget {
       return events[day] ?? [];
     }
 
-    return Column(
-      children: [
-        TableCalendar(
-          firstDay: DateTime.utc(2022, 4, 1),
-          lastDay: DateTime.utc(2025, 12, 31),
-          eventLoader: getEvent, //追記
-          selectedDayPredicate: (day) {
-            return isSameDay(_selected, day);
-          },
-          onDaySelected: (selected, focused) async {
-            // if (!isSameDay(_selected, selected)) {
-            final f = DateFormat('yyyy-MM-dd');
-            final selectedDate = f.format(selected);
-            debugPrint('selected:$selectedDate');
-            final DayBelongings data =
-                await getBelongingsApiData(date: selectedDate);
-            debugPrint("data: $data");
-            ref.read(dateNotifierProvider.notifier).updateState("$selected");
-            ref.read(dayBelongingsNotifierProvider.notifier).updateState(data);
-            ref.read(indexNotifierProvider.notifier).updateState(1);
-            // setState(() {
-            //   _selected = selected;
-            //   _focused = focused;
-            // });
-            // }
-          },
-          focusedDay: _focused,
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            TableCalendar(
+              firstDay: DateTime.utc(2022, 4, 1),
+              lastDay: DateTime.utc(2025, 12, 31),
+              eventLoader: getEvent, //追記
+              selectedDayPredicate: (day) {
+                return isSameDay(_selected, day);
+              },
+              onDaySelected: (selected, focused) async {
+                // if (!isSameDay(_selected, selected)) {
+                final f = DateFormat('yyyy-MM-dd');
+                final selectedDate = f.format(selected);
+                debugPrint('selected:$selectedDate');
+                final DayBelongings data =
+                    await getBelongingsApiData(date: selectedDate);
+                debugPrint("data: $data");
+                ref
+                    .read(dateNotifierProvider.notifier)
+                    .updateState("$selected");
+                ref
+                    .read(dayBelongingsNotifierProvider.notifier)
+                    .updateState(data);
+                ref.read(indexNotifierProvider.notifier).updateState(1);
+                // setState(() {
+                //   _selected = selected;
+                //   _focused = focused;
+                // });
+                // }
+              },
+              focusedDay: _focused,
+            ),
+            FutureBuilder<List<String>>(
+              future: getStudents(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // データがまだ取得されていない場合の表示
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  // エラーが発生した場合の表示
+                  return Text('エラー: ${snapshot.error}');
+                } else {
+                  // データを表示
+                  final data = snapshot.data;
+                  return Column(
+                    children: data?.map((el) => Text(el)).toList() ?? [],
+                  );
+                }
+              },
+            ),
+          ],
         ),
-
-        // const SubjectDropdown()
-
-        // ListView(
-        //   shrinkWrap: true,
-        //   children: getEvent(_selected!)
-        //       .map((event) => ListTile(
-        //             title: Text(event.toString()),
-        //           ))
-        //       .toList(),
-        // )
-      ],
+      ),
     );
   }
 }
