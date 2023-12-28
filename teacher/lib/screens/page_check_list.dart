@@ -32,9 +32,16 @@ class PageCheckList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(dateNotifierProvider);
     final DayBelongings dayData = ref.watch(dayBelongingsNotifierProvider);
+
     late List<Widget> registerMain;
     late Widget timetable;
     late Widget belongings;
+
+    final List<TextEditingController> itemTextControllers = [];
+    for (int i = 0; i < 6; i++) {
+      itemTextControllers.add(TextEditingController());
+    }
+
     if (dayData.subjects.isEmpty) {
       registerMain = [
         timetable = const Text(
@@ -54,6 +61,21 @@ class PageCheckList extends ConsumerWidget {
 
     final timeF = DateTime.parse(dayData.selectedDate);
     final day = '日月火水木金土日'[timeF.weekday];
+
+    void submitNewData() async {
+      final List<String> additionalItems = [];
+      for (int k = 0; k < 6; k++) {
+        if (itemTextControllers[k].text.trim().isEmpty) continue;
+        additionalItems.add(itemTextControllers[k].text);
+      }
+
+      DayBelongings newSet =
+          dayData.copyWith(additionalItemNames: additionalItems);
+      debugPrint("original:$dayData");
+      debugPrint("newSet: $newSet");
+      final notifier = ref.read(dayBelongingsNotifierProvider.notifier);
+      notifier.updateState(newSet);
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -118,40 +140,72 @@ class PageCheckList extends ConsumerWidget {
           height: 50,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(),
+            for (int j = 0; j < 3; j++)
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                  ),
+                ),
+                child: SizedBox(
+                  width: 200,
+                  child: TextField(
+                    controller: itemTextControllers[j],
+                    decoration: InputDecoration(
+                      label: Text("追加${j + 1}"),
+                    ),
+                  ),
+                ),
               ),
-              child: const SizedBox(
-                height: 100,
-                width: 200,
-                child: TextField(),
-              ),
-            ),
           ],
         ),
-        // TextField(),
-        // TextField(),
-
-        // Column(
-        //   children: [
-        // TextField(),
-        // TextField(),
-        //   ],
-        // ),
-        // Column(
-        // children: [
-        // TextField(),
-        // TextField(),
-        //   ],
-        // ),
-
-        ElevatedButton(
-          onPressed: () {
-            debugPrint('ここにPOSTメソッドでバックエンドへデータを送付');
-          },
-          child: const Text('登録'),
+        const SizedBox(
+          height: 50,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            for (int j = 3; j < 6; j++)
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                  ),
+                ),
+                child: SizedBox(
+                  width: 200,
+                  child: TextField(
+                    controller: itemTextControllers[j],
+                    decoration: InputDecoration(
+                      label: Text("追加${j + 1}"),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(
+          height: 50,
+        ),
+        SizedBox(
+          height: 100,
+          width: 200,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+            ),
+            onPressed: submitNewData,
+            child: const Text(
+              '登録',
+              style: TextStyle(fontSize: 40),
+            ),
+          ),
         ),
       ],
     );
