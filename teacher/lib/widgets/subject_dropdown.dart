@@ -49,6 +49,11 @@ class SubjectDropdown extends ConsumerWidget {
         value: 'どうとく', //enum
         child: Text('どうとく'), //表示するText
       ),
+      const DropdownMenuItem(
+        // alignment: Alignment.center,
+        value: 'ずこう', //enum
+        child: Text('ずこう'), //表示するText
+      ),
     ];
 
     return DropdownButton(

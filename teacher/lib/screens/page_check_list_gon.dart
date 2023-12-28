@@ -59,17 +59,11 @@ class PageCheckListGon extends ConsumerWidget {
                   final f = DateFormat('yyyy-MM-dd');
                   final beforeDay = f.format(timeF);
                   debugPrint(beforeDay);
-                  ref
-                      .read(dateNotifierProvider.notifier)
-                      .updateState(beforeDay);
                   final DayBelongings data =
                       await getBelongingsApiData(date: beforeDay);
                   ref
                       .read(dayBelongingsNotifierProvider.notifier)
                       .updateState(data);
-                  // final timeB = DateTime.parse(data.selectedDate);
-                  // const durC = Duration(days: -1);
-                  // final timeD = timeB.add(durC);
                 },
                 child: const Text('<')),
             const SizedBox(
