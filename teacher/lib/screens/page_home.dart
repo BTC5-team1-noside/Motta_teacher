@@ -108,8 +108,20 @@ class PageHome extends ConsumerWidget {
                 } else {
                   // データを表示
                   final data = snapshot.data;
-                  return Column(
-                    children: data?.map((el) => Text(el)).toList() ?? [],
+                  return Wrap(
+                    children: data
+                            ?.map((el) => Column(children: [
+                                  SizedBox(
+                                    height: 100,
+                                    width: 200,
+                                    child: Container(
+                                      color: Colors.blue,
+                                      child: Center(child: Text(el)),
+                                    ),
+                                  ),
+                                ]))
+                            .toList() ??
+                        [],
                   );
                 }
               },
