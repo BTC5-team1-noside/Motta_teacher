@@ -1,24 +1,21 @@
-import 'package:flutter/material.dart'; //必要
-import 'package:flutter_riverpod/flutter_riverpod.dart'; //#9_rivepod_状態管理
 // import 'package:go_router/go_router.dart'; //#11_g0_router_画面遷移
 // import 'package:flutter/foundation.dart'; //#13_BottomNavigationBar
 // import 'package:device_preview/device_preview.dart'; //#25_reponsive design
-
-import 'package:teacher/page_Home.dart';
-import 'package:teacher/page_check_list.dart';
-import 'package:teacher/page_setting.dart';
-
-// BottomNavの初期設定
-final indexProvider = StateProvider((ref) {
-  return 0;
-});
+import 'package:flutter/material.dart'; //必要
+import 'package:teacher/models/index.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; //#9_rivepod_状態管理
+import 'package:teacher/screens/page_home.dart';
+// import 'package:teacher/page_check_list.dart';
+import 'package:teacher/screens/page_check_list_gon.dart';
+import 'package:teacher/screens/page_setting.dart';
 
 //BottomNavの状態管理（選択した画面へ移動）
 class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final int index = ref.watch(indexProvider);
+    final int index = ref.watch(indexNotifierProvider);
+
     //アップバー
     final appBar = makeAppBar();
 
@@ -47,15 +44,16 @@ class MainScreen extends ConsumerWidget {
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.blueGrey.shade300,
       currentIndex: index,
-      onTap: (index) {
-        ref.read(indexProvider.notifier).state = index;
+      onTap: (idx) {
+        ref.read(indexNotifierProvider.notifier).updateState(idx);
       },
     );
 
     final pages = [
-      const PageHome(),
-      const PageCheckList(),
-      const PageSettings()
+      PageHome(),
+      // const PageCheckList(),
+      const PageCheckListGon(),
+      const PageSettings(),
     ];
 
     return Scaffold(

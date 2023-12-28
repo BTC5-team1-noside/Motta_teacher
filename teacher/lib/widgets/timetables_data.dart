@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
-import 'package:teacher/timetables.dart';
+import 'package:teacher/models/timetables.dart';
 
 Future<Timetables> getTimetablesApiData() async {
   final url = Uri.https(

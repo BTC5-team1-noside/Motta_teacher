@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:teacher/belongings.dart';
-import 'package:teacher/page_check_list.dart';
+import 'package:teacher/models/belongings.dart';
+import 'package:teacher/no_need/page_check_list.dart';
 // import 'package:teacher/page_Home.dart';
 // import 'package:teacher/page_check_list.dart';
-import 'package:teacher/side_menu.dart';
+import 'package:teacher/widgets/side_menu.dart';
 // import 'package:teacher/subject.dart';
-import 'package:teacher/edit_settings.dart';
-import 'package:teacher/belongings_data.dart';
-import 'package:teacher/timetables.dart';
-import 'package:teacher/timetables_data.dart';
+import 'package:teacher/models/edit_settings.dart';
+import 'package:teacher/widgets/belongings_data.dart';
+import 'package:teacher/models/timetables.dart';
+import 'package:teacher/widgets/timetables_data.dart';
 
 // class PageSettings extends StatelessWidget {
 class PageSettings extends ConsumerWidget {

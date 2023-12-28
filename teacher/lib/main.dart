@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'; //#9_rivepod_状態管�
 // import 'package:go_router/go_router.dart'; //#11_g0_router_画面遷移
 import 'package:flutter/foundation.dart'; //#13_BottomNavigationBar
 import 'package:device_preview/device_preview.dart'; //#25_reponsive design
-import 'package:teacher/main_screen.dart';
+import 'package:teacher/screens/main_screen.dart';
 
 main() {
   const app =

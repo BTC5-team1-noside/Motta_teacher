@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 // import 'package:teacher/main_screen.dart';
 import 'dart:collection';
 // import 'package:teacher/page_check_list.dart';
+import "package:intl/intl.dart";
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -57,11 +58,14 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         onDaySelected: (selected, focused) {
           if (!isSameDay(_selected, selected)) {
-            debugPrint('here');
+            final f = DateFormat('yyyy-MM-dd');
+            final selectedDate = f.format(selected);
+            debugPrint('selected:$selectedDate');
             setState(() {
               _selected = selected;
               _focused = focused;
             });
+            
           }
         },
         focusedDay: _focused,

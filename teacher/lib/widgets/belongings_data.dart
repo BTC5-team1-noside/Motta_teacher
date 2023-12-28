@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
 import 'dart:convert';
 
-import 'package:teacher/belongings.dart';
+import 'package:teacher/models/belongings.dart';
 
 // void getApiData() async {
-Future<DayBelongings> getBelongingsApiData() async {
-  const date = '2023-12-25';
+Future<DayBelongings> getBelongingsApiData({String date = "2023-12-25"}) async {
   final url = Uri.https(
       'motta-9dbb2df4f6d7.herokuapp.com', 'api/v1/teacher/subjects/$date');
   // 'motta-9dbb2df4f6d7.herokuapp.com', '$endpoint/$date');
