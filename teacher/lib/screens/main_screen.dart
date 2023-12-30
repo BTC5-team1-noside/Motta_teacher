@@ -68,7 +68,7 @@ class MainScreen extends ConsumerWidget {
     return AppBar(
       backgroundColor: Colors.blue,
       titleTextStyle: const TextStyle(color: Colors.white, fontSize: 50),
-      title: const Text('Motta'),
+      title: const Text('Motta_test'),
     );
   }
 }
