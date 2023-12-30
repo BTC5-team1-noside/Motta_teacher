@@ -1,0 +1,4 @@
+{
+  "flavor": "dev",
+  "base_url": "localhost:8000/"
+}

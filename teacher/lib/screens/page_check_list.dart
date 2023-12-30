@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import "package:teacher/models/date.dart";
 import "package:teacher/widgets/belongings.dart";
 import 'package:teacher/widgets/subject_dropdown.dart';
+import "package:http/http.dart" as http;
+import "dart:convert";
 
 class PageCheckList extends ConsumerWidget {
   const PageCheckList({super.key});
@@ -36,10 +38,20 @@ class PageCheckList extends ConsumerWidget {
     late List<Widget> registerMain;
     late Widget timetable;
     late Widget belongings;
+    late String updateButtonText;
+
+    dayData.isHistoryData
+        ? updateButtonText = '変更保存'
+        : updateButtonText = '新規登録';
 
     final List<TextEditingController> itemTextControllers = [];
     for (int i = 0; i < 6; i++) {
       itemTextControllers.add(TextEditingController());
+    }
+
+    for (int i = 0; i < dayData.additionalItemNames.length; i++) {
+      // debugPrint("page_check_list #51 ; ${dayData.additionalItemNames[i]}");
+      itemTextControllers[i].text = dayData.additionalItemNames[i];
     }
 
     if (dayData.subjects.isEmpty) {
@@ -64,6 +76,7 @@ class PageCheckList extends ConsumerWidget {
 
     void submitNewData() async {
       final List<String> additionalItems = [];
+
       for (int k = 0; k < 6; k++) {
         if (itemTextControllers[k].text.trim().isEmpty) continue;
         additionalItems.add(itemTextControllers[k].text);
@@ -71,10 +84,53 @@ class PageCheckList extends ConsumerWidget {
 
       DayBelongings newSet =
           dayData.copyWith(additionalItemNames: additionalItems);
-      debugPrint("original:$dayData");
-      debugPrint("newSet: $newSet");
+      debugPrint("page_check_list_#76 original:$dayData");
+      debugPrint("page_check_list_#77 newSet: $newSet");
       final notifier = ref.read(dayBelongingsNotifierProvider.notifier);
       notifier.updateState(newSet);
+
+      //POSTメソッドを追記（gon_versionからの追記）
+      if (dayData.isHistoryData) {
+        debugPrint("変更を更新しました。");
+
+        //❗️開発環境と本番環境が切り替えできるようになったら、コメントアウトを外す
+        // final url = Uri.https('motta-9dbb2df4f6d7.herokuapp.com',
+        //     'api/v1/teacher/timetables-history/${dayData.selectedDate}');
+
+        // try {
+        //   final response = await http.patch(url,
+        //       headers: {"Content-type": "application/json"},
+        //       body: json.encode(newSet));
+        //   final resStatus = response.statusCode;
+        //   // final decodedRes = await json.decode(response.body);
+        //   debugPrint("page_check_list #89 : $resStatus");
+        //   // debugPrint("page_check_list #89 : $decodedRes");
+        // } catch (error) {
+        //   debugPrint(error.toString());
+        //   throw Exception('Failed to load data: $error');
+        // }
+        //❗️開発環境と本番環境が切り替えできるようになったら、コメントアウトを外す
+      } else {
+        debugPrint("新規登録しました。");
+
+        //❗️開発環境と本番環境が切り替えできるようになったら、コメントアウトを外す
+        // final url = Uri.https('motta-9dbb2df4f6d7.herokuapp.com',
+        //     'api/v1/teacher/timetables-history/${dayData.selectedDate}');
+
+        // try {
+        //   final response = await http.post(url,
+        //       headers: {"Content-type": "application/json"},
+        //       body: json.encode(newSet));
+        //   final resStatus = response.statusCode;
+        //   // final decodedRes = await json.decode(response.body);
+        //   debugPrint("page_check_list #89 : $resStatus");
+        //   // debugPrint("page_check_list #89 : $decodedRes");
+        // } catch (error) {
+        //   debugPrint(error.toString());
+        //   throw Exception('Failed to load data: $error');
+        // }
+        //❗️開発環境と本番環境が切り替えできるようになったら、コメントアウトを外す
+      }
     }
 
     return Column(
@@ -88,7 +144,12 @@ class PageCheckList extends ConsumerWidget {
           children: [
             ElevatedButton(
                 onPressed: () async {
+                  const flavor = String.fromEnvironment('flavor');
                   debugPrint('日にちを減らす');
+
+                  if (flavor == 'dev') {
+                    debugPrint('dev環境の値を取得');
+                  }
                   debugPrint(dayData.selectedDate);
                   final timeF = DateTime.parse(dayData.selectedDate)
                       .add(const Duration(days: -1));
@@ -116,7 +177,6 @@ class PageCheckList extends ConsumerWidget {
                   final timeF = DateTime.parse(dayData.selectedDate)
                       .add(const Duration(days: 1));
                   debugPrint('日月火水木金土'[timeF.weekday - 1]);
-
                   final f = DateFormat('yyyy-MM-dd');
                   final afterDay = f.format(timeF);
                   ref.read(dateNotifierProvider.notifier).updateState(afterDay);
@@ -201,10 +261,10 @@ class PageCheckList extends ConsumerWidget {
               ),
             ),
             onPressed: submitNewData,
-            child: const Text(
-              '登録',
-              style: TextStyle(fontSize: 40),
-            ),
+            child: Text(
+              updateButtonText,
+              style: const TextStyle(fontSize: 30),
+            ), //  '登録',
           ),
         ),
       ],
