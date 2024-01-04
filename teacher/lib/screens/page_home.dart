@@ -1,3 +1,6 @@
+import 'dart:html';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:go_router/go_router.dart';
@@ -69,104 +72,184 @@ class PageHome extends ConsumerWidget {
           children: [
             Container(
               height: 400,
+              margin: const EdgeInsets.only(top: 20),
               color: Colors.amber,
               child: TableCalendar(
                 firstDay: DateTime.utc(2022, 4, 1),
                 lastDay: DateTime.utc(2025, 12, 31),
                 eventLoader: getEvent,
                 selectedDayPredicate: (day) {
+                  print(isSameDay(_selected, day));
                   return isSameDay(_selected, day);
                 },
                 onDaySelected: (selected, focused) async {
-                  final f = DateFormat('yyyy-MM-dd');
-                  final selectedDate = f.format(selected);
+                  final formatDate = DateFormat('yyyy-MM-dd');
+                  final selectedDate = formatDate.format(selected);
                   debugPrint('selected:$selectedDate');
-                  final DayBelongings data =
-                      await getBelongingsApiData(date: selectedDate);
-                  debugPrint("data: $data");
                   ref
                       .read(dateNotifierProvider.notifier)
                       .updateState("$selected");
+                  final DayBelongings data =
+                      await getBelongingsApiData(date: selectedDate);
                   ref
                       .read(dayBelongingsNotifierProvider.notifier)
                       .updateState(data);
-                  ref.read(indexNotifierProvider.notifier).updateState(1);
                 },
                 focusedDay: _focused,
               ),
             ),
             Container(
-              height: 400,
-              color: Colors.green.shade900,
-              child: Expanded(
-                child: FutureBuilder<List<Map<String, dynamic>>>(
-                  future: getStudents(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('エラー: ${snapshot.error}');
-                    } else {
-                      final List<Map<String, dynamic>> data = snapshot.data!;
-                      return GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 10,
-                          crossAxisSpacing: 1.0,
-                          mainAxisSpacing: 1.0,
-                          childAspectRatio: 1.0,
-                        ),
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          final el = data[index];
-                          return Container(
-                            margin: const EdgeInsets.all(1.0),
-                            height: 0,
-                            // width: 2,
-                            decoration: BoxDecoration(
-                              color: el["checkedInventory"]
-                                  ? Colors.green
-                                  : Colors.grey,
-                              // color: Colors.white,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.person,
-                                    size: 27, color: Colors.white),
-                                // size: 45,
-                                // color: Colors.white),
-                                const SizedBox(height: 8),
-                                Container(
-                                  width: 60,
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade700,
-                                      borderRadius: BorderRadius.circular(5.0)),
-                                  child: Text(
-                                    el["student_name"].toString(),
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontFamily: "Roboto",
-                                        fontSize: 10.0,
-                                        color: Colors.white),
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
+              height: 70,
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.only(top: 20, bottom: 20),
+              color: Colors.blue,
+              child: const Text(
+                "選択中の日付： ",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 24),
               ),
             ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+                height: 350,
+                child: IconButton(
+                  onPressed: () => {print("ボタンが押された")},
+                  icon: const Icon(Icons.arrow_back_ios),
+                  color: Colors.grey,
+                  tooltip: "前日に戻る",
+                ),
+              ),
+              Column(
+                children: [
+                  Container(
+                    height: 350,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    // color: Colors.green.shade900,
+                    padding: const EdgeInsets.all(35),
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/kokuban.png"),
+                          fit: BoxFit.cover),
+                    ),
+
+                    child: FutureBuilder<List<Map<String, dynamic>>>(
+                      future: getStudents(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('エラー: ${snapshot.error}');
+                        } else {
+                          final List<Map<String, dynamic>> data =
+                              snapshot.data!;
+                          return GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 10,
+                                    childAspectRatio: 1.0,
+                                    mainAxisSpacing: 3.0,
+                                    crossAxisSpacing: 3.0),
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              final el = data[index];
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: el["checkedInventory"]
+                                      ? Colors.white.withOpacity(0.1)
+                                      : Colors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: el["checkedInventory"]
+                                      ? [
+                                          const Icon(
+                                            Icons.face_retouching_natural,
+                                            size: 27,
+                                            color: Color.fromARGB(
+                                                255, 238, 255, 3),
+                                          ),
+                                          const SizedBox(height: 6),
+                                          Container(
+                                            width: 60,
+                                            padding: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey.shade500
+                                                  .withOpacity(0),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            child: Text(
+                                              el["student_name"].toString(),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 9.0,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          )
+                                        ]
+                                      : [
+                                          const Icon(
+                                            Icons.face,
+                                            size: 27,
+                                            color: Colors.white,
+                                          ),
+                                          const SizedBox(height: 6),
+                                          Container(
+                                            width: 60,
+                                            padding: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey.shade500
+                                                  .withOpacity(0),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            child: Text(
+                                              el["student_name"].toString(),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontFamily: "Roboto",
+                                                fontSize: 9.0,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+                height: 350,
+                child: IconButton(
+                  onPressed: () => {print("ボタンが押された")},
+                  icon: const Icon(Icons.arrow_forward_ios),
+                  color: Colors.grey,
+                  tooltip: "翌日に進む",
+                ),
+              ),
+            ]),
             Container(
+              margin: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.all(10),
+              width: double.infinity,
               height: 60,
-              color: Colors.brown,
+              child: ElevatedButton(
+                onPressed: () => {print("ボタンが押された")},
+                child: const Text("持ち物登録を行う"),
+              ),
             )
           ],
         ),
@@ -174,3 +257,14 @@ class PageHome extends ConsumerWidget {
     );
   }
 }
+
+
+
+            // Container(
+            //   height: 30,
+            //   color: const Color.fromARGB(255, 164, 119, 102),
+            // ),
+            // Container(
+            //   height: 20,
+            //   color: Colors.brown,
+            // ),
