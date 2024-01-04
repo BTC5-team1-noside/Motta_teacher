@@ -13,20 +13,20 @@ import "package:teacher/models/date.dart";
 import "package:http/http.dart" as http;
 import "dart:convert";
 
-Future<List<String>> getStudents() async {
+Future<List<Map<String, dynamic>>> getStudents() async {
   final url = Uri.https("motta-9dbb2df4f6d7.herokuapp.com",
-      "/api/v1/teacher/home/history", {"date": "2024-12-21"});
+      "/api/v1/teacher/home/history", {"date": "2023-12-21"});
 
   try {
     final res = await http.get(url);
     final data = await json.decode(res.body);
     debugPrint("うまくいってます！");
-    debugPrint("${data["selectedDate"]}");
-    // return data["studentsHistory"].map((el) => el["student_name"]);
 
-    final studentNames = List<String>.from(
-        data["studentsHistory"].map((el) => el["student_name"]));
-    // final studentNames = List<String>.from(data["studentsHistory"]);
+    final List<Map<String, dynamic>> studentNames =
+        List<Map<String, dynamic>>.from(
+            data["studentsHistory"].map((student) => student));
+    debugPrint(studentNames.toString());
+
     return studentNames;
   } catch (error) {
     debugPrint("エラーです！");
@@ -89,15 +89,10 @@ class PageHome extends ConsumerWidget {
                     .read(dayBelongingsNotifierProvider.notifier)
                     .updateState(data);
                 ref.read(indexNotifierProvider.notifier).updateState(1);
-                // setState(() {
-                //   _selected = selected;
-                //   _focused = focused;
-                // });
-                // }
               },
               focusedDay: _focused,
             ),
-            FutureBuilder<List<String>>(
+            FutureBuilder<List<Map<String, dynamic>>>(
               future: getStudents(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -108,15 +103,18 @@ class PageHome extends ConsumerWidget {
                   return Text('エラー: ${snapshot.error}');
                 } else {
                   // データを表示
-                  final data = snapshot.data;
+                  final List<Map<String, dynamic>> data = snapshot.data!;
                   return Wrap(
                     children: data
-                            ?.map((el) => Container(
+                            .map((el) => Container(
                                   margin: const EdgeInsets.all(8.0),
                                   height: 70,
                                   width: 100,
                                   decoration: BoxDecoration(
-                                      color: Colors.grey,
+                                      // color: Colors.grey,
+                                      color: el["checkedInventory"]
+                                          ? Colors.green
+                                          : Colors.grey,
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -126,11 +124,11 @@ class PageHome extends ConsumerWidget {
                                         child: Icon(Icons.person,
                                             size: 24, color: Colors.white),
                                       ),
-                                      const SizedBox(
-                                          height: 8), // アイコンとテキストの間にスペーシングを設定
+                                      const SizedBox(height: 8),
                                       Align(
                                         alignment: Alignment.bottomCenter,
-                                        child: Text(el),
+                                        child:
+                                            Text(el["student_name"].toString()),
                                       ),
                                     ],
                                   ),
@@ -140,7 +138,7 @@ class PageHome extends ConsumerWidget {
                   );
                 }
               },
-            ),
+            )
           ],
         ),
       ),
