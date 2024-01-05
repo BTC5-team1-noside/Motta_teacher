@@ -80,7 +80,8 @@ class PageHome extends ConsumerWidget {
           children: [
             Container(
               height: 450,
-              margin: const EdgeInsets.only(top: 20),
+              color: const Color.fromARGB(255, 236, 236, 236),
+              margin: const EdgeInsets.only(top: 0),
               // color: Colors.amber,
               child: TableCalendar(
                 firstDay: DateTime.utc(2022, 4, 1),
@@ -120,11 +121,11 @@ class PageHome extends ConsumerWidget {
                     }
                   },
                 ),
-                rowHeight: 50,
-                daysOfWeekHeight: 35,
+                rowHeight: 55,
+                daysOfWeekHeight: 40,
                 headerStyle: HeaderStyle(
                   titleTextStyle: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 24,
                     fontWeight: FontWeight.w600,
                   ),
                   titleTextFormatter: (date, locale) {
@@ -136,9 +137,27 @@ class PageHome extends ConsumerWidget {
                   rightChevronVisible: true,
                 ),
                 calendarBuilders: CalendarBuilders(
+                  markerBuilder: (context, day, events) {
+                    return Positioned(
+                      bottom: 7,
+                      child: Container(
+                        // padding: const EdgeInsets.all(0),
+                        margin: const EdgeInsets.all(1),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white, // 好きな色に変更してください
+                        ),
+                        child: const Icon(
+                          Icons.check_circle,
+                          color: Colors.green, // アイコンの色を設定
+                          size: 18,
+                        ),
+                      ),
+                    );
+                  },
                   selectedBuilder: (context, date, events) {
                     return Container(
-                      margin: const EdgeInsets.all(4.0),
+                      margin: const EdgeInsets.all(2.0),
                       padding: const EdgeInsets.all(2),
                       alignment: Alignment.topCenter,
                       decoration: BoxDecoration(
@@ -148,8 +167,8 @@ class PageHome extends ConsumerWidget {
                       child: Text(
                         '${date.day}',
                         style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
                           color: Colors.white, // 選択中の日付の文字色を指定
                         ),
                       ),
@@ -157,12 +176,11 @@ class PageHome extends ConsumerWidget {
                   },
                   defaultBuilder: (context, date, events) {
                     return Container(
-                      margin: const EdgeInsets.all(4.0),
+                      margin: const EdgeInsets.all(2.0),
                       padding: const EdgeInsets.all(2),
                       alignment: Alignment.topCenter,
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.3),
-                        // border: Border.all(width: 0.2),
+                        color: Colors.grey.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                       child: Text(
@@ -174,9 +192,28 @@ class PageHome extends ConsumerWidget {
                       ),
                     );
                   },
+                  outsideBuilder: (context, date, events) {
+                    return Container(
+                      margin: const EdgeInsets.all(2.0),
+                      padding: const EdgeInsets.all(2),
+                      alignment: Alignment.topCenter,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Text(
+                        '${date.day}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          // fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  },
                   todayBuilder: (context, day, focusedDay) {
                     return Container(
-                      margin: const EdgeInsets.all(4.0),
+                      margin: const EdgeInsets.all(2.0),
                       padding: const EdgeInsets.all(2),
                       alignment: Alignment.topCenter,
                       decoration: BoxDecoration(
@@ -187,8 +224,8 @@ class PageHome extends ConsumerWidget {
                       child: Text(
                         '${day.day}',
                         style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
                           color: Colors.white, // 選択中の日付の文字色を指定
                         ),
                       ),
@@ -218,13 +255,18 @@ class PageHome extends ConsumerWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(0),
               margin: const EdgeInsets.only(top: 0, bottom: 0),
-              color: Colors.blue,
+              // color: Colors.blue,
               child: Text(
                 _selected != null
-                    ? DateFormat('yyyy-MM-dd').format(_selected!)
-                    : DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                    ? DateFormat('yyyy年 MM月 dd日 (E)', "ja_JP")
+                        .format(_selected!)
+                    : DateFormat('yyyy年 MM月 dd日 (E)', "ja_JP")
+                        .format(DateTime.now()),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 24),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
