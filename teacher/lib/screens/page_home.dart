@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
+// import 'package:intl/date_symbol_data_local.dart';
 // import 'package:teacher/main_screen.dart';
 import 'dart:collection';
 // import 'package:teacher/page_check_list.dart';
@@ -17,9 +18,15 @@ import "package:teacher/models/date.dart";
 import "package:http/http.dart" as http;
 import "dart:convert";
 
-Future<List<Map<String, dynamic>>> getStudents() async {
+Future<List<Map<String, dynamic>>> getStudents(DateTime? selectedDate) async {
+  final formatDate = DateFormat("yyyy-MM-dd");
+  DateTime currentDate = selectedDate ?? DateTime.now();
+  final formattedDate = formatDate.format(currentDate);
+
+  // final url = Uri.https("motta-9dbb2df4f6d7.herokuapp.com",
+  //     "/api/v1/teacher/home/history", {"date": _selected});
   final url = Uri.https("motta-9dbb2df4f6d7.herokuapp.com",
-      "/api/v1/teacher/home/history", {"date": "2023-12-21"});
+      "/api/v1/teacher/home/history", {"date": formattedDate});
 
   try {
     final res = await http.get(url);
@@ -46,7 +53,10 @@ class PageHome extends ConsumerWidget {
     DateTime.now(): ['Test C', 'Test D', 'Test E', 'Test F'],
   };
   late final DateTime _focused = DateTime.now();
-  late final DateTime _selected = _focused;
+  // late final DateTime _selected = _focused;
+
+  DateTime? _selected; // DateTime?型を使用
+  // final DateTime _selected
 
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
@@ -72,7 +82,7 @@ class PageHome extends ConsumerWidget {
         child: Column(
           children: [
             Container(
-              height: 400,
+              height: 450,
               margin: const EdgeInsets.only(top: 20),
               // color: Colors.amber,
               child: TableCalendar(
@@ -84,6 +94,14 @@ class PageHome extends ConsumerWidget {
                   return isSameDay(_selected, day);
                 },
                 daysOfWeekStyle: DaysOfWeekStyle(
+                  weekdayStyle: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  weekendStyle: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
                   dowTextFormatter: (date, locale) {
                     switch (date.weekday) {
                       case 1:
@@ -105,13 +123,15 @@ class PageHome extends ConsumerWidget {
                     }
                   },
                 ),
+                rowHeight: 50,
+                daysOfWeekHeight: 35,
                 headerStyle: HeaderStyle(
                   titleTextStyle: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                   ),
                   titleTextFormatter: (date, locale) {
-                    return DateFormat("yyyy年 MM月", locale).format(date);
+                    return DateFormat("yyyy年 MM月 (E)", "ja_JP").format(date);
                   },
                   titleCentered: true,
                   formatButtonVisible: false,
@@ -119,6 +139,25 @@ class PageHome extends ConsumerWidget {
                   rightChevronVisible: true,
                 ),
                 calendarBuilders: CalendarBuilders(
+                  selectedBuilder: (context, date, events) {
+                    return Container(
+                      margin: const EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.all(2),
+                      alignment: Alignment.topCenter,
+                      decoration: BoxDecoration(
+                        color: Colors.blue, // 選択中の日付の背景色を指定
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Text(
+                        '${date.day}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white, // 選択中の日付の文字色を指定
+                        ),
+                      ),
+                    );
+                  },
                   defaultBuilder: (context, date, events) {
                     return Container(
                       margin: const EdgeInsets.all(4.0),
@@ -132,18 +171,39 @@ class PageHome extends ConsumerWidget {
                       child: Text(
                         '${date.day}',
                         style: const TextStyle(
-                          fontSize: 21,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  },
+                  todayBuilder: (context, day, focusedDay) {
+                    return Container(
+                      margin: const EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.all(2),
+                      alignment: Alignment.topCenter,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(
+                            255, 243, 128, 21), // 選択中の日付の背景色を指定
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Text(
+                        '${day.day}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white, // 選択中の日付の文字色を指定
                         ),
                       ),
                     );
                   },
                 ),
                 onDaySelected: (selected, focused) async {
-                  // final formatDate = DateFormat('yyyy-MM-dd');
-                  final formatDate = DateFormat('yyyy年MM月dd日');
+                  final formatDate = DateFormat('yyyy-MM-dd');
                   final selectedDate = formatDate.format(selected);
-                  debugPrint('selected:$selectedDate');
+                  // debugPrint('selected:$selectedDate');
+                  _selected = selected;
+
                   ref
                       .read(dateNotifierProvider.notifier)
                       .updateState("$selected");
@@ -157,10 +217,10 @@ class PageHome extends ConsumerWidget {
               ),
             ),
             Container(
-              height: 70,
+              height: 40,
               width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              margin: const EdgeInsets.only(top: 20, bottom: 20),
+              padding: const EdgeInsets.all(0),
+              margin: const EdgeInsets.only(top: 0, bottom: 0),
               color: Colors.blue,
               child: const Text(
                 "選択中の日付： ",
@@ -193,13 +253,17 @@ class PageHome extends ConsumerWidget {
                     ),
 
                     child: FutureBuilder<List<Map<String, dynamic>>>(
-                      future: getStudents(),
+                      future: _selected != null
+                          ? getStudents(_selected!)
+                          : getStudents(DateTime.now()),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return const CircularProgressIndicator();
                         } else if (snapshot.hasError) {
                           return Text('エラー: ${snapshot.error}');
+                        } else if (snapshot.data == null) {
+                          return const Text('データがありません');
                         } else {
                           final List<Map<String, dynamic>> data =
                               snapshot.data!;
@@ -318,14 +382,3 @@ class PageHome extends ConsumerWidget {
     );
   }
 }
-
-
-
-            // Container(
-            //   height: 30,
-            //   color: const Color.fromARGB(255, 164, 119, 102),
-            // ),
-            // Container(
-            //   height: 20,
-            //   color: Colors.brown,
-            // ),
