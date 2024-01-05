@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'; //#9_rivepod_状態管�
 import 'package:flutter/foundation.dart'; //#13_BottomNavigationBar
 import 'package:device_preview/device_preview.dart'; //#25_reponsive design
 import 'package:teacher/screens/main_screen.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 main() {
   const app =
@@ -11,6 +12,7 @@ main() {
   // プロバイダースコープでアプリを囲む
 
   const scope = ProviderScope(child: app);
+  initializeDateFormatting('ja_JP', null);
 
   if (kIsWeb) {
     final devicePreview = DevicePreview(builder: (_) => scope);
