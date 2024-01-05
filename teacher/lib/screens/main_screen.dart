@@ -6,7 +6,7 @@ import 'package:teacher/models/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; //#9_rivepod_状態管理
 import 'package:teacher/screens/page_home.dart';
 // import 'package:teacher/page_check_list.dart';
-import 'package:teacher/screens/page_check_list_gon.dart';
+import 'package:teacher/screens/page_check_list.dart';
 import 'package:teacher/screens/page_setting.dart';
 
 //BottomNavの状態管理（選択した画面へ移動）
@@ -18,16 +18,6 @@ class MainScreen extends ConsumerWidget {
 
     //アップバー
     final appBar = makeAppBar();
-
-    // // フローティングアクションボタン (FAB)
-    // final fab = FloatingActionButton(
-    //   onPressed: () {
-    //     ref.read(indexProvider.notifier).state = 1;
-    //     // debugPrint('FAB が押されました');
-    //   },
-    //   child:
-    //       const Icon(Icons.fact_check), // label: '持ち物登録'//const Text('持ち物登録'),
-    // );
 
     //ボトムバー
     const items = [
@@ -51,14 +41,12 @@ class MainScreen extends ConsumerWidget {
 
     final pages = [
       PageHome(),
-      // const PageCheckList(),
-      const PageCheckListGon(),
+      PageCheckList(),
       const PageSettings(),
     ];
 
     return Scaffold(
       appBar: appBar,
-      // floatingActionButton: fab, // フローティングアクションボタン (FAB)
       body: pages[index],
       bottomNavigationBar: bar,
     );
@@ -68,7 +56,7 @@ class MainScreen extends ConsumerWidget {
     return AppBar(
       backgroundColor: Colors.blue,
       titleTextStyle: const TextStyle(color: Colors.white, fontSize: 50),
-      title: const Text('Motta'),
+      title: const Text('Motta_test'),
     );
   }
 }

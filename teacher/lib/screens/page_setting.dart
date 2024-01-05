@@ -10,6 +10,8 @@ import 'package:teacher/models/edit_settings.dart';
 import 'package:teacher/widgets/belongings_data.dart';
 import 'package:teacher/models/timetables.dart';
 import 'package:teacher/widgets/timetables_data.dart';
+import "package:http/http.dart" as http;
+import 'dart:convert';
 
 // class PageSettings extends StatelessWidget {
 class PageSettings extends ConsumerWidget {
@@ -28,7 +30,6 @@ class PageSettings extends ConsumerWidget {
     ];
 
     final pageId = ref.watch(editScreenNotifierProvider);
-    // debugPrint("check id : $pageId");
     return Scaffold(
         body: Row(children: [
       const SizedBox(
@@ -37,13 +38,10 @@ class PageSettings extends ConsumerWidget {
       ),
       Center(
           child: SizedBox(
-        width: 300,
+        // width: 300,
         child: pages[pageId],
       ))
     ]));
-    // ]
-    // )
-    // );
   }
 }
 
@@ -54,9 +52,39 @@ class StudentEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Future<DayBelongings> data = getBelongingsApiData();
-    debugPrint("取得したデータは$data");
-    return Image.asset('images/studentEdit.png');
+    // return Image.asset('images/studentEdit.png');
+    return FutureBuilder<List<dynamic>>(
+        future: getStudentsApiData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // データがまだ取得されていない場合の処理
+            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+          } else if (snapshot.hasError) {
+            // エラーが発生した場合の処理
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // データが正常に取得された場合の処理
+            final data = snapshot.data;
+            debugPrint('#89 data; $data');
+            return SizedBox(
+              height: 300,
+              child: DataTable(
+                  columns: const [
+                    DataColumn(label: Text("出席番号")),
+                    DataColumn(label: Text("名前"))
+                  ],
+                  rows: List<DataRow>.generate(data!.length, (i) {
+                    final studentId = data[i]["id"];
+                    final studentName = data[i]["student_name"];
+
+                    return DataRow(cells: [
+                      DataCell(Text("$studentId")),
+                      DataCell(Text(studentName)),
+                    ]);
+                  })),
+            );
+          }
+        });
   }
 }
 

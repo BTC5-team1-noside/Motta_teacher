@@ -9,8 +9,8 @@
       "program": "lib/main.dart",
       "args": [
         "-d",
-        "chrome"
-        // "--dart-define-from-file=scripts/flavors/dev.json"
+        "chrome",
+        "--dart-define-from-file=scripts/flavors/dev.json"
       ]
     },
     {
@@ -21,8 +21,8 @@
       "program": "lib/main.dart",
       "args": [
         "-d",
-        "chrome"
-        // "--dart-define-from-file=scripts/flavors/stg.json"
+        "chrome",
+        "--dart-define-from-file=scripts/flavors/stg.json"
       ]
     },
     {

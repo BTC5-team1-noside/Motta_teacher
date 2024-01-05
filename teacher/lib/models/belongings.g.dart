@@ -50,7 +50,7 @@ Map<String, dynamic> _$$SubjectImplToJson(_$SubjectImpl instance) =>
 // **************************************************************************
 
 String _$dayBelongingsNotifierHash() =>
-    r'd4216ef5024f6588028acd1ec25a79822a88561e';
+    r'6e25cb1a4add04c9bcfd29c5a16caf47e8e98c0d';
 
 /// See also [DayBelongingsNotifier].
 @ProviderFor(DayBelongingsNotifier)
