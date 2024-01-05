@@ -22,9 +22,6 @@ Future<List<Map<String, dynamic>>> getStudents(DateTime? selectedDate) async {
   final formatDate = DateFormat("yyyy-MM-dd");
   DateTime currentDate = selectedDate ?? DateTime.now();
   final formattedDate = formatDate.format(currentDate);
-
-  // final url = Uri.https("motta-9dbb2df4f6d7.herokuapp.com",
-  //     "/api/v1/teacher/home/history", {"date": _selected});
   final url = Uri.https("motta-9dbb2df4f6d7.herokuapp.com",
       "/api/v1/teacher/home/history", {"date": formattedDate});
 
@@ -222,10 +219,12 @@ class PageHome extends ConsumerWidget {
               padding: const EdgeInsets.all(0),
               margin: const EdgeInsets.only(top: 0, bottom: 0),
               color: Colors.blue,
-              child: const Text(
-                "選択中の日付： ",
+              child: Text(
+                _selected != null
+                    ? DateFormat('yyyy-MM-dd').format(_selected!)
+                    : DateFormat('yyyy-MM-dd').format(DateTime.now()),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 24),
               ),
             ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -372,7 +371,24 @@ class PageHome extends ConsumerWidget {
               width: double.infinity,
               height: 60,
               child: ElevatedButton(
-                onPressed: () => {print("ボタンが押された")},
+                onPressed: () async {
+                  print("持ち物登録ボタンが押された");
+                  // print(_selected)
+                  final DayBelongings data = await getBelongingsApiData(
+                    date: _selected != null
+                        ? DateFormat('yyyy-MM-dd').format(_selected!)
+                        : DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                  );
+                  debugPrint("data: $data");
+                  ref
+                      .read(dateNotifierProvider.notifier)
+                      .updateState("$_selected");
+
+                  ref
+                      .read(dayBelongingsNotifierProvider.notifier)
+                      .updateState(data);
+                  ref.read(indexNotifierProvider.notifier).updateState(1);
+                },
                 child: const Text("持ち物登録を行う"),
               ),
             )
