@@ -49,7 +49,7 @@ class PageHome extends ConsumerWidget {
     DateTime.now().subtract(const Duration(days: 3)): ['Test A', 'Test B', 'c'],
     DateTime.now(): ['Test C', 'Test D', 'Test E', 'Test F'],
   };
-  late final DateTime _focused = DateTime.now();
+  late DateTime _focused = DateTime.now();
   // late final DateTime _selected = _focused;
 
   DateTime? _selected; // DateTime?型を使用
@@ -237,6 +237,7 @@ class PageHome extends ConsumerWidget {
                   final selectedDate = formatDate.format(selected);
                   // debugPrint('selected:$selectedDate');
                   _selected = selected;
+                  _focused = focused;
 
                   ref
                       .read(dateNotifierProvider.notifier)
