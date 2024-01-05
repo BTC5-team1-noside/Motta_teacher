@@ -94,7 +94,7 @@ class SubjectDropdown extends ConsumerWidget {
 
           final notifier = ref.read(dayBelongingsNotifierProvider.notifier);
           notifier.updateState(newSet);
-          debugPrint("$newSet");
+          debugPrint("subject_dropdown #97; $newSet");
         } catch (error) {
           debugPrint(error.toString());
           throw Exception('Failed to load data: $error');

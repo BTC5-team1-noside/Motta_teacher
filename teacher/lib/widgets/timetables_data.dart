@@ -19,3 +19,19 @@ Future<Timetables> getTimetablesApiData() async {
     throw Exception('Failed to load data: $error');
   }
 }
+
+Future<List<dynamic>> getStudentsApiData() async {
+  const baseUrl = String.fromEnvironment('base_url');
+  final url = Uri.https(baseUrl, 'api/v1/teacher/settings/students');
+  try {
+    //JSON <=== from API(Database)
+    final response = await http.get(url);
+    //JsonMAP <=== JSON
+    final data = json.decode(response.body);
+    // final dataFromJson = Timetables.fromJson(data);
+    return data;
+  } catch (error) {
+    debugPrint(error.toString());
+    throw Exception('Failed to load data: $error');
+  }
+}

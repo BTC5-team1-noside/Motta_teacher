@@ -19,16 +19,6 @@ class MainScreen extends ConsumerWidget {
     //アップバー
     final appBar = makeAppBar();
 
-    // // フローティングアクションボタン (FAB)
-    // final fab = FloatingActionButton(
-    //   onPressed: () {
-    //     ref.read(indexProvider.notifier).state = 1;
-    //     // debugPrint('FAB が押されました');
-    //   },
-    //   child:
-    //       const Icon(Icons.fact_check), // label: '持ち物登録'//const Text('持ち物登録'),
-    // );
-
     //ボトムバー
     const items = [
       BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
@@ -51,14 +41,12 @@ class MainScreen extends ConsumerWidget {
 
     final pages = [
       PageHome(),
-      // const PageCheckList(),
-      const PageCheckList(),
+      PageCheckList(),
       const PageSettings(),
     ];
 
     return Scaffold(
       appBar: appBar,
-      // floatingActionButton: fab, // フローティングアクションボタン (FAB)
       body: pages[index],
       bottomNavigationBar: bar,
     );
