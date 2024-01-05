@@ -1,5 +1,6 @@
-import 'dart:html';
-import 'dart:ui';
+// import 'dart:html';
+// import 'dart:ui';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +9,7 @@ import 'package:table_calendar/table_calendar.dart';
 // import 'package:teacher/main_screen.dart';
 import 'dart:collection';
 // import 'package:teacher/page_check_list.dart';
-import "package:intl/intl.dart";
+// import "package:intl/intl.dart";
 import 'package:teacher/models/belongings.dart';
 import 'package:teacher/widgets/belongings_data.dart';
 import "package:teacher/models/index.dart";
@@ -28,7 +29,7 @@ Future<List<Map<String, dynamic>>> getStudents() async {
     final List<Map<String, dynamic>> studentNames =
         List<Map<String, dynamic>>.from(
             data["studentsHistory"].map((student) => student));
-    debugPrint(studentNames.toString());
+    // debugPrint(studentNames.toString());
 
     return studentNames;
   } catch (error) {
@@ -73,7 +74,7 @@ class PageHome extends ConsumerWidget {
             Container(
               height: 400,
               margin: const EdgeInsets.only(top: 20),
-              color: Colors.amber,
+              // color: Colors.amber,
               child: TableCalendar(
                 firstDay: DateTime.utc(2022, 4, 1),
                 lastDay: DateTime.utc(2025, 12, 31),
@@ -82,8 +83,65 @@ class PageHome extends ConsumerWidget {
                   print(isSameDay(_selected, day));
                   return isSameDay(_selected, day);
                 },
+                daysOfWeekStyle: DaysOfWeekStyle(
+                  dowTextFormatter: (date, locale) {
+                    switch (date.weekday) {
+                      case 1:
+                        return "月";
+                      case 2:
+                        return "火";
+                      case 3:
+                        return "水";
+                      case 4:
+                        return "木";
+                      case 5:
+                        return "金";
+                      case 6:
+                        return "土";
+                      case 7:
+                        return "日";
+                      default:
+                        return "";
+                    }
+                  },
+                ),
+                headerStyle: HeaderStyle(
+                  titleTextStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  titleTextFormatter: (date, locale) {
+                    return DateFormat("yyyy年 MM月", locale).format(date);
+                  },
+                  titleCentered: true,
+                  formatButtonVisible: false,
+                  leftChevronVisible: true,
+                  rightChevronVisible: true,
+                ),
+                calendarBuilders: CalendarBuilders(
+                  defaultBuilder: (context, date, events) {
+                    return Container(
+                      margin: const EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.all(2),
+                      alignment: Alignment.topCenter,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.3),
+                        // border: Border.all(width: 0.2),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Text(
+                        '${date.day}',
+                        style: const TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 onDaySelected: (selected, focused) async {
-                  final formatDate = DateFormat('yyyy-MM-dd');
+                  // final formatDate = DateFormat('yyyy-MM-dd');
+                  final formatDate = DateFormat('yyyy年MM月dd日');
                   final selectedDate = formatDate.format(selected);
                   debugPrint('selected:$selectedDate');
                   ref
@@ -113,7 +171,7 @@ class PageHome extends ConsumerWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.05,
-                height: 350,
+                height: 392,
                 child: IconButton(
                   onPressed: () => {print("ボタンが押された")},
                   icon: const Icon(Icons.arrow_back_ios),
@@ -124,13 +182,13 @@ class PageHome extends ConsumerWidget {
               Column(
                 children: [
                   Container(
-                    height: 350,
+                    height: 392,
                     width: MediaQuery.of(context).size.width * 0.9,
                     // color: Colors.green.shade900,
                     padding: const EdgeInsets.all(35),
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage("assets/images/kokuban.png"),
+                          image: AssetImage("assets/images/monitor.png"),
                           fit: BoxFit.cover),
                     ),
 
@@ -170,10 +228,10 @@ class PageHome extends ConsumerWidget {
                                           const Icon(
                                             Icons.face_retouching_natural,
                                             size: 27,
-                                            color: Color.fromARGB(
-                                                255, 238, 255, 3),
+                                            color:
+                                                Color.fromARGB(255, 74, 255, 3),
                                           ),
-                                          const SizedBox(height: 6),
+                                          const SizedBox(height: 4),
                                           Container(
                                             width: 60,
                                             padding: const EdgeInsets.all(2),
@@ -188,6 +246,7 @@ class PageHome extends ConsumerWidget {
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
                                                 fontSize: 9.0,
+                                                fontWeight: FontWeight.w600,
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -197,9 +256,10 @@ class PageHome extends ConsumerWidget {
                                           const Icon(
                                             Icons.face,
                                             size: 27,
-                                            color: Colors.white,
+                                            color: Color.fromARGB(
+                                                255, 250, 250, 250),
                                           ),
-                                          const SizedBox(height: 6),
+                                          const SizedBox(height: 4),
                                           Container(
                                             width: 60,
                                             padding: const EdgeInsets.all(2),
@@ -215,6 +275,7 @@ class PageHome extends ConsumerWidget {
                                               style: const TextStyle(
                                                 fontFamily: "Roboto",
                                                 fontSize: 9.0,
+                                                fontWeight: FontWeight.w600,
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -232,7 +293,7 @@ class PageHome extends ConsumerWidget {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.05,
-                height: 350,
+                height: 392,
                 child: IconButton(
                   onPressed: () => {print("ボタンが押された")},
                   icon: const Icon(Icons.arrow_forward_ios),
