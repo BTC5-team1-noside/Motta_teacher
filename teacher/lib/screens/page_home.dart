@@ -42,6 +42,29 @@ Future<List<Map<String, dynamic>>> getStudents(DateTime? selectedDate) async {
   }
 }
 
+Future<List<String>> getStudentsHistoryDate(DateTime? selectedDate) async {
+  final formatDate = DateFormat("yyyy-MM-dd");
+  DateTime currentDate = selectedDate ?? DateTime.now();
+  final formattedDate = formatDate.format(currentDate);
+  final url = Uri.https("motta-9dbb2df4f6d7.herokuapp.com",
+      "/api/v1/teacher/home/history", {"date": formattedDate});
+
+  try {
+    final res = await http.get(url);
+    final data = await json.decode(res.body);
+    debugPrint("うまくいってます！");
+
+    final List<String> studentsHistoryDate =
+        List<String>.from(data["timeTablesHistoryDates"].map((date) => date));
+    // debugPrint(studentsHistoryDate.toString());
+
+    return studentsHistoryDate;
+  } catch (error) {
+    debugPrint("エラーです！");
+    throw Future.error("エラーが発生しました: $error");
+  }
+}
+
 class PageHome extends ConsumerWidget {
   PageHome({super.key});
 
@@ -60,21 +83,21 @@ class PageHome extends ConsumerWidget {
   }
 
   // とりあえず、カレンダーにアイコンを入れるための配
-  final List<String> timeTablesHistoryDates = [
-    "2024-01-01",
-    "2024-01-04",
-    "2024-01-05",
-    "2024-01-08",
-    "2024-01-09",
-    "2024-01-10",
-    "2024-01-11",
-    "2024-01-12",
-    "2024-01-14",
-    "2024-01-15",
-    "2024-01-16",
-    "2024-01-17",
-    "2024-01-18"
-  ];
+  // final List<String> timeTablesHistoryDates = [
+  //   "2024-01-01",
+  //   "2024-01-04",
+  //   "2024-01-05",
+  //   "2024-01-08",
+  //   "2024-01-09",
+  //   "2024-01-10",
+  //   "2024-01-11",
+  //   "2024-01-12",
+  //   "2024-01-14",
+  //   "2024-01-15",
+  //   "2024-01-16",
+  //   "2024-01-17",
+  //   "2024-01-18"
+  // ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -157,32 +180,39 @@ class PageHome extends ConsumerWidget {
                   markerBuilder: (context, day, events) {
                     final formattedDate = DateFormat('yyyy-MM-dd').format(day);
 
-                    // final Future<List<Map<String, dynamic>>> aaa = getStudents(
-                    //     _selected != null ? _selected! : DateTime.now());
+                    return FutureBuilder<List<String>>(
+                      future: getStudentsHistoryDate(_selected),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('エラー: ${snapshot.error}');
+                        } else {
+                          final List<String> data = snapshot.data!;
+                          debugPrint("$data");
+                          final hasIcon = data.contains(formattedDate);
 
-                    // debugPrint("$aaa");
-                    // final Future<DayBelongings> data =
-                    //     getBelongingsApiData(date: "2023-12-21");
-
-                    final hasIcon =
-                        timeTablesHistoryDates.contains(formattedDate);
-                    return hasIcon
-                        ? Positioned(
-                            bottom: 7,
-                            child: Container(
-                              margin: const EdgeInsets.all(1),
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white, // アイコンの背景色
-                              ),
-                              child: const Icon(
-                                Icons.check_circle,
-                                color: Colors.green, // アイコンの色
-                                size: 18,
-                              ),
-                            ),
-                          )
-                        : const SizedBox(); // アイコンがない場合は空のContainerを返す
+                          return hasIcon
+                              ? Positioned(
+                                  bottom: 7,
+                                  child: Container(
+                                    margin: const EdgeInsets.all(1),
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white, // アイコンの背景色
+                                    ),
+                                    child: const Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green, // アイコンの色
+                                      size: 18,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(); // アイコンがない場合は空のContainerを返す
+                        }
+                      },
+                    );
                   },
                   selectedBuilder: (context, date, events) {
                     return Container(
