@@ -240,7 +240,45 @@ class ItemsEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset('images/itemsEdit.png');
+    return FutureBuilder<List<dynamic>>(
+        future: getItemsApiData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // データがまだ取得されていない場合の処理
+            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+          } else if (snapshot.hasError) {
+            // エラーが発生した場合の処理
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // データが正常に取得された場合の処理
+            final data = snapshot.data;
+            debugPrint('#239;$data');
+
+            return
+                // Column(
+                //   children: [
+                // Image.asset('images/itemsEdit.png'),
+                // Text(data![0]['id'].toString()),
+                DataTable(
+                    columns: const [
+                  DataColumn(label: Text('id')),
+                  DataColumn(label: Text('アイテム')),
+                ],
+                    rows: List<DataRow>.generate(data!.length, (i) {
+                      return DataRow(cells: [
+                        DataCell(Text(data[i]['id'].toString())),
+                        DataCell(Column(
+                          children: List.generate(
+                            data[i]['item_name'].length,
+                            (j) => Text(data[i]['item_name'][j].toString()),
+                          ),
+                        ))
+                      ]);
+                    }));
+            //   ],
+            // );
+          }
+        });
   }
 }
 
@@ -249,6 +287,50 @@ class EventEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset('images/eventEdit.png');
+    return FutureBuilder<List<dynamic>>(
+        future: getEventsApiData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // データがまだ取得されていない場合の処理
+            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+          } else if (snapshot.hasError) {
+            // エラーが発生した場合の処理
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // データが正常に取得された場合の処理
+            final data = snapshot.data;
+            debugPrint('#239;$data');
+            return
+                // Column(
+                //   children: [
+                // Image.asset('images/eventEdit.png'),
+                // Text('${data![0]['event_name']}'),
+                SizedBox(
+              child: Row(children: [
+                DataTable(
+                    dataRowMaxHeight: 180,
+                    columns: const [
+                      DataColumn(label: Text('日付')),
+                      DataColumn(label: Text('イベント名')),
+                      DataColumn(label: Text('持ち物')),
+                    ],
+                    rows: List<DataRow>.generate(data!.length, (i) {
+                      return DataRow(cells: [
+                        DataCell(Text(data[i]['date'].toString())),
+                        DataCell(Text(data[i]['event_name'].toString())),
+                        DataCell(Column(
+                          children: List.generate(
+                            data[i]['itemNames'].length,
+                            (j) => Text(data[i]['itemNames'][j].toString()),
+                          ),
+                        ))
+                      ]);
+                    })),
+              ]),
+            );
+            //   ],
+            // );
+          }
+        });
   }
 }
