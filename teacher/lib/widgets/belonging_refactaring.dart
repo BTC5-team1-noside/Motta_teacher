@@ -47,7 +47,6 @@ class Belongings extends ConsumerWidget {
       return items;
     }
 
-    debugPrint('#70$checkedItems');
     return Column(
       children: [
         SizedBox(

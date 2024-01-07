@@ -422,7 +422,7 @@ class PageHome extends ConsumerWidget {
                         ? DateFormat('yyyy-MM-dd').format(_selected!)
                         : DateFormat('yyyy-MM-dd').format(DateTime.now()),
                   );
-                  debugPrint("data: $data");
+                  debugPrint("page_home.dart#425 data: $data");
                   ref
                       .read(dateNotifierProvider.notifier)
                       .updateState("$_selected");

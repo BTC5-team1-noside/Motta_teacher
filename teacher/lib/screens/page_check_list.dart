@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teacher/models/belongings.dart';
@@ -11,8 +12,8 @@ import "package:http/http.dart" as http;
 import "dart:convert";
 
 class PageCheckList extends ConsumerWidget {
-  PageCheckList({super.key});
-
+  // const PageCheckList({super.key});
+  const PageCheckList({super.key});
   List<Widget> generateTimeTable(DayBelongings pathData) {
     List<Widget> rows = [];
     for (int i = 0; i < pathData.subjects.length; i++) {
@@ -31,33 +32,65 @@ class PageCheckList extends ConsumerWidget {
     return rows;
   }
 
-  late List<String> additionalItems = List.filled(6, "");
+  List<String> generateAdditionalItems(DayBelongings pathData) {
+    List<String> additionalItems = [];
+    if (pathData.isHistoryData) {
+      for (int i = 0; i < pathData.additionalItemNames.length; i++) {
+        if (pathData.additionalItemNames[i].isNotEmpty) {
+          additionalItems.add(pathData.additionalItemNames[i]);
+        } else {
+          additionalItems.add('');
+        }
+      }
+    } else {
+      additionalItems = List.filled(6, "");
+    }
+    return additionalItems;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(dateNotifierProvider);
     final DayBelongings dayData = ref.watch(dayBelongingsNotifierProvider);
-
+    var additionalItems = generateAdditionalItems(dayData);
+    // final itemTextControllers = generateItemTextControllers();
     late List<Widget> registerMain;
     late Widget timetable;
     late Widget belongings;
     late String updateButtonText;
+    final List<FocusNode> focusNods = [];
+    final List<TextEditingController> itemTextControllers = [];
 
-    //追加アイテムの初期化はここでも良いのでは？（再度考え直してみる）
-    // final List<String> additionalItems = List.filled(6, "");
+    for (int i = 0; i < 6; i++) {
+      focusNods.add(FocusNode());
+    }
 
-    // debugPrint("here;$additionalItems");
+    void textFeildFocusController(int i) {
+      // FocusNodeにリスナーを追加して、フォーカスが変更されたときに呼び出す処理を設定
+      focusNods[i].addListener(() {
+        if (!focusNods[i].hasFocus) {
+          // フォーカスが離れたときの処理
+          debugPrint('Focus lost');
+          DayBelongings newSet =
+              dayData.copyWith(additionalItemNames: additionalItems);
+          final notifier = ref.read(dayBelongingsNotifierProvider.notifier);
+          notifier.updateState(newSet);
+        }
+      });
+    }
+
     debugPrint("screen_page_check_list #46;${additionalItems.length}");
     dayData.isHistoryData
         ? updateButtonText = '変更保存'
         : updateButtonText = '新規登録';
 
-    final List<TextEditingController> itemTextControllers = [];
     for (int i = 0; i < 6; i++) {
       itemTextControllers.add(TextEditingController());
+      textFeildFocusController(i);
     }
 
     for (int i = 0; i < dayData.additionalItemNames.length; i++) {
+      // debugPrint('#71 ; ${dayData.additionalItemNames[i]}');
       itemTextControllers[i].text = dayData.additionalItemNames[i];
     }
 
@@ -191,13 +224,8 @@ class PageCheckList extends ConsumerWidget {
                     controller: itemTextControllers[j],
                     onChanged: (value) {
                       additionalItems[j] = value;
-                      debugPrint('#206:$additionalItems');
-                      DayBelongings newSet = dayData.copyWith(
-                          additionalItemNames: additionalItems);
-                      final notifier =
-                          ref.read(dayBelongingsNotifierProvider.notifier);
-                      notifier.updateState(newSet);
                     },
+                    focusNode: focusNods[j],
                     decoration: InputDecoration(
                       label: Text("追加${j + 1}"),
                     ),
@@ -226,13 +254,8 @@ class PageCheckList extends ConsumerWidget {
                     controller: itemTextControllers[j],
                     onChanged: (value) {
                       additionalItems[j] = value;
-                      debugPrint('#206:$additionalItems');
-                      DayBelongings newSet = dayData.copyWith(
-                          additionalItemNames: additionalItems);
-                      final notifier =
-                          ref.read(dayBelongingsNotifierProvider.notifier);
-                      notifier.updateState(newSet);
                     },
+                    focusNode: focusNods[j],
                     decoration: InputDecoration(
                       label: Text("追加${j + 1}"),
                     ),

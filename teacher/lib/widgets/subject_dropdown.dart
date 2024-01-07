@@ -62,6 +62,11 @@ class SubjectDropdown extends ConsumerWidget {
         value: 'ずこう', //enum
         child: Text('ずこう'), //表示するText
       ),
+      const DropdownMenuItem(
+        // alignment: Alignment.center,
+        value: 'じゅぎょう　なし', //enum
+        child: Text('授業なし'), //表示するText
+      ),
     ];
 
     return DropdownButton(
@@ -81,11 +86,19 @@ class SubjectDropdown extends ConsumerWidget {
           final data = belongingsBySubject
               .where((ele) => ele["subject_name"] == newSubject)
               .toList();
-          List<String> listString = (data[0]["belongings"] as List<dynamic>)
-              .map((item) => item as String)
-              .toList();
-          Subject newSub = dayData.subjects[period]
-              .copyWith(subject_name: newSubject!, belongings: listString);
+          debugPrint('#89 data;$data');
+          late Subject newSub;
+          if (data.isNotEmpty) {
+            List<String> listString = (data[0]["belongings"] as List<dynamic>)
+                .map((item) => item as String)
+                .toList();
+
+            newSub = dayData.subjects[period]
+                .copyWith(subject_name: newSubject!, belongings: listString);
+          } else if (data.isEmpty) {
+            newSub = dayData.subjects[period]
+                .copyWith(subject_name: newSubject!, belongings: []);
+          }
 
           List<Subject> newSubjects = [...dayData.subjects];
           newSubjects[period] = newSub;
