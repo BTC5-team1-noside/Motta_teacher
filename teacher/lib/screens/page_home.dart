@@ -82,23 +82,6 @@ class PageHome extends ConsumerWidget {
     return key.day * 1000000 + key.month * 10000 + key.year;
   }
 
-  // とりあえず、カレンダーにアイコンを入れるための配
-  // final List<String> timeTablesHistoryDates = [
-  //   "2024-01-01",
-  //   "2024-01-04",
-  //   "2024-01-05",
-  //   "2024-01-08",
-  //   "2024-01-09",
-  //   "2024-01-10",
-  //   "2024-01-11",
-  //   "2024-01-12",
-  //   "2024-01-14",
-  //   "2024-01-15",
-  //   "2024-01-16",
-  //   "2024-01-17",
-  //   "2024-01-18"
-  // ];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(indexNotifierProvider);
@@ -180,39 +163,48 @@ class PageHome extends ConsumerWidget {
                   markerBuilder: (context, day, events) {
                     final formattedDate = DateFormat('yyyy-MM-dd').format(day);
 
-                    return FutureBuilder<List<String>>(
-                      future: getStudentsHistoryDate(_selected),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('エラー: ${snapshot.error}');
-                        } else {
-                          final List<String> data = snapshot.data!;
-                          debugPrint("$data");
-                          final hasIcon = data.contains(formattedDate);
+                    // ここで選択された日付と同じ月であるかどうかを確認
+                    debugPrint("$day.month");
+                    final bool isSameMonth = day.month == _focused.month;
 
-                          return hasIcon
-                              ? Positioned(
-                                  bottom: 7,
-                                  child: Container(
-                                    margin: const EdgeInsets.all(1),
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white, // アイコンの背景色
+                    if (isSameMonth) {
+                      return FutureBuilder<List<String>>(
+                        future: getStudentsHistoryDate(_selected),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('エラー: ${snapshot.error}');
+                          } else {
+                            final List<String> data = snapshot.data!;
+                            final hasIcon = data.contains(formattedDate);
+
+                            // 同じ月である場合のみアイコンを表示
+                            return hasIcon
+                                ? Positioned(
+                                    bottom: 7,
+                                    child: Container(
+                                      margin: const EdgeInsets.all(1),
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white,
+                                      ),
+                                      child: const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                        size: 18,
+                                      ),
                                     ),
-                                    child: const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green, // アイコンの色
-                                      size: 18,
-                                    ),
-                                  ),
-                                )
-                              : const SizedBox(); // アイコンがない場合は空のContainerを返す
-                        }
-                      },
-                    );
+                                  )
+                                : const SizedBox();
+                          }
+                        },
+                      );
+                    } else {
+                      // 同じ月でない場合は空のContainerを返す
+                      return const SizedBox();
+                    }
                   },
                   selectedBuilder: (context, date, events) {
                     return Container(
@@ -308,6 +300,12 @@ class PageHome extends ConsumerWidget {
                       .updateState(data);
                 },
                 focusedDay: _focused,
+                onPageChanged: (focusedDay) {
+                  debugPrint("月変えた？");
+                  final formattedDate =
+                      DateFormat('yyyy-MM-dd').format(focusedDay);
+                  print("Displayed month: $formattedDate");
+                },
               ),
             ),
             Container(
