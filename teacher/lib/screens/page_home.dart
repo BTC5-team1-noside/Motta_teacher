@@ -371,7 +371,7 @@ class PageHome extends ConsumerWidget {
                   height: 460,
                   width: double.infinity,
                   // color: Colors.green.shade900,
-                  padding: const EdgeInsets.all(35),
+                  padding: const EdgeInsets.all(45),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("assets/images/monitor.png"),
