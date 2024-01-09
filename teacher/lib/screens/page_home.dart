@@ -170,7 +170,8 @@ class PageHome extends ConsumerWidget {
                     fontWeight: FontWeight.w600,
                   ),
                   titleTextFormatter: (date, locale) {
-                    return DateFormat("yyyy年 MM月 (E)", "ja_JP").format(date);
+                    return DateFormat("yyyy年 MM月 dd日 (E)", "ja_JP")
+                        .format(date);
                   },
                   titleCentered: true,
                   formatButtonVisible: false,
