@@ -18,6 +18,7 @@ dependencies:
   flutter_riverpod: #状態管理の設定
   riverpod:
   riverpod_annotation:
+  shared_preferences: ^2.0.8
 
   flutter:
     sdk: flutter
