@@ -97,7 +97,17 @@ class PageHome extends ConsumerWidget {
       return events[day] ?? [];
     }
 
+    List<String>? historyDates;
+
+    // before
+    getStudentsHistoryDate(_selected != null ? _selected! : DateTime.now())
+        .then((value) {
+      historyDates = value;
+      debugPrint("確認用：$historyDates");
+    });
+
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 236, 236, 236),
       body: Center(
         child: Column(
           children: [
@@ -163,48 +173,33 @@ class PageHome extends ConsumerWidget {
                   markerBuilder: (context, day, events) {
                     final formattedDate = DateFormat('yyyy-MM-dd').format(day);
 
-                    // ここで選択された日付と同じ月であるかどうかを確認
-                    debugPrint("$day.month");
-                    final bool isSameMonth = day.month == _focused.month;
+                    // final Future<List<Map<String, dynamic>>> aaa = getStudents(
+                    //     _selected != null ? _selected! : DateTime.now());
 
-                    if (isSameMonth) {
-                      return FutureBuilder<List<String>>(
-                        future: getStudentsHistoryDate(_selected),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          } else if (snapshot.hasError) {
-                            return Text('エラー: ${snapshot.error}');
-                          } else {
-                            final List<String> data = snapshot.data!;
-                            final hasIcon = data.contains(formattedDate);
+                    // final Future<DayBelongings> data =
+                    //     getBelongingsApiData(date: "2023-12-21");
 
-                            // 同じ月である場合のみアイコンを表示
-                            return hasIcon
-                                ? Positioned(
-                                    bottom: 7,
-                                    child: Container(
-                                      margin: const EdgeInsets.all(1),
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white,
-                                      ),
-                                      child: const Icon(
-                                        Icons.check_circle,
-                                        color: Colors.green,
-                                        size: 18,
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox();
-                          }
-                        },
-                      );
-                    } else {
-                      // 同じ月でない場合は空のContainerを返す
-                      return const SizedBox();
-                    }
+                    historyDates ??= [];
+
+                    debugPrint("ヒストリー：$historyDates");
+                    final hasIcon = historyDates!.contains(formattedDate);
+                    return hasIcon
+                        ? Positioned(
+                            bottom: 7,
+                            child: Container(
+                              margin: const EdgeInsets.all(1),
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white, // アイコンの背景色
+                              ),
+                              child: const Icon(
+                                Icons.check_circle,
+                                color: Colors.green, // アイコンの色
+                                size: 18,
+                              ),
+                            ),
+                          )
+                        : const SizedBox(); // アイコンがない場合は空のContainerを返す
                   },
                   selectedBuilder: (context, date, events) {
                     return Container(
@@ -309,168 +304,23 @@ class PageHome extends ConsumerWidget {
               ),
             ),
             Container(
-              height: 40,
-              width: double.infinity,
-              padding: const EdgeInsets.all(0),
-              margin: const EdgeInsets.only(top: 0, bottom: 0),
-              // color: Colors.blue,
-              child: Text(
-                _selected != null
-                    ? DateFormat('yyyy年 MM月 dd日 (E)', "ja_JP")
-                        .format(_selected!)
-                    : DateFormat('yyyy年 MM月 dd日 (E)', "ja_JP")
-                        .format(DateTime.now()),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.05,
-                height: 392,
-                child: IconButton(
-                  onPressed: () => {print("ボタンが押された")},
-                  icon: const Icon(Icons.arrow_back_ios),
-                  color: Colors.grey,
-                  tooltip: "前日に戻る",
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    height: 392,
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    // color: Colors.green.shade900,
-                    padding: const EdgeInsets.all(35),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/monitor.png"),
-                          fit: BoxFit.cover),
-                    ),
-
-                    child: FutureBuilder<List<Map<String, dynamic>>>(
-                      future: _selected != null
-                          ? getStudents(_selected!)
-                          : getStudents(DateTime.now()),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('エラー: ${snapshot.error}');
-                        } else if (snapshot.data == null) {
-                          return const Text('データがありません');
-                        } else {
-                          final List<Map<String, dynamic>> data =
-                              snapshot.data!;
-                          return GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 10,
-                                    childAspectRatio: 1.0,
-                                    mainAxisSpacing: 3.0,
-                                    crossAxisSpacing: 3.0),
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              final el = data[index];
-                              return Container(
-                                decoration: BoxDecoration(
-                                  color: el["checkedInventory"]
-                                      ? Colors.white.withOpacity(0.1)
-                                      : Colors.white.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: el["checkedInventory"]
-                                      ? [
-                                          const Icon(
-                                            Icons.face_retouching_natural,
-                                            size: 27,
-                                            color:
-                                                Color.fromARGB(255, 74, 255, 3),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Container(
-                                            width: 60,
-                                            padding: const EdgeInsets.all(2),
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey.shade500
-                                                  .withOpacity(0),
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                            ),
-                                            child: Text(
-                                              el["student_name"].toString(),
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                fontSize: 9.0,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          )
-                                        ]
-                                      : [
-                                          const Icon(
-                                            Icons.face,
-                                            size: 27,
-                                            color: Color.fromARGB(
-                                                255, 250, 250, 250),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Container(
-                                            width: 60,
-                                            padding: const EdgeInsets.all(2),
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey.shade500
-                                                  .withOpacity(0),
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                            ),
-                                            child: Text(
-                                              el["student_name"].toString(),
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                fontFamily: "Roboto",
-                                                fontSize: 9.0,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                ),
-                              );
-                            },
-                          );
-                        }
-                      },
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.05,
-                height: 392,
-                child: IconButton(
-                  onPressed: () => {print("ボタンが押された")},
-                  icon: const Icon(Icons.arrow_forward_ios),
-                  color: Colors.grey,
-                  tooltip: "翌日に進む",
-                ),
-              ),
-            ]),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 0),
               padding: const EdgeInsets.all(10),
-              width: double.infinity,
-              height: 60,
+              width: 300,
+              height: 70,
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) {
+                        // ボタンが押されたときの色
+                        return Colors.blue;
+                      }
+                      // ボタンが通常の状態の色
+                      return const Color.fromARGB(255, 4, 45, 207);
+                    },
+                  ),
+                ),
                 onPressed: () async {
                   print("持ち物登録ボタンが押された");
                   // print(_selected)
@@ -489,9 +339,129 @@ class PageHome extends ConsumerWidget {
                       .updateState(data);
                   ref.read(indexNotifierProvider.notifier).updateState(1);
                 },
-                child: const Text("持ち物登録を行う"),
+                child: const Text(
+                  "持ち物登録を行う",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-            )
+            ),
+            Column(
+              children: [
+                Container(
+                  height: 460,
+                  width: double.infinity,
+                  // color: Colors.green.shade900,
+                  padding: const EdgeInsets.all(35),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/monitor.png"),
+                        fit: BoxFit.contain),
+                  ),
+
+                  child: FutureBuilder<List<Map<String, dynamic>>>(
+                    future: _selected != null
+                        ? getStudents(_selected!)
+                        : getStudents(DateTime.now()),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('エラー: ${snapshot.error}');
+                      } else if (snapshot.data == null) {
+                        return const Text('データがありません');
+                      } else {
+                        final List<Map<String, dynamic>> data = snapshot.data!;
+                        return GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 10,
+                                  childAspectRatio: 1.0,
+                                  mainAxisSpacing: 3.0,
+                                  crossAxisSpacing: 3.0),
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            final el = data[index];
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: el["checkedInventory"]
+                                    ? Colors.white.withOpacity(0.1)
+                                    : Colors.white.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: el["checkedInventory"]
+                                    ? [
+                                        const Icon(
+                                          Icons.face_retouching_natural,
+                                          size: 27,
+                                          color:
+                                              Color.fromARGB(255, 74, 255, 3),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Container(
+                                          width: 60,
+                                          padding: const EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade500
+                                                .withOpacity(0),
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                          ),
+                                          child: Text(
+                                            el["student_name"].toString(),
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        )
+                                      ]
+                                    : [
+                                        const Icon(
+                                          Icons.face,
+                                          size: 27,
+                                          color: Color.fromARGB(
+                                              255, 250, 250, 250),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Container(
+                                          width: 60,
+                                          padding: const EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade500
+                                                .withOpacity(0),
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                          ),
+                                          child: Text(
+                                            el["student_name"].toString(),
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              fontFamily: "Roboto",
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
+                )
+              ],
+            ),
           ],
         ),
       ),
