@@ -36,11 +36,10 @@ class PageSettings extends ConsumerWidget {
         width: 300, // サイドメニューの幅
         child: SideMenu(),
       ),
-      Center(
-          child: SizedBox(
-        // width: 300,
+      SizedBox(
+        width: 500,
         child: pages[pageId],
-      ))
+      ),
     ]));
   }
 }
@@ -67,21 +66,41 @@ class StudentEdit extends StatelessWidget {
             final data = snapshot.data;
             debugPrint('#89 data; $data');
             return SizedBox(
-              height: 300,
-              child: DataTable(
-                  columns: const [
-                    DataColumn(label: Text("出席番号")),
-                    DataColumn(label: Text("名前"))
-                  ],
-                  rows: List<DataRow>.generate(data!.length, (i) {
-                    final studentId = data[i]["id"];
-                    final studentName = data[i]["student_name"];
+              // height: 300,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DataTable(
+                      columns: const [
+                        DataColumn(label: Text("出席番号")),
+                        DataColumn(label: Text("名前"))
+                      ],
+                      rows: List<DataRow>.generate(20, (i) {
+                        final studentId = data![i]["id"];
+                        final studentName = data[i]["student_name"];
 
-                    return DataRow(cells: [
-                      DataCell(Text("$studentId")),
-                      DataCell(Text(studentName)),
-                    ]);
-                  })),
+                        return DataRow(cells: [
+                          DataCell(Text("$studentId")),
+                          DataCell(Text(studentName)),
+                        ]);
+                      })),
+                  DataTable(
+                      columns: const [
+                        DataColumn(label: Text("出席番号")),
+                        DataColumn(label: Text("名前"))
+                      ],
+                      rows: List<DataRow>.generate(15, (i) {
+                        final studentId = data![i + 20]["id"];
+                        final studentName = data[i + 20]["student_name"];
+
+                        return DataRow(cells: [
+                          DataCell(Text("$studentId")),
+                          DataCell(Text(studentName)),
+                        ]);
+                      })),
+                ],
+              ),
             );
           }
         });
@@ -105,39 +124,59 @@ class TimetableEdit extends StatelessWidget {
         } else {
           // データが正常に取得された場合の処理
           final data = snapshot.data;
-          // debugPrint('取得したデータは!! $data');
-          // ここで取得したデータを使ってウィジェットを構築する
-
-          List<Widget> cols = [];
-          for (int i = 0; i < data!.timetableList.length; i++) {
-            List<Widget> rows = [];
-            for (int j = 0; j < data.timetableList[i].subjects.length; j++) {
-              final row = Row(
-                children: [
-                  // Text(data!.timetableList[i].day),
-                  Text(data.timetableList[i].subjects[j].subject_name),
-                  // Text(data.timetableList[i].subjects[j].subject_name)
-                ],
-              );
-              rows.add(row);
-            }
-            final col = Column(
-              children: [
-                Text(data.timetableList[i].day),
-                // 他のデータやウィジェットの構築もここに追加できます
-                Column(children: rows),
-              ],
-            );
-            cols.add(col);
-          }
 
           return Column(children: [
-            Image.asset('images/timetableEdit.png'),
-            // Text(data!.timetableList[0].day),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: cols,
-            )
+            Table(
+              columnWidths: const <int, TableColumnWidth>{
+                0: FixedColumnWidth(80),
+                1: FixedColumnWidth(80),
+                2: FixedColumnWidth(80),
+                3: FixedColumnWidth(80),
+                4: FixedColumnWidth(80),
+                5: FixedColumnWidth(80),
+              },
+              border: TableBorder.all(color: Colors.black),
+              defaultVerticalAlignment:
+                  TableCellVerticalAlignment.middle, //各セルの上下方向の文字位置変更
+
+              children: [
+                TableRow(
+                  children: List.generate(6, (index) {
+                    if (index == 0) {
+                      return const Center(
+                        child: SizedBox(
+                            height: 80, child: Center(child: Text('時間割表'))),
+                      );
+                    } else {
+                      final day = data!.timetableList[index - 1].day;
+                      return Center(child: Text(day));
+                    }
+                  }),
+                ),
+                for (int i = 0; i < 5; i++)
+                  TableRow(
+                    children: List.generate(6, (index) {
+                      if (index == 0) {
+                        return Center(
+                          child: SizedBox(
+                              height: 80,
+                              child: Center(
+                                child: Text('${i + 1}'),
+                              )),
+                        );
+                      } else if (data!
+                              .timetableList[index - 1].subjects.length <
+                          5) {
+                        return const Center(child: Text('🦆'));
+                      } else {
+                        final subjectName = data
+                            .timetableList[index - 1].subjects[i].subject_name;
+                        return Center(child: Text(subjectName));
+                      }
+                    }),
+                  ),
+              ],
+            ),
           ]);
         }
       },
@@ -154,7 +193,45 @@ class BelongingsEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset('images/belongingsEdit.png');
+    return FutureBuilder<List<dynamic>>(
+        future: getBelongingsApiData3(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // データがまだ取得されていない場合の処理
+            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+          } else if (snapshot.hasError) {
+            // エラーが発生した場合の処理
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // データが正常に取得された場合の処理
+            final data = snapshot.data;
+            debugPrint('#239;$data');
+
+            return SizedBox(
+              child: Row(children: [
+                DataTable(
+                    dataRowMaxHeight: 80,
+                    columns: const [
+                      DataColumn(label: Text('科目')),
+                      DataColumn(label: Text('持ち物')),
+                    ],
+                    rows: List<DataRow>.generate(data!.length, (i) {
+                      return DataRow(cells: [
+                        DataCell(Text(data[i]['subject_name'].toString())),
+                        DataCell(Column(
+                          children: List.generate(
+                            data[i]['belongings'].length,
+                            (j) => Text(data[i]['belongings'][j].toString()),
+                          ),
+                        ))
+                      ]);
+                    })),
+              ]),
+            );
+            //   ],
+            // );
+          }
+        });
   }
 }
 
@@ -163,7 +240,45 @@ class ItemsEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset('images/itemsEdit.png');
+    return FutureBuilder<List<dynamic>>(
+        future: getItemsApiData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // データがまだ取得されていない場合の処理
+            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+          } else if (snapshot.hasError) {
+            // エラーが発生した場合の処理
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // データが正常に取得された場合の処理
+            final data = snapshot.data;
+            debugPrint('#239;$data');
+
+            return
+                // Column(
+                //   children: [
+                // Image.asset('images/itemsEdit.png'),
+                // Text(data![0]['id'].toString()),
+                DataTable(
+                    columns: const [
+                  DataColumn(label: Text('id')),
+                  DataColumn(label: Text('アイテム')),
+                ],
+                    rows: List<DataRow>.generate(data!.length, (i) {
+                      return DataRow(cells: [
+                        DataCell(Text(data[i]['id'].toString())),
+                        DataCell(Column(
+                          children: List.generate(
+                            data[i]['item_name'].length,
+                            (j) => Text(data[i]['item_name'][j].toString()),
+                          ),
+                        ))
+                      ]);
+                    }));
+            //   ],
+            // );
+          }
+        });
   }
 }
 
@@ -172,6 +287,50 @@ class EventEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset('images/eventEdit.png');
+    return FutureBuilder<List<dynamic>>(
+        future: getEventsApiData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // データがまだ取得されていない場合の処理
+            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+          } else if (snapshot.hasError) {
+            // エラーが発生した場合の処理
+            return Text('Error: ${snapshot.error}');
+          } else {
+            // データが正常に取得された場合の処理
+            final data = snapshot.data;
+            debugPrint('#239;$data');
+            return
+                // Column(
+                //   children: [
+                // Image.asset('images/eventEdit.png'),
+                // Text('${data![0]['event_name']}'),
+                SizedBox(
+              child: Row(children: [
+                DataTable(
+                    dataRowMaxHeight: 180,
+                    columns: const [
+                      DataColumn(label: Text('日付')),
+                      DataColumn(label: Text('イベント名')),
+                      DataColumn(label: Text('持ち物')),
+                    ],
+                    rows: List<DataRow>.generate(data!.length, (i) {
+                      return DataRow(cells: [
+                        DataCell(Text(data[i]['date'].toString())),
+                        DataCell(Text(data[i]['event_name'].toString())),
+                        DataCell(Column(
+                          children: List.generate(
+                            data[i]['itemNames'].length,
+                            (j) => Text(data[i]['itemNames'][j].toString()),
+                          ),
+                        ))
+                      ]);
+                    })),
+              ]),
+            );
+            //   ],
+            // );
+          }
+        });
   }
 }
