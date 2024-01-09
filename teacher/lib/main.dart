@@ -7,11 +7,20 @@ import 'package:teacher/screens/main_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 main() {
-  const app =
-      MaterialApp(debugShowCheckedModeBanner: false, home: MainScreen());
+  final app = MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          primaryColor: Colors.amber,
+          scaffoldBackgroundColor: Colors.blueGrey.shade200,
+          appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.blue,
+              titleTextStyle: TextStyle(color: Colors.white, fontSize: 50)),
+          bottomNavigationBarTheme:
+              const BottomNavigationBarThemeData(backgroundColor: Colors.blue)),
+      home: const MainScreen());
   // プロバイダースコープでアプリを囲む
 
-  const scope = ProviderScope(child: app);
+  final scope = ProviderScope(child: app);
   initializeDateFormatting('ja_JP', null);
 
   if (kIsWeb) {

@@ -67,39 +67,41 @@ class StudentEdit extends StatelessWidget {
             debugPrint('#89 data; $data');
             return SizedBox(
               // height: 300,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DataTable(
-                      columns: const [
-                        DataColumn(label: Text("出席番号")),
-                        DataColumn(label: Text("名前"))
-                      ],
-                      rows: List<DataRow>.generate(20, (i) {
-                        final studentId = data![i]["id"];
-                        final studentName = data[i]["student_name"];
+              child: SingleChildScrollView(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DataTable(
+                        columns: const [
+                          DataColumn(label: Text("出席番号")),
+                          DataColumn(label: Text("名前"))
+                        ],
+                        rows: List<DataRow>.generate(35, (i) {
+                          final studentId = data![i]["id"];
+                          final studentName = data[i]["student_name"];
 
-                        return DataRow(cells: [
-                          DataCell(Text("$studentId")),
-                          DataCell(Text(studentName)),
-                        ]);
-                      })),
-                  DataTable(
-                      columns: const [
-                        DataColumn(label: Text("出席番号")),
-                        DataColumn(label: Text("名前"))
-                      ],
-                      rows: List<DataRow>.generate(15, (i) {
-                        final studentId = data![i + 20]["id"];
-                        final studentName = data[i + 20]["student_name"];
+                          return DataRow(cells: [
+                            DataCell(Text("$studentId")),
+                            DataCell(Text(studentName)),
+                          ]);
+                        })),
+                    // DataTable(
+                    //     columns: const [
+                    //       DataColumn(label: Text("出席番号")),
+                    //       DataColumn(label: Text("名前"))
+                    //     ],
+                    //     rows: List<DataRow>.generate(15, (i) {
+                    //       final studentId = data![i + 20]["id"];
+                    //       final studentName = data[i + 20]["student_name"];
 
-                        return DataRow(cells: [
-                          DataCell(Text("$studentId")),
-                          DataCell(Text(studentName)),
-                        ]);
-                      })),
-                ],
+                    //       return DataRow(cells: [
+                    //         DataCell(Text("$studentId")),
+                    //         DataCell(Text(studentName)),
+                    //       ]);
+                    //     })),
+                  ],
+                ),
               ),
             );
           }
