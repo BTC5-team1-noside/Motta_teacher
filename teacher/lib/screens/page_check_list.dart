@@ -13,7 +13,7 @@ import "dart:convert";
 
 class PageCheckList extends ConsumerWidget {
   // const PageCheckList({super.key});
-  const PageCheckList({super.key});
+  PageCheckList({super.key});
   List<Widget> generateTimeTable(DayBelongings pathData) {
     List<Widget> rows = [];
     for (int i = 0; i < pathData.subjects.length; i++) {
@@ -48,8 +48,10 @@ class PageCheckList extends ConsumerWidget {
     return additionalItems;
   }
 
+  final List<FocusNode> focusNods = [];
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    debugPrint("page_check_list:START");
     ref.watch(dateNotifierProvider);
     final DayBelongings dayData = ref.watch(dayBelongingsNotifierProvider);
     var additionalItems = generateAdditionalItems(dayData);
@@ -58,7 +60,8 @@ class PageCheckList extends ConsumerWidget {
     late Widget timetable;
     late Widget belongings;
     late String updateButtonText;
-    final List<FocusNode> focusNods = [];
+
+    // final List<FocusNode> focusNods = [];
     final List<TextEditingController> itemTextControllers = [];
 
     for (int i = 0; i < 6; i++) {
@@ -67,33 +70,42 @@ class PageCheckList extends ConsumerWidget {
 
     void textFeildFocusController(int i) {
       // FocusNodeにリスナーを追加して、フォーカスが変更されたときに呼び出す処理を設定
+
+      //❗️❗️追加アイテムが編集途中で消える原因はここ?。
       focusNods[i].addListener(() {
         if (!focusNods[i].hasFocus) {
           // フォーカスが離れたときの処理
-          debugPrint('Focus lost');
+          debugPrint('Focus lost $i');
           DayBelongings newSet =
               dayData.copyWith(additionalItemNames: additionalItems);
           final notifier = ref.read(dayBelongingsNotifierProvider.notifier);
           notifier.updateState(newSet);
+          debugPrint('#79 newSet; $newSet');
+          debugPrint('#80 dayData; $dayData');
         }
       });
     }
 
     debugPrint("screen_page_check_list #46;${additionalItems.length}");
+    debugPrint("screen_page_check_list #46;${additionalItems.toList()}");
     dayData.isHistoryData
         ? updateButtonText = '変更保存'
         : updateButtonText = '新規登録';
 
+    //TextFieldの初期設定:start
     for (int i = 0; i < 6; i++) {
       itemTextControllers.add(TextEditingController());
       textFeildFocusController(i);
     }
 
+    //❗️❗️追加アイテムが編集途中で消える原因はここ?。
+    //
     for (int i = 0; i < dayData.additionalItemNames.length; i++) {
-      // debugPrint('#71 ; ${dayData.additionalItemNames[i]}');
+      debugPrint('#71 ; ${dayData.additionalItemNames[i]}');
       itemTextControllers[i].text = dayData.additionalItemNames[i];
     }
-
+    //TextFieldの初期設定:end
+    debugPrint('#104 ; ${dayData.additionalItemNames}');
     if (dayData.subjects.isEmpty) {
       registerMain = [
         timetable = const Text(
@@ -168,6 +180,7 @@ class PageCheckList extends ConsumerWidget {
       ref.read(dayBelongingsNotifierProvider.notifier).updateState(data);
     }
 
+    debugPrint('#178 ; ${dayData.additionalItemNames}');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

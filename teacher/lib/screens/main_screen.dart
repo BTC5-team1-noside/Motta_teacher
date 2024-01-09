@@ -41,7 +41,7 @@ class MainScreen extends ConsumerWidget {
 
     final pages = [
       PageHome(),
-      const PageCheckList(),
+      PageCheckList(),
       const PageSettings(),
     ];
 
