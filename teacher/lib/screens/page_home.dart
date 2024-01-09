@@ -43,29 +43,6 @@ Future<List<Map<String, dynamic>>> getStudents(DateTime? selectedDate) async {
   }
 }
 
-// Future<List<String>> getStudentsHistoryDate(DateTime? selectedDate) async {
-//   final formatDate = DateFormat("yyyy-MM-dd");
-//   DateTime currentDate = selectedDate ?? DateTime.now();
-//   final formattedDate = formatDate.format(currentDate);
-//   final url = Uri.https("motta-9dbb2df4f6d7.herokuapp.com",
-//       "/api/v1/teacher/home/history", {"date": formattedDate});
-
-//   try {
-//     final res = await http.get(url);
-//     final data = await json.decode(res.body);
-//     debugPrint("うまくいってます！");
-
-//     final List<String> studentsHistoryDate =
-//         List<String>.from(data["timeTablesHistoryDates"].map((date) => date));
-//     // debugPrint(studentsHistoryDate.toString());
-
-//     return studentsHistoryDate;
-//   } catch (error) {
-//     debugPrint("エラーです！");
-//     throw Future.error("エラーが発生しました: $error");
-//   }
-// }
-
 Future<List<String>> getStudentsHistoryDate(DateTime? selectedDate) async {
   final formatDate = DateFormat("yyyy-MM-dd");
   DateTime currentDate = selectedDate ?? DateTime.now();
@@ -125,14 +102,17 @@ class PageHome extends ConsumerWidget {
       return events[day] ?? [];
     }
 
-    List<String>? historyDates;
+    // List<String>? historyDates;
 
     // before
-    getStudentsHistoryDate(_selected != null ? _selected! : DateTime.now())
-        .then((value) {
-      historyDates = value;
-      debugPrint("確認用：$historyDates");
-    });
+    // getStudentsHistoryDate(_selected != null ? _selected! : DateTime.now())
+    //     .then((value) {
+    //   historyDates = value;
+    //   debugPrint("確認用：$historyDates");
+    // });
+    late Future<List<String>> historyDatesFuture;
+    historyDatesFuture =
+        getStudentsHistoryDate(_selected != null ? _selected! : DateTime.now());
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 236, 236, 236),
@@ -205,7 +185,7 @@ class PageHome extends ConsumerWidget {
                     debugPrint("$day.month");
 
                     return FutureBuilder<List<String>>(
-                      future: getStudentsHistoryDate(_selected),
+                      future: historyDatesFuture,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
