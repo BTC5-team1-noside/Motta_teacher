@@ -99,7 +99,7 @@ class PageCheckList extends ConsumerWidget {
     }
 
     //❗️❗️追加アイテムが編集途中で消える原因はここ?。
-    //
+    //❗️i < dayData.additionalItemNames.length =>6に固定
     for (int i = 0; i < dayData.additionalItemNames.length; i++) {
       debugPrint('#71 ; ${dayData.additionalItemNames[i]}');
       itemTextControllers[i].text = dayData.additionalItemNames[i];
