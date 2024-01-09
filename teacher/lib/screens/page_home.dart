@@ -68,15 +68,8 @@ Future<List<String>> getStudentsHistoryDate(DateTime? selectedDate) async {
 class PageHome extends ConsumerWidget {
   PageHome({super.key});
 
-  final Map<DateTime, List> _eventsList = {
-    DateTime.now().subtract(const Duration(days: 3)): ['Test A', 'Test B', 'c'],
-    DateTime.now(): ['Test C', 'Test D', 'Test E', 'Test F'],
-  };
   late DateTime _focused = DateTime.now();
-  // late final DateTime _selected = _focused;
-
   DateTime? _selected; // DateTime?型を使用
-  // final DateTime _selected
 
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
@@ -91,7 +84,7 @@ class PageHome extends ConsumerWidget {
     final events = LinkedHashMap<DateTime, List>(
       equals: isSameDay,
       hashCode: getHashCode,
-    )..addAll(_eventsList);
+    );
 
     List getEvent(DateTime day) {
       return events[day] ?? [];
@@ -158,7 +151,7 @@ class PageHome extends ConsumerWidget {
                 daysOfWeekHeight: 40,
                 headerStyle: HeaderStyle(
                   titleTextStyle: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 30,
                     fontWeight: FontWeight.w600,
                   ),
                   titleTextFormatter: (date, locale) {
@@ -173,33 +166,42 @@ class PageHome extends ConsumerWidget {
                   markerBuilder: (context, day, events) {
                     final formattedDate = DateFormat('yyyy-MM-dd').format(day);
 
-                    // final Future<List<Map<String, dynamic>>> aaa = getStudents(
-                    //     _selected != null ? _selected! : DateTime.now());
+                    // ここで選択された日付と同じ月であるかどうかを確認
+                    debugPrint("$day.month");
 
-                    // final Future<DayBelongings> data =
-                    //     getBelongingsApiData(date: "2023-12-21");
+                    return FutureBuilder<List<String>>(
+                      future: getStudentsHistoryDate(_selected),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('エラー: ${snapshot.error}');
+                        } else {
+                          final List<String> data = snapshot.data!;
+                          final hasIcon = data.contains(formattedDate);
 
-                    historyDates ??= [];
-
-                    debugPrint("ヒストリー：$historyDates");
-                    final hasIcon = historyDates!.contains(formattedDate);
-                    return hasIcon
-                        ? Positioned(
-                            bottom: 7,
-                            child: Container(
-                              margin: const EdgeInsets.all(1),
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white, // アイコンの背景色
-                              ),
-                              child: const Icon(
-                                Icons.check_circle,
-                                color: Colors.green, // アイコンの色
-                                size: 18,
-                              ),
-                            ),
-                          )
-                        : const SizedBox(); // アイコンがない場合は空のContainerを返す
+                          // 同じ月である場合のみアイコンを表示
+                          return hasIcon
+                              ? Positioned(
+                                  bottom: 7,
+                                  child: Container(
+                                    margin: const EdgeInsets.all(1),
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                    child: const Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green,
+                                      size: 18,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox();
+                        }
+                      },
+                    );
                   },
                   selectedBuilder: (context, date, events) {
                     return Container(
@@ -213,7 +215,7 @@ class PageHome extends ConsumerWidget {
                       child: Text(
                         '${date.day}',
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 22,
                           fontWeight: FontWeight.w900,
                           color: Colors.white, // 選択中の日付の文字色を指定
                         ),
@@ -232,7 +234,7 @@ class PageHome extends ConsumerWidget {
                       child: Text(
                         '${date.day}',
                         style: const TextStyle(
-                          fontSize: 15,
+                          fontSize: 20,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -251,7 +253,7 @@ class PageHome extends ConsumerWidget {
                         '${date.day}',
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 15,
+                          fontSize: 20,
                           // fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -270,7 +272,7 @@ class PageHome extends ConsumerWidget {
                       child: Text(
                         '${day.day}',
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 22,
                           fontWeight: FontWeight.w900,
                           color: Colors.white, // 選択中の日付の文字色を指定
                         ),
