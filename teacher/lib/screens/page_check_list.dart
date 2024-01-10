@@ -14,6 +14,7 @@ import "dart:convert";
 class PageCheckList extends ConsumerWidget {
   // const PageCheckList({super.key});
   PageCheckList({super.key});
+
   List<Widget> generateTimeTable(DayBelongings pathData) {
     List<Widget> rows = [];
     for (int i = 0; i < pathData.subjects.length; i++) {
@@ -34,8 +35,10 @@ class PageCheckList extends ConsumerWidget {
 
   List<String> generateAdditionalItems(DayBelongings pathData) {
     List<String> additionalItems = [];
+    //追加カードを固定値「６」として書き換え
     if (pathData.isHistoryData) {
-      for (int i = 0; i < pathData.additionalItemNames.length; i++) {
+      // for (int i = 0; i < pathData.additionalItemNames.length; i++) {
+      for (int i = 0; i < 6; i++) {
         if (pathData.additionalItemNames[i].isNotEmpty) {
           additionalItems.add(pathData.additionalItemNames[i]);
         } else {
@@ -44,17 +47,29 @@ class PageCheckList extends ConsumerWidget {
       }
     } else {
       additionalItems = List.filled(6, "");
+      debugPrint(
+          '#50 additionalItmes;${pathData.additionalItemNames.toList()}');
+      debugPrint('#51 additionalItmes;${additionalItems.toList()}');
     }
     return additionalItems;
   }
 
   final List<FocusNode> focusNods = [];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     debugPrint("page_check_list:START");
     ref.watch(dateNotifierProvider);
     final DayBelongings dayData = ref.watch(dayBelongingsNotifierProvider);
-    var additionalItems = generateAdditionalItems(dayData);
+    var newAdditionalItems = generateAdditionalItems(dayData);
+////////
+    // DayBelongings newSet =
+    //     dayData.copyWith(additionalItemNames: newAdditionalItems);
+    // final notifier = ref.read(dayBelongingsNotifierProvider.notifier);
+    // notifier.updateState(newSet);
+////////////
+
+    debugPrint('#62 additionalItmes;${newAdditionalItems.toList()}');
     // final itemTextControllers = generateItemTextControllers();
     late List<Widget> registerMain;
     late Widget timetable;
@@ -77,7 +92,7 @@ class PageCheckList extends ConsumerWidget {
           // フォーカスが離れたときの処理
           debugPrint('Focus lost $i');
           DayBelongings newSet =
-              dayData.copyWith(additionalItemNames: additionalItems);
+              dayData.copyWith(additionalItemNames: newAdditionalItems);
           final notifier = ref.read(dayBelongingsNotifierProvider.notifier);
           notifier.updateState(newSet);
           debugPrint('#79 newSet; $newSet');
@@ -86,8 +101,8 @@ class PageCheckList extends ConsumerWidget {
       });
     }
 
-    debugPrint("screen_page_check_list #46;${additionalItems.length}");
-    debugPrint("screen_page_check_list #46;${additionalItems.toList()}");
+    debugPrint("screen_page_check_list #93;${newAdditionalItems.length}");
+    debugPrint("screen_page_check_list #94;${newAdditionalItems.toList()}");
     dayData.isHistoryData
         ? updateButtonText = '変更保存'
         : updateButtonText = '新規登録';
@@ -100,9 +115,11 @@ class PageCheckList extends ConsumerWidget {
 
     //❗️❗️追加アイテムが編集途中で消える原因はここ?。
     //❗️i < dayData.additionalItemNames.length =>6に固定
-    for (int i = 0; i < dayData.additionalItemNames.length; i++) {
-      debugPrint('#71 ; ${dayData.additionalItemNames[i]}');
-      itemTextControllers[i].text = dayData.additionalItemNames[i];
+    // for (int i = 0; i < dayData.additionalItemNames.length; i++) {
+    for (int i = 0; i < 6; i++) {
+      // debugPrint('#71 ; ${dayData.additionalItemNames[i]}');
+      // itemTextControllers[i].text = dayData.additionalItemNames[i];
+      itemTextControllers[i].text = newAdditionalItems[i];
     }
     //TextFieldの初期設定:end
     debugPrint('#104 ; ${dayData.additionalItemNames}');
@@ -171,11 +188,11 @@ class PageCheckList extends ConsumerWidget {
       final changingDate = DateFormat('yyyy-MM-dd').format(time);
       final DayBelongings data = await getBelongingsApiData(date: changingDate);
       if (data.isHistoryData) {
-        additionalItems = [
+        newAdditionalItems = [
           ...data.additionalItemNames,
         ];
       } else {
-        additionalItems = List.filled(6, ""); //
+        newAdditionalItems = List.filled(6, ""); //
       }
       ref.read(dayBelongingsNotifierProvider.notifier).updateState(data);
     }
@@ -236,7 +253,7 @@ class PageCheckList extends ConsumerWidget {
                   child: TextField(
                     controller: itemTextControllers[j],
                     onChanged: (value) {
-                      additionalItems[j] = value;
+                      newAdditionalItems[j] = value;
                     },
                     focusNode: focusNods[j],
                     decoration: InputDecoration(
@@ -266,7 +283,7 @@ class PageCheckList extends ConsumerWidget {
                   child: TextField(
                     controller: itemTextControllers[j],
                     onChanged: (value) {
-                      additionalItems[j] = value;
+                      newAdditionalItems[j] = value;
                     },
                     focusNode: focusNods[j],
                     decoration: InputDecoration(

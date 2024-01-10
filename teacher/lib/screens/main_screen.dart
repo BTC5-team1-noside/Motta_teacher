@@ -8,6 +8,7 @@ import 'package:teacher/screens/page_home.dart';
 // import 'package:teacher/page_check_list.dart';
 import 'package:teacher/screens/page_check_list.dart';
 import 'package:teacher/screens/page_setting.dart';
+// import 'package:teacher/models/belongings.dart';
 
 //BottomNavの状態管理（選択した画面へ移動）
 class MainScreen extends ConsumerWidget {
