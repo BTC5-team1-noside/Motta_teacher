@@ -65,90 +65,95 @@ class StudentEdit extends StatelessWidget {
           final data = snapshot.data;
           debugPrint('#89 data; $data');
           return SingleChildScrollView(
-              child: Container(
-                  margin: const EdgeInsets.only(left: 30, top: 20),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            child: Container(
+              margin: const EdgeInsets.only(left: 30, top: 20),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 60,
+                      child: Text(
+                        '生徒編集',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 77, 77, 77)),
+                      ),
+                    ),
+                    Table(
+                      columnWidths: const <int, TableColumnWidth>{
+                        0: FixedColumnWidth(200),
+                        1: FixedColumnWidth(350),
+                      },
+                      border: TableBorder.all(
+                        color: const Color.fromARGB(255, 122, 122, 122),
+                        style: BorderStyle.solid,
+                        width: 0.5,
+                      ),
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
                       children: [
-                        const SizedBox(
-                          height: 60,
-                          child: Text(
-                            '生徒編集',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 77, 77, 77)),
-                          ),
-                        ),
-                        Table(
-                            columnWidths: const <int, TableColumnWidth>{
-                              0: FixedColumnWidth(200),
-                              1: FixedColumnWidth(350),
-                            },
-                            border: TableBorder.all(
-                              color: const Color.fromARGB(255, 122, 122, 122),
-                              style: BorderStyle.solid,
-                              width: 0.5,
-                            ),
-                            defaultVerticalAlignment:
-                                TableCellVerticalAlignment.middle,
+                        const TableRow(
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 216, 216, 216)),
                             children: [
-                              const TableRow(
-                                  decoration: BoxDecoration(
-                                      color:
-                                          Color.fromARGB(255, 216, 216, 216)),
-                                  children: [
-                                    Center(
-                                      child: SizedBox(
-                                        height: 50, // 高さを設定
-                                        child: Center(
-                                          child: Text(
-                                            '出席番号',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                        ),
-                                      ),
+                              Center(
+                                child: SizedBox(
+                                  height: 50, // 高さを設定
+                                  child: Center(
+                                    child: Text(
+                                      '出席番号',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 16),
                                     ),
-                                    Center(
-                                      child: SizedBox(
-                                        height: 50, // 高さを設定
-                                        child: Center(
-                                          child: Text(
-                                            '名前',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                        ),
-                                      ),
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: SizedBox(
+                                  height: 50, // 高さを設定
+                                  child: Center(
+                                    child: Text(
+                                      '名前',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 16),
                                     ),
-                                  ]),
-                              for (var i = 0; i < data!.length; i++)
-                                TableRow(
-                                    children: List.generate(2, (index) {
-                                  if (index == 0) {
-                                    return Center(
-                                      child: SizedBox(
-                                        height: 40,
-                                        child: Center(
-                                          child: Text("${i + 1}"),
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    return Center(
-                                      child: SizedBox(
-                                        height: 40,
-                                        child: Center(
-                                          child: Text(data[i]["student_name"]),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                }))
-                            ])
-                      ])));
+                                  ),
+                                ),
+                              ),
+                            ]),
+                        for (var i = 0; i < data!.length; i++)
+                          TableRow(
+                            children: List.generate(2, (index) {
+                              if (index == 0) {
+                                return Center(
+                                  child: SizedBox(
+                                    height: 40,
+                                    child: Center(
+                                      child: Text("${i + 1}"),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Center(
+                                  child: SizedBox(
+                                    height: 40,
+                                    child: Center(
+                                      child: Text(data[i]["student_name"]),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }),
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
+                          )
+                      ],
+                    )
+                  ]),
+            ),
+          );
         }
       },
     );
