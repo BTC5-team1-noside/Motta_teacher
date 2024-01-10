@@ -28,8 +28,8 @@ class MainScreen extends ConsumerWidget {
 
     final bar = BottomNavigationBar(
       items: items,
-      unselectedFontSize: 18,
-      selectedFontSize: 25,
+      unselectedFontSize: 16,
+      selectedFontSize: 16,
       // backgroundColor: Colors.blue,
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.blueGrey.shade300,
@@ -54,9 +54,17 @@ class MainScreen extends ConsumerWidget {
 
   AppBar makeAppBar() {
     return AppBar(
-      // backgroundColor: Colors.blue,
-      titleTextStyle: const TextStyle(color: Colors.white, fontSize: 50),
-      title: const Text('Motta'),
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/images/Motta_logo.png',
+            height: 60,
+          ),
+          const SizedBox(height: 15),
+        ],
+      ),
     );
   }
 }
