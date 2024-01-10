@@ -115,13 +115,13 @@ class PageHome extends ConsumerWidget {
         getStudentsHistoryDate(_selected != null ? _selected! : DateTime.now());
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 236, 236, 236),
+      // backgroundColor: const Color.fromARGB(255, 236, 236, 236),
       body: Center(
         child: Column(
           children: [
             Container(
               height: 450,
-              color: const Color.fromARGB(255, 236, 236, 236),
+              // color: const Color.fromARGB(255, 236, 236, 236),
               margin: const EdgeInsets.only(top: 0),
               // color: Colors.amber,
               child: TableCalendar(

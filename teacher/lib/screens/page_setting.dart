@@ -32,8 +32,8 @@ class PageSettings extends ConsumerWidget {
     final pageId = ref.watch(editScreenNotifierProvider);
     return Scaffold(
         body: Row(children: [
-      const SizedBox(
-        width: 300, // サイドメニューの幅
+      SizedBox(
+        width: 220, // サイドメニューの幅
         child: SideMenu(),
       ),
       SizedBox(
@@ -72,19 +72,21 @@ class StudentEdit extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DataTable(
-                      columns: const [
-                        DataColumn(label: Text("出席番号")),
-                        DataColumn(label: Text("名前"))
-                      ],
-                      rows: List<DataRow>.generate(20, (i) {
-                        final studentId = data![i]["id"];
-                        final studentName = data[i]["student_name"];
+                    columns: const [
+                      DataColumn(label: Text("出席番号")),
+                      DataColumn(label: Text("名前"))
+                    ],
+                    rows: List<DataRow>.generate(20, (i) {
+                      final studentId = data![i]["id"];
+                      final studentName = data[i]["student_name"];
 
-                        return DataRow(cells: [
-                          DataCell(Text("$studentId")),
-                          DataCell(Text(studentName)),
-                        ]);
-                      })),
+                      return DataRow(cells: [
+                        DataCell(Text("$studentId")),
+                        DataCell(Text(studentName)),
+                      ]);
+                    }),
+                    decoration: const BoxDecoration(color: Colors.amber),
+                  ),
                   DataTable(
                       columns: const [
                         DataColumn(label: Text("出席番号")),
@@ -152,6 +154,7 @@ class TimetableEdit extends StatelessWidget {
                       return Center(child: Text(day));
                     }
                   }),
+                  decoration: const BoxDecoration(color: Colors.white),
                 ),
                 for (int i = 0; i < 5; i++)
                   TableRow(
@@ -174,6 +177,7 @@ class TimetableEdit extends StatelessWidget {
                         return Center(child: Text(subjectName));
                       }
                     }),
+                    decoration: const BoxDecoration(color: Colors.white),
                   ),
               ],
             ),
@@ -210,22 +214,24 @@ class BelongingsEdit extends StatelessWidget {
             return SizedBox(
               child: Row(children: [
                 DataTable(
-                    dataRowMaxHeight: 80,
-                    columns: const [
-                      DataColumn(label: Text('科目')),
-                      DataColumn(label: Text('持ち物')),
-                    ],
-                    rows: List<DataRow>.generate(data!.length, (i) {
-                      return DataRow(cells: [
-                        DataCell(Text(data[i]['subject_name'].toString())),
-                        DataCell(Column(
-                          children: List.generate(
-                            data[i]['belongings'].length,
-                            (j) => Text(data[i]['belongings'][j].toString()),
-                          ),
-                        ))
-                      ]);
-                    })),
+                  dataRowMaxHeight: 80,
+                  columns: const [
+                    DataColumn(label: Text('科目')),
+                    DataColumn(label: Text('持ち物')),
+                  ],
+                  rows: List<DataRow>.generate(data!.length, (i) {
+                    return DataRow(cells: [
+                      DataCell(Text(data[i]['subject_name'].toString())),
+                      DataCell(Column(
+                        children: List.generate(
+                          data[i]['belongings'].length,
+                          (j) => Text(data[i]['belongings'][j].toString()),
+                        ),
+                      ))
+                    ]);
+                  }),
+                  decoration: const BoxDecoration(color: Colors.white),
+                ),
               ]),
             );
             //   ],

@@ -30,7 +30,7 @@ class MainScreen extends ConsumerWidget {
       items: items,
       unselectedFontSize: 18,
       selectedFontSize: 25,
-      backgroundColor: Colors.blue,
+      // backgroundColor: Colors.blue,
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.blueGrey.shade300,
       currentIndex: index,
@@ -54,7 +54,7 @@ class MainScreen extends ConsumerWidget {
 
   AppBar makeAppBar() {
     return AppBar(
-      backgroundColor: Colors.blue,
+      // backgroundColor: Colors.blue,
       titleTextStyle: const TextStyle(color: Colors.white, fontSize: 50),
       title: const Text('Motta'),
     );
