@@ -51,61 +51,107 @@ class StudentEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Image.asset('images/studentEdit.png');
     return FutureBuilder<List<dynamic>>(
-        future: getStudentsApiData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // データがまだ取得されていない場合の処理
-            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
-          } else if (snapshot.hasError) {
-            // エラーが発生した場合の処理
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // データが正常に取得された場合の処理
-            final data = snapshot.data;
-            debugPrint('#89 data; $data');
-            return SizedBox(
-              // height: 300,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DataTable(
-                    columns: const [
-                      DataColumn(label: Text("出席番号")),
-                      DataColumn(label: Text("名前"))
-                    ],
-                    rows: List<DataRow>.generate(20, (i) {
-                      final studentId = data![i]["id"];
-                      final studentName = data[i]["student_name"];
-
-                      return DataRow(cells: [
-                        DataCell(Text("$studentId")),
-                        DataCell(Text(studentName)),
-                      ]);
-                    }),
-                    // decoration: const BoxDecoration(color: Colors.amber),
-                  ),
-                  DataTable(
-                      columns: const [
-                        DataColumn(label: Text("出席番号")),
-                        DataColumn(label: Text("名前"))
-                      ],
-                      rows: List<DataRow>.generate(15, (i) {
-                        final studentId = data![i + 20]["id"];
-                        final studentName = data[i + 20]["student_name"];
-
-                        return DataRow(cells: [
-                          DataCell(Text("$studentId")),
-                          DataCell(Text(studentName)),
-                        ]);
-                      })),
-                ],
-              ),
-            );
-          }
-        });
+      future: getStudentsApiData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // データがまだ取得されていない場合の処理
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          // エラーが発生した場合の処理
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // データが正常に取得された場合の処理
+          final data = snapshot.data;
+          debugPrint('#89 data; $data');
+          return SingleChildScrollView(
+              child: Container(
+                  margin: const EdgeInsets.only(left: 30, top: 20),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 60,
+                          child: Text(
+                            '生徒編集',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 77, 77, 77)),
+                          ),
+                        ),
+                        Table(
+                            columnWidths: const <int, TableColumnWidth>{
+                              0: FixedColumnWidth(200),
+                              1: FixedColumnWidth(350),
+                            },
+                            border: TableBorder.all(
+                              color: const Color.fromARGB(255, 122, 122, 122),
+                              style: BorderStyle.solid,
+                              width: 0.5,
+                            ),
+                            defaultVerticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            children: [
+                              const TableRow(
+                                  decoration: BoxDecoration(
+                                      color:
+                                          Color.fromARGB(255, 216, 216, 216)),
+                                  children: [
+                                    Center(
+                                      child: SizedBox(
+                                        height: 50, // 高さを設定
+                                        child: Center(
+                                          child: Text(
+                                            '出席番号',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: SizedBox(
+                                        height: 50, // 高さを設定
+                                        child: Center(
+                                          child: Text(
+                                            '名前',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                              for (var i = 0; i < data!.length; i++)
+                                TableRow(
+                                    children: List.generate(2, (index) {
+                                  if (index == 0) {
+                                    return Center(
+                                      child: SizedBox(
+                                        height: 40,
+                                        child: Center(
+                                          child: Text("${i + 1}"),
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return Center(
+                                      child: SizedBox(
+                                        height: 40,
+                                        child: Center(
+                                          child: Text(data[i]["student_name"]),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }))
+                            ])
+                      ])));
+        }
+      },
+    );
   }
 }
 
