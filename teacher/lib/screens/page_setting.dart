@@ -32,12 +32,12 @@ class PageSettings extends ConsumerWidget {
     final pageId = ref.watch(editScreenNotifierProvider);
     return Scaffold(
         body: Row(children: [
-      const SizedBox(
-        width: 300, // サイドメニューの幅
+      SizedBox(
+        width: 220, // サイドメニューの幅
         child: SideMenu(),
       ),
       SizedBox(
-        width: 500,
+        width: 600,
         child: pages[pageId],
       ),
     ]));
@@ -51,61 +51,112 @@ class StudentEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Image.asset('images/studentEdit.png');
     return FutureBuilder<List<dynamic>>(
-        future: getStudentsApiData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // データがまだ取得されていない場合の処理
-            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
-          } else if (snapshot.hasError) {
-            // エラーが発生した場合の処理
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // データが正常に取得された場合の処理
-            final data = snapshot.data;
-            debugPrint('#89 data; $data');
-            return SizedBox(
-              // height: 300,
-              child: SingleChildScrollView(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      future: getStudentsApiData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // データがまだ取得されていない場合の処理
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          // エラーが発生した場合の処理
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // データが正常に取得された場合の処理
+          final data = snapshot.data;
+          debugPrint('#89 data; $data');
+          return SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.only(left: 30, top: 20),
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    DataTable(
-                        columns: const [
-                          DataColumn(label: Text("出席番号")),
-                          DataColumn(label: Text("名前"))
-                        ],
-                        rows: List<DataRow>.generate(35, (i) {
-                          final studentId = data![i]["id"];
-                          final studentName = data[i]["student_name"];
-
-                          return DataRow(cells: [
-                            DataCell(Text("$studentId")),
-                            DataCell(Text(studentName)),
-                          ]);
-                        })),
-                    // DataTable(
-                    //     columns: const [
-                    //       DataColumn(label: Text("出席番号")),
-                    //       DataColumn(label: Text("名前"))
-                    //     ],
-                    //     rows: List<DataRow>.generate(15, (i) {
-                    //       final studentId = data![i + 20]["id"];
-                    //       final studentName = data[i + 20]["student_name"];
-
-                    //       return DataRow(cells: [
-                    //         DataCell(Text("$studentId")),
-                    //         DataCell(Text(studentName)),
-                    //       ]);
-                    //     })),
-                  ],
-                ),
-              ),
-            );
-          }
-        });
+                    const SizedBox(
+                      height: 60,
+                      child: Text(
+                        '生徒編集',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 77, 77, 77)),
+                      ),
+                    ),
+                    Table(
+                      columnWidths: const <int, TableColumnWidth>{
+                        0: FixedColumnWidth(200),
+                        1: FixedColumnWidth(350),
+                      },
+                      border: TableBorder.all(
+                        color: const Color.fromARGB(255, 122, 122, 122),
+                        style: BorderStyle.solid,
+                        width: 0.5,
+                      ),
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
+                      children: [
+                        const TableRow(
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 216, 216, 216)),
+                            children: [
+                              Center(
+                                child: SizedBox(
+                                  height: 50, // 高さを設定
+                                  child: Center(
+                                    child: Text(
+                                      '出席番号',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: SizedBox(
+                                  height: 50, // 高さを設定
+                                  child: Center(
+                                    child: Text(
+                                      '名前',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                        for (var i = 0; i < data!.length; i++)
+                          TableRow(
+                            children: List.generate(2, (index) {
+                              if (index == 0) {
+                                return Center(
+                                  child: SizedBox(
+                                    height: 40,
+                                    child: Center(
+                                      child: Text("${i + 1}"),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Center(
+                                  child: SizedBox(
+                                    height: 40,
+                                    child: Center(
+                                      child: Text(data[i]["student_name"]),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }),
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
+                          )
+                      ],
+                    )
+                  ]),
+            ),
+          );
+        }
+      },
+    );
   }
 }
 
@@ -127,67 +178,96 @@ class TimetableEdit extends StatelessWidget {
           // データが正常に取得された場合の処理
           final data = snapshot.data;
 
-          return Column(children: [
-            Table(
-              columnWidths: const <int, TableColumnWidth>{
-                0: FixedColumnWidth(80),
-                1: FixedColumnWidth(80),
-                2: FixedColumnWidth(80),
-                3: FixedColumnWidth(80),
-                4: FixedColumnWidth(80),
-                5: FixedColumnWidth(80),
-              },
-              border: TableBorder.all(color: Colors.black),
-              defaultVerticalAlignment:
-                  TableCellVerticalAlignment.middle, //各セルの上下方向の文字位置変更
-
-              children: [
-                TableRow(
-                  children: List.generate(6, (index) {
-                    if (index == 0) {
-                      return const Center(
-                        child: SizedBox(
-                            height: 80, child: Center(child: Text('時間割表'))),
-                      );
-                    } else {
-                      final day = data!.timetableList[index - 1].day;
-                      return Center(child: Text(day));
-                    }
-                  }),
+          return Container(
+            margin: const EdgeInsets.only(left: 30, top: 20),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(
+                height: 60,
+                child: Text(
+                  '時間割 編集',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 77, 77, 77)),
                 ),
-                for (int i = 0; i < 5; i++)
+              ),
+              Table(
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FixedColumnWidth(70),
+                  1: FixedColumnWidth(95),
+                  2: FixedColumnWidth(95),
+                  3: FixedColumnWidth(95),
+                  4: FixedColumnWidth(95),
+                  5: FixedColumnWidth(95),
+                },
+                border: TableBorder.all(
+                  color: const Color.fromARGB(255, 122, 122, 122),
+                  style: BorderStyle.solid,
+                  width: 0.5,
+                ),
+                defaultVerticalAlignment:
+                    TableCellVerticalAlignment.middle, //各セルの上下方向の文字位置変更
+
+                children: [
                   TableRow(
                     children: List.generate(6, (index) {
                       if (index == 0) {
                         return Center(
-                          child: SizedBox(
-                              height: 80,
-                              child: Center(
-                                child: Text('${i + 1}'),
-                              )),
+                          child: Container(
+                            color: const Color.fromARGB(255, 216, 216, 216),
+                            height: 50,
+                            child: const Center(child: Text('時間割表')),
+                          ),
                         );
-                      } else if (data!
-                              .timetableList[index - 1].subjects.length <
-                          5) {
-                        return const Center(child: Text('🦆'));
                       } else {
-                        final subjectName = data
-                            .timetableList[index - 1].subjects[i].subject_name;
-                        return Center(child: Text(subjectName));
+                        final day = data!.timetableList[index - 1].day;
+                        return Center(
+                            child: Text(
+                          day,
+                          style: const TextStyle(fontSize: 16),
+                        ));
                       }
                     }),
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 216, 216, 216),
+                    ),
                   ),
-              ],
-            ),
-          ]);
+                  for (int i = 0; i < 5; i++)
+                    TableRow(
+                      children: List.generate(6, (index) {
+                        if (index == 0) {
+                          return Center(
+                            child: SizedBox(
+                                height: 80,
+                                child: Center(
+                                  child: Text(
+                                    '${i + 1}',
+                                    style: const TextStyle(fontSize: 22),
+                                  ),
+                                )),
+                          );
+                        } else if (data!
+                                .timetableList[index - 1].subjects.length <
+                            5) {
+                          return const Center(child: Text('🦆'));
+                        } else {
+                          final subjectName = data.timetableList[index - 1]
+                              .subjects[i].subject_name;
+                          return Center(child: Text(subjectName));
+                        }
+                      }),
+                      decoration: const BoxDecoration(color: Colors.white),
+                    ),
+                ],
+              ),
+            ]),
+          );
         }
       },
     );
   }
-
-  // Widget build(BuildContext context) {
-  //   return Image.asset('images/timetableEdit.png');
-  // }
 }
 
 class BelongingsEdit extends StatelessWidget {
@@ -209,78 +289,240 @@ class BelongingsEdit extends StatelessWidget {
             final data = snapshot.data;
             debugPrint('#239;$data');
 
-            return SizedBox(
-              child: Row(children: [
-                DataTable(
-                    dataRowMaxHeight: 80,
-                    columns: const [
-                      DataColumn(label: Text('科目')),
-                      DataColumn(label: Text('持ち物')),
-                    ],
-                    rows: List<DataRow>.generate(data!.length, (i) {
-                      return DataRow(cells: [
-                        DataCell(Text(data[i]['subject_name'].toString())),
-                        DataCell(Column(
-                          children: List.generate(
-                            data[i]['belongings'].length,
-                            (j) => Text(data[i]['belongings'][j].toString()),
-                          ),
-                        ))
-                      ]);
-                    })),
-              ]),
+            return Container(
+              margin: const EdgeInsets.only(left: 30, top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 60,
+                    child: Text(
+                      '科目別 持ち物編集',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 77, 77, 77)),
+                    ),
+                  ),
+                  SizedBox(
+                    child: Table(
+                      columnWidths: const {
+                        0: FixedColumnWidth(150), // 列の幅を設定する場合
+                        1: FixedColumnWidth(400),
+                      },
+                      border: TableBorder.all(
+                        color: const Color.fromARGB(255, 122, 122, 122),
+                        style: BorderStyle.solid,
+                        width: 0.5,
+                      ),
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
+                      children: [
+                        const TableRow(
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 216, 216, 216)),
+                          children: [
+                            Center(
+                              child: SizedBox(
+                                height: 50, // 高さを設定
+                                child: Center(
+                                  child: Text(
+                                    '科目',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: SizedBox(
+                                height: 50, // 高さを設定
+                                child: Center(
+                                  child: Text(
+                                    '持ち物',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        for (var i = 0; i < data!.length; i++)
+                          TableRow(
+                              children: [
+                                Center(
+                                  child: SizedBox(
+                                    height: 80,
+                                    child: Center(
+                                      child: Text(
+                                        data[i]['subject_name'].toString(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TableCell(
+                                  child: Column(
+                                    children: List.generate(
+                                      data[i]['belongings'].length,
+                                      (j) => Text(
+                                        data[i]['belongings'][j].toString(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              decoration:
+                                  const BoxDecoration(color: Colors.white)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             );
-            //   ],
-            // );
           }
         });
   }
 }
 
 class ItemsEdit extends StatelessWidget {
-  const ItemsEdit({super.key});
+  const ItemsEdit({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
-        future: getItemsApiData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // データがまだ取得されていない場合の処理
-            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
-          } else if (snapshot.hasError) {
-            // エラーが発生した場合の処理
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // データが正常に取得された場合の処理
-            final data = snapshot.data;
-            debugPrint('#239;$data');
+      future: getItemsApiData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // データがまだ取得されていない場合の処理
+          return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+        } else if (snapshot.hasError) {
+          // エラーが発生した場合の処理
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // データが正常に取得された場合の処理
+          final data = snapshot.data;
+          debugPrint('#239;$data');
 
-            return
-                // Column(
-                //   children: [
-                // Image.asset('images/itemsEdit.png'),
-                // Text(data![0]['id'].toString()),
-                DataTable(
-                    columns: const [
-                  DataColumn(label: Text('id')),
-                  DataColumn(label: Text('アイテム')),
-                ],
-                    rows: List<DataRow>.generate(data!.length, (i) {
-                      return DataRow(cells: [
-                        DataCell(Text(data[i]['id'].toString())),
-                        DataCell(Column(
-                          children: List.generate(
-                            data[i]['item_name'].length,
-                            (j) => Text(data[i]['item_name'][j].toString()),
+          return Container(
+            margin: const EdgeInsets.only(left: 30, top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 60,
+                  child: Text(
+                    "日常品 編集",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 77, 77, 77)),
+                  ),
+                ),
+                SizedBox(
+                  child: Table(
+                    columnWidths: const {
+                      0: FixedColumnWidth(80),
+                      1: FixedColumnWidth(310),
+                      2: FixedColumnWidth(150),
+                    },
+                    border: TableBorder.all(
+                      color: const Color.fromARGB(255, 122, 122, 122),
+                      style: BorderStyle.solid,
+                      width: 0.5,
+                    ),
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    children: [
+                      const TableRow(
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 216, 216, 216)),
+                        children: [
+                          Center(
+                            child: SizedBox(
+                              height: 50, // 高さを設定
+                              child: Center(
+                                child: Text(
+                                  'No',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ),
                           ),
-                        ))
-                      ]);
-                    }));
-            //   ],
-            // );
-          }
-        });
+                          Center(
+                            child: SizedBox(
+                              height: 50, // 高さを設定
+                              child: Center(
+                                child: Text(
+                                  '持ち物の名前',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: SizedBox(
+                              height: 50, // 高さを設定
+                              child: Center(
+                                child: Text(
+                                  '頻度',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      for (int i = 0; i < 4; i++)
+                        TableRow(
+                          children: List.generate(
+                            3,
+                            (index) {
+                              if (index == 0) {
+                                return Center(
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: Center(
+                                      child: Text("${i + 1}"),
+                                    ),
+                                  ),
+                                );
+                              } else if (index == 1) {
+                                return Center(
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(data![i]["item_name"]),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Center(
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(data![i]["day"]),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          decoration: const BoxDecoration(color: Colors.white),
+                        )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+      },
+    );
   }
 }
 
@@ -290,49 +532,161 @@ class EventEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
-        future: getEventsApiData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // データがまだ取得されていない場合の処理
-            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
-          } else if (snapshot.hasError) {
-            // エラーが発生した場合の処理
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // データが正常に取得された場合の処理
-            final data = snapshot.data;
-            debugPrint('#239;$data');
-            return
-                // Column(
-                //   children: [
-                // Image.asset('images/eventEdit.png'),
-                // Text('${data![0]['event_name']}'),
-                SizedBox(
-              child: Row(children: [
-                DataTable(
-                    dataRowMaxHeight: 180,
-                    columns: const [
-                      DataColumn(label: Text('日付')),
-                      DataColumn(label: Text('イベント名')),
-                      DataColumn(label: Text('持ち物')),
-                    ],
-                    rows: List<DataRow>.generate(data!.length, (i) {
-                      return DataRow(cells: [
-                        DataCell(Text(data[i]['date'].toString())),
-                        DataCell(Text(data[i]['event_name'].toString())),
-                        DataCell(Column(
-                          children: List.generate(
-                            data[i]['itemNames'].length,
-                            (j) => Text(data[i]['itemNames'][j].toString()),
+      future: getEventsApiData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // データがまだ取得されていない場合の処理
+          return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+        } else if (snapshot.hasError) {
+          // エラーが発生した場合の処理
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // データが正常に取得された場合の処理
+          final data = snapshot.data;
+          debugPrint('#239;$data');
+
+          return Container(
+            margin: const EdgeInsets.only(left: 30, top: 20),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(
+                height: 60,
+                child: Text(
+                  'イベント登録',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 77, 77, 77)),
+                ),
+              ),
+              Table(
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FixedColumnWidth(70),
+                  1: FixedColumnWidth(170),
+                  2: FixedColumnWidth(150),
+                  3: FixedColumnWidth(150),
+                },
+                border: TableBorder.all(
+                  color: const Color.fromARGB(255, 122, 122, 122),
+                  style: BorderStyle.solid,
+                  width: 0.5,
+                ),
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
+                  const TableRow(
+                    decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 216, 216, 216)),
+                    children: [
+                      Center(
+                        child: SizedBox(
+                          height: 50, // 高さを設定
+                          child: Center(
+                            child: Text(
+                              'No',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16),
+                            ),
                           ),
-                        ))
-                      ]);
-                    })),
-              ]),
-            );
-            //   ],
-            // );
-          }
-        });
+                        ),
+                      ),
+                      Center(
+                        child: SizedBox(
+                          height: 50, // 高さを設定
+                          child: Center(
+                            child: Text(
+                              'イベント名',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: SizedBox(
+                          height: 50, // 高さを設定
+                          child: Center(
+                            child: Text(
+                              '持ち物の名前',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: SizedBox(
+                          height: 50, // 高さを設定
+                          child: Center(
+                            child: Text(
+                              '登録日',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  for (var i = 0; i < data!.length; i++)
+                    TableRow(
+                      children: List.generate(
+                        4,
+                        (index) {
+                          if (index == 0) {
+                            return Center(
+                              child: SizedBox(
+                                height: 170,
+                                child: Center(
+                                  child: Text("${i + 1}"),
+                                ),
+                              ),
+                            );
+                          } else if (index == 1) {
+                            return Center(
+                              child: SizedBox(
+                                height: 170,
+                                child: Center(
+                                  child: Text(data[i]["event_name"]),
+                                ),
+                              ),
+                            );
+                          } else if (index == 2) {
+                            return Center(
+                              child: SizedBox(
+                                height: 170,
+                                child: Center(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: List.generate(
+                                        data[i]["itemNames"].length,
+                                        (index) =>
+                                            Text(data[i]["itemNames"][index]),
+                                      )),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Center(
+                              child: SizedBox(
+                                height: 170,
+                                child: Center(
+                                  child: Text(data[i]["date"]),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      decoration: const BoxDecoration(color: Colors.white),
+                    )
+                ],
+              ),
+            ]),
+          );
+        }
+      },
+    );
   }
 }

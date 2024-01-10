@@ -102,26 +102,18 @@ class PageHome extends ConsumerWidget {
       return events[day] ?? [];
     }
 
-    // List<String>? historyDates;
-
-    // before
-    // getStudentsHistoryDate(_selected != null ? _selected! : DateTime.now())
-    //     .then((value) {
-    //   historyDates = value;
-    //   debugPrint("確認用：$historyDates");
-    // });
     late Future<List<String>> historyDatesFuture;
     historyDatesFuture =
         getStudentsHistoryDate(_selected != null ? _selected! : DateTime.now());
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 236, 236, 236),
+      // backgroundColor: const Color.fromARGB(255, 236, 236, 236),
       body: Center(
         child: Column(
           children: [
             Container(
               height: 450,
-              color: const Color.fromARGB(255, 236, 236, 236),
+              // color: const Color.fromARGB(255, 236, 236, 236),
               margin: const EdgeInsets.only(top: 0),
               // color: Colors.amber,
               child: TableCalendar(
@@ -129,7 +121,7 @@ class PageHome extends ConsumerWidget {
                 lastDay: DateTime.utc(2025, 12, 31),
                 eventLoader: getEvent,
                 selectedDayPredicate: (day) {
-                  print(isSameDay(_selected, day));
+                  // print(isSameDay(_selected, day));
                   return isSameDay(_selected, day);
                 },
                 daysOfWeekStyle: DaysOfWeekStyle(
@@ -315,9 +307,9 @@ class PageHome extends ConsumerWidget {
                 focusedDay: _focused,
                 onPageChanged: (focusedDay) {
                   debugPrint("月変えた？");
-                  final formattedDate =
-                      DateFormat('yyyy-MM-dd').format(focusedDay);
-                  print("Displayed month: $formattedDate");
+                  // final formattedDate =
+                  //     DateFormat('yyyy-MM-dd').format(focusedDay);
+                  // print("Displayed month: $formattedDate");
                 },
               ),
             ),
@@ -340,7 +332,7 @@ class PageHome extends ConsumerWidget {
                   ),
                 ),
                 onPressed: () async {
-                  print("持ち物登録ボタンが押された");
+                  // print("持ち物登録ボタンが押された");
                   // print(_selected)
                   final DayBelongings data = await getBelongingsApiData(
                     date: _selected != null

@@ -3,104 +3,65 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:go_router/go_router.dart';
 // import 'package:teacher/subject.dart';
 import 'package:teacher/models/edit_settings.dart';
-
-// class SideMenu extends StatelessWidget {
-// class SideMenu extends ConsumerWidget {
-//   const SideMenu({super.key});
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     var pageId = ref.watch(editScreenNotifierProvider);
-//     // debugPrint('here is side_menu;pageId=$pageId');
-// //final Daybelongiongs a = getApiData();
-// //a.
-//     return ListView(
-//       // padding: const EdgeInsets.all(100),
-//       children: [
-//         ListTile(
-//           selectedTileColor: Colors.grey.shade400,
-//           // titleTextStyle: ,
-//           title: const Text(
-//             '生徒編集',
-//             style: TextStyle(color: Colors.black, fontSize: 25),
-//           ),
-//           onTap: () {
-//             //実行したい関数を設定
-//             pageId = 0;
-//             final notifier = ref.read(editScreenNotifierProvider.notifier);
-//             notifier.updateScreen(pageId);
-//             debugPrint('Tap on list tile A:$pageId');
-//           },
-//         ),
-//         ListTile(
-//           title: const Text(
-//             '時間割　編集',
-//             style: TextStyle(color: Colors.black, fontSize: 25),
-//           ),
-//           onTap: () {
-//             pageId = 1;
-//             final notifier = ref.read(editScreenNotifierProvider.notifier);
-//             notifier.updateScreen(pageId);
-//             debugPrint('Tap on list tile B');
-//           },
-//         ),
-//         ListTile(
-//           title: const Text(
-//             '科目別　持ち物編集',
-//             style: TextStyle(color: Colors.black, fontSize: 25),
-//           ),
-//           onTap: () {
-//             pageId = 2;
-//             final notifier = ref.read(editScreenNotifierProvider.notifier);
-//             notifier.updateScreen(pageId);
-//             debugPrint('Tap on list tile C');
-//           },
-//         ),
-//         ListTile(
-//           title: const Text(
-//             '日常品　編集',
-//             style: TextStyle(color: Colors.black, fontSize: 25),
-//           ),
-//           onTap: () {
-//             pageId = 3;
-//             final notifier = ref.read(editScreenNotifierProvider.notifier);
-//             notifier.updateScreen(pageId);
-//             debugPrint('Tap on list tile C');
-//           },
-//         ),
-//         ListTile(
-//           title: const Text(
-//             'イベント登録',
-//             style: TextStyle(color: Colors.black, fontSize: 25),
-//           ),
-//           onTap: () {
-//             pageId = 4;
-//             final notifier = ref.read(editScreenNotifierProvider.notifier);
-//             notifier.updateScreen(pageId);
-//             debugPrint('Tap on list tile D');
-//           },
-//         ),
-//       ],
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:teacher/models/edit_settings.dart';
 
 class SideMenu extends ConsumerWidget {
-  const SideMenu({super.key});
+  SideMenu({Key? key}) : super(key: key);
+
+  late int pageId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // var pageId = ref.watch(editScreenNotifierProvider);
+    var pageId = ref.watch(editScreenNotifierProvider);
 
-    return ListView(
-      // padding: const EdgeInsets.all(100),
-      children: [
-        _buildListTile('生徒編集', 0, ref),
-        _buildListTile('時間割　編集', 1, ref),
-        _buildListTile('科目別　持ち物編集', 2, ref),
-        _buildListTile('日常品　編集', 3, ref),
-        _buildListTile('イベント登録', 4, ref),
-      ],
+    return Container(
+      color: const Color.fromARGB(255, 34, 38, 49).withOpacity(0.9),
+      child: ListView(
+        children: [
+          buildListTile(ref, pageId, 0, '生徒編集', Icons.group),
+          buildListTile(ref, pageId, 1, '時間割 編集', Icons.dataset),
+          buildListTile(ref, pageId, 2, '科目別 持ち物編集', Icons.square_foot),
+          buildListTile(ref, pageId, 3, '日常品 編集', Icons.edit),
+          buildListTile(ref, pageId, 4, 'イベント登録', Icons.event),
+        ],
+      ),
+    );
+  }
+
+  Widget buildListTile(WidgetRef ref, int currentPageId, int tilePageId,
+      String title, IconData icon) {
+    bool isSelected = currentPageId == tilePageId;
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: InkWell(
+        onTap: () {
+          pageId = tilePageId;
+          final notifier = ref.read(editScreenNotifierProvider.notifier);
+          notifier.updateScreen(pageId);
+          debugPrint('Tap on list tile $title:$pageId');
+        },
+        hoverColor: const Color.fromARGB(255, 34, 38, 49),
+        child: ListTile(
+          leading: Icon(
+            icon,
+            color: Colors.white,
+            size: 20,
+          ),
+          tileColor: isSelected
+              ? const Color.fromARGB(255, 2, 37, 49) // 選択されたアイテムの色
+              : null, // デフォルトの色にするためにnullを使用
+          title: Text(
+            title,
+            style: const TextStyle(
+              color: Color.fromARGB(255, 255, 255, 255),
+              fontSize: 16,
+            ),
+          ),
+        ),
+      ),
     );
   }
 

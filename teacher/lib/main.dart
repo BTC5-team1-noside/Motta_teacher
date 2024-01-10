@@ -7,18 +7,21 @@ import 'package:teacher/screens/main_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 main() {
+  // テーマの設定
+  final theme = ThemeData(
+      scaffoldBackgroundColor: const Color.fromARGB(255, 245, 248, 251),
+      appBarTheme:
+          const AppBarTheme(backgroundColor: Color.fromARGB(255, 25, 112, 170)),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Color.fromARGB(255, 25, 112, 170)),
+      visualDensity: VisualDensity.adaptivePlatformDensity);
+
+  // MaterialAppのインスタンスを作成し、テーマを設定
   final app = MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primaryColor: Colors.amber,
-          scaffoldBackgroundColor: Colors.blueGrey.shade200,
-          appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.blue,
-              titleTextStyle: TextStyle(color: Colors.white, fontSize: 50)),
-          bottomNavigationBarTheme:
-              const BottomNavigationBarThemeData(backgroundColor: Colors.blue)),
-      home: const MainScreen());
-  // プロバイダースコープでアプリを囲む
+    debugShowCheckedModeBanner: false,
+    home: const MainScreen(),
+    theme: theme,
+  );
 
   final scope = ProviderScope(child: app);
   initializeDateFormatting('ja_JP', null);

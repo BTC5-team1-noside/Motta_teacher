@@ -6,7 +6,8 @@ import 'package:teacher/models/timetables.dart';
 
 Future<List<dynamic>> getStudentsApiData() async {
   const baseUrl = String.fromEnvironment('base_url');
-  final url = Uri.https(baseUrl, 'api/v1/teacher/settings/students');
+  final url = Uri.https(
+      'motta-9dbb2df4f6d7.herokuapp.com', 'api/v1/teacher/settings/students');
   try {
     //JSON <=== from API(Database)
     final response = await http.get(url);
