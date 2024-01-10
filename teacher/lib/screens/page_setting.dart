@@ -37,7 +37,7 @@ class PageSettings extends ConsumerWidget {
         child: SideMenu(),
       ),
       SizedBox(
-        width: 500,
+        width: 600,
         child: pages[pageId],
       ),
     ]));
@@ -85,7 +85,7 @@ class StudentEdit extends StatelessWidget {
                         DataCell(Text(studentName)),
                       ]);
                     }),
-                    decoration: const BoxDecoration(color: Colors.amber),
+                    // decoration: const BoxDecoration(color: Colors.amber),
                   ),
                   DataTable(
                       columns: const [
@@ -127,61 +127,92 @@ class TimetableEdit extends StatelessWidget {
           // データが正常に取得された場合の処理
           final data = snapshot.data;
 
-          return Column(children: [
-            Table(
-              columnWidths: const <int, TableColumnWidth>{
-                0: FixedColumnWidth(80),
-                1: FixedColumnWidth(80),
-                2: FixedColumnWidth(80),
-                3: FixedColumnWidth(80),
-                4: FixedColumnWidth(80),
-                5: FixedColumnWidth(80),
-              },
-              border: TableBorder.all(color: Colors.black),
-              defaultVerticalAlignment:
-                  TableCellVerticalAlignment.middle, //各セルの上下方向の文字位置変更
-
-              children: [
-                TableRow(
-                  children: List.generate(6, (index) {
-                    if (index == 0) {
-                      return const Center(
-                        child: SizedBox(
-                            height: 80, child: Center(child: Text('時間割表'))),
-                      );
-                    } else {
-                      final day = data!.timetableList[index - 1].day;
-                      return Center(child: Text(day));
-                    }
-                  }),
-                  decoration: const BoxDecoration(color: Colors.white),
+          return Container(
+            margin: const EdgeInsets.only(left: 20, top: 20),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(
+                height: 60,
+                child: Text(
+                  '時間割 編集',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 77, 77, 77)),
                 ),
-                for (int i = 0; i < 5; i++)
+              ),
+              Table(
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FixedColumnWidth(70),
+                  1: FixedColumnWidth(95),
+                  2: FixedColumnWidth(95),
+                  3: FixedColumnWidth(95),
+                  4: FixedColumnWidth(95),
+                  5: FixedColumnWidth(95),
+                },
+                border: TableBorder.all(
+                  color: const Color.fromARGB(255, 122, 122, 122),
+                  style: BorderStyle.solid,
+                  width: 0.5,
+                ),
+                defaultVerticalAlignment:
+                    TableCellVerticalAlignment.middle, //各セルの上下方向の文字位置変更
+
+                children: [
                   TableRow(
                     children: List.generate(6, (index) {
                       if (index == 0) {
                         return Center(
-                          child: SizedBox(
-                              height: 80,
-                              child: Center(
-                                child: Text('${i + 1}'),
-                              )),
+                          child: Container(
+                            color: const Color.fromARGB(255, 216, 216, 216),
+                            height: 50,
+                            child: const Center(child: Text('時間割表')),
+                          ),
                         );
-                      } else if (data!
-                              .timetableList[index - 1].subjects.length <
-                          5) {
-                        return const Center(child: Text('🦆'));
                       } else {
-                        final subjectName = data
-                            .timetableList[index - 1].subjects[i].subject_name;
-                        return Center(child: Text(subjectName));
+                        final day = data!.timetableList[index - 1].day;
+                        return Center(
+                            child: Text(
+                          day,
+                          style: const TextStyle(fontSize: 22),
+                        ));
                       }
                     }),
-                    decoration: const BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 216, 216, 216),
+                    ),
                   ),
-              ],
-            ),
-          ]);
+                  for (int i = 0; i < 5; i++)
+                    TableRow(
+                      children: List.generate(6, (index) {
+                        if (index == 0) {
+                          return Center(
+                            child: SizedBox(
+                                height: 80,
+                                child: Center(
+                                  child: Text(
+                                    '${i + 1}',
+                                    style: const TextStyle(fontSize: 22),
+                                  ),
+                                )),
+                          );
+                        } else if (data!
+                                .timetableList[index - 1].subjects.length <
+                            5) {
+                          return const Center(child: Text('🦆'));
+                        } else {
+                          final subjectName = data.timetableList[index - 1]
+                              .subjects[i].subject_name;
+                          return Center(child: Text(subjectName));
+                        }
+                      }),
+                      decoration: const BoxDecoration(color: Colors.white),
+                    ),
+                ],
+              ),
+            ]),
+          );
         }
       },
     );
@@ -194,6 +225,8 @@ class TimetableEdit extends StatelessWidget {
 
 class BelongingsEdit extends StatelessWidget {
   const BelongingsEdit({super.key});
+
+  // const BelongingsEdit({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -211,29 +244,101 @@ class BelongingsEdit extends StatelessWidget {
             final data = snapshot.data;
             debugPrint('#239;$data');
 
-            return SizedBox(
-              child: Row(children: [
-                DataTable(
-                  dataRowMaxHeight: 80,
-                  columns: const [
-                    DataColumn(label: Text('科目')),
-                    DataColumn(label: Text('持ち物')),
-                  ],
-                  rows: List<DataRow>.generate(data!.length, (i) {
-                    return DataRow(cells: [
-                      DataCell(Text(data[i]['subject_name'].toString())),
-                      DataCell(Column(
-                        children: List.generate(
-                          data[i]['belongings'].length,
-                          (j) => Text(data[i]['belongings'][j].toString()),
+            return Container(
+              margin: const EdgeInsets.only(left: 20, top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 60,
+                    child: Text(
+                      '科目別 持ち物編集',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 77, 77, 77)),
+                    ),
+                  ),
+                  SizedBox(
+                    child: Table(
+                      columnWidths: const {
+                        0: FixedColumnWidth(150), // 列の幅を設定する場合
+                        1: FixedColumnWidth(400),
+                      },
+                      border: TableBorder.all(
+                        color: const Color.fromARGB(255, 122, 122, 122),
+                        style: BorderStyle.solid,
+                        width: 0.5,
+                      ),
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
+                      children: [
+                        const TableRow(
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 216, 216, 216)),
+                          children: [
+                            Center(
+                              child: SizedBox(
+                                height: 50, // 高さを設定
+                                child: Center(
+                                  child: Text(
+                                    '科目',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: SizedBox(
+                                height: 50, // 高さを設定
+                                child: Center(
+                                  child: Text(
+                                    '持ち物',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ))
-                    ]);
-                  }),
-                  decoration: const BoxDecoration(color: Colors.white),
-                ),
-              ]),
+                        for (var i = 0; i < data!.length; i++)
+                          TableRow(
+                              children: [
+                                Center(
+                                  child: SizedBox(
+                                    height: 80,
+                                    child: Center(
+                                      child: Text(
+                                        data[i]['subject_name'].toString(),
+                                        // textAlign: TextAlign.left,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TableCell(
+                                  child: Column(
+                                    children: List.generate(
+                                      data[i]['belongings'].length,
+                                      (j) => Text(
+                                        data[i]['belongings'][j].toString(),
+                                        // textAlign: TextAlign.left,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              decoration:
+                                  const BoxDecoration(color: Colors.white)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             );
+
             //   ],
             // );
           }
