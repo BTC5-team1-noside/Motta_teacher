@@ -137,7 +137,7 @@ class TimetableEdit extends StatelessWidget {
                   '時間割 編集',
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 77, 77, 77)),
                 ),
@@ -249,7 +249,7 @@ class BelongingsEdit extends StatelessWidget {
                       '科目別 持ち物編集',
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                          fontSize: 28,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 77, 77, 77)),
                     ),
@@ -365,7 +365,7 @@ class ItemsEdit extends StatelessWidget {
                     "日常品 編集",
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 77, 77, 77)),
                   ),
@@ -434,26 +434,29 @@ class ItemsEdit extends StatelessWidget {
                               if (index == 0) {
                                 return Center(
                                   child: SizedBox(
-                                      height: 50,
-                                      child: Center(
-                                        child: Text("${i + 1}"),
-                                      )),
+                                    height: 50,
+                                    child: Center(
+                                      child: Text("${i + 1}"),
+                                    ),
+                                  ),
                                 );
                               } else if (index == 1) {
                                 return Center(
                                   child: SizedBox(
-                                      height: 50,
-                                      child: Center(
-                                        child: Text(data![i]["item_name"]),
-                                      )),
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(data![i]["item_name"]),
+                                    ),
+                                  ),
                                 );
                               } else {
                                 return Center(
                                   child: SizedBox(
-                                      height: 50,
-                                      child: Center(
-                                        child: Text(data![i]["day"]),
-                                      )),
+                                    height: 50,
+                                    child: Center(
+                                      child: Text(data![i]["day"]),
+                                    ),
+                                  ),
                                 );
                               }
                             },
@@ -478,49 +481,161 @@ class EventEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
-        future: getEventsApiData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // データがまだ取得されていない場合の処理
-            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
-          } else if (snapshot.hasError) {
-            // エラーが発生した場合の処理
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // データが正常に取得された場合の処理
-            final data = snapshot.data;
-            debugPrint('#239;$data');
-            return
-                // Column(
-                //   children: [
-                // Image.asset('images/eventEdit.png'),
-                // Text('${data![0]['event_name']}'),
-                SizedBox(
-              child: Row(children: [
-                DataTable(
-                    dataRowMaxHeight: 180,
-                    columns: const [
-                      DataColumn(label: Text('日付')),
-                      DataColumn(label: Text('イベント名')),
-                      DataColumn(label: Text('持ち物')),
-                    ],
-                    rows: List<DataRow>.generate(data!.length, (i) {
-                      return DataRow(cells: [
-                        DataCell(Text(data[i]['date'].toString())),
-                        DataCell(Text(data[i]['event_name'].toString())),
-                        DataCell(Column(
-                          children: List.generate(
-                            data[i]['itemNames'].length,
-                            (j) => Text(data[i]['itemNames'][j].toString()),
+      future: getEventsApiData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // データがまだ取得されていない場合の処理
+          return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+        } else if (snapshot.hasError) {
+          // エラーが発生した場合の処理
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // データが正常に取得された場合の処理
+          final data = snapshot.data;
+          debugPrint('#239;$data');
+
+          return Container(
+            margin: const EdgeInsets.only(left: 30, top: 20),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(
+                height: 60,
+                child: Text(
+                  'イベント登録',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 77, 77, 77)),
+                ),
+              ),
+              Table(
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FixedColumnWidth(70),
+                  1: FixedColumnWidth(170),
+                  2: FixedColumnWidth(150),
+                  3: FixedColumnWidth(150),
+                },
+                border: TableBorder.all(
+                  color: const Color.fromARGB(255, 122, 122, 122),
+                  style: BorderStyle.solid,
+                  width: 0.5,
+                ),
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
+                  const TableRow(
+                    decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 216, 216, 216)),
+                    children: [
+                      Center(
+                        child: SizedBox(
+                          height: 50, // 高さを設定
+                          child: Center(
+                            child: Text(
+                              'No',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16),
+                            ),
                           ),
-                        ))
-                      ]);
-                    })),
-              ]),
-            );
-            //   ],
-            // );
-          }
-        });
+                        ),
+                      ),
+                      Center(
+                        child: SizedBox(
+                          height: 50, // 高さを設定
+                          child: Center(
+                            child: Text(
+                              'イベント名',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: SizedBox(
+                          height: 50, // 高さを設定
+                          child: Center(
+                            child: Text(
+                              '持ち物の名前',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: SizedBox(
+                          height: 50, // 高さを設定
+                          child: Center(
+                            child: Text(
+                              '登録日',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  for (var i = 0; i < data!.length; i++)
+                    TableRow(
+                      children: List.generate(
+                        4,
+                        (index) {
+                          if (index == 0) {
+                            return Center(
+                              child: SizedBox(
+                                height: 170,
+                                child: Center(
+                                  child: Text("${i + 1}"),
+                                ),
+                              ),
+                            );
+                          } else if (index == 1) {
+                            return Center(
+                              child: SizedBox(
+                                height: 170,
+                                child: Center(
+                                  child: Text(data[i]["event_name"]),
+                                ),
+                              ),
+                            );
+                          } else if (index == 2) {
+                            return Center(
+                              child: SizedBox(
+                                height: 170,
+                                child: Center(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: List.generate(
+                                        data[i]["itemNames"].length,
+                                        (index) =>
+                                            Text(data[i]["itemNames"][index]),
+                                      )),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Center(
+                              child: SizedBox(
+                                height: 170,
+                                child: Center(
+                                  child: Text(data[i]["date"]),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      decoration: const BoxDecoration(color: Colors.white),
+                    )
+                ],
+              ),
+            ]),
+          );
+        }
+      },
+    );
   }
 }
