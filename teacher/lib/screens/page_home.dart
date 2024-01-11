@@ -158,7 +158,7 @@ class PageHome extends ConsumerWidget {
                 daysOfWeekHeight: 40,
                 headerStyle: HeaderStyle(
                   titleTextStyle: const TextStyle(
-                    fontSize: 30,
+                    fontSize: 28,
                     fontWeight: FontWeight.w600,
                   ),
                   titleTextFormatter: (date, locale) {
@@ -313,51 +313,70 @@ class PageHome extends ConsumerWidget {
                 },
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 0),
-              padding: const EdgeInsets.all(10),
-              width: 300,
-              height: 70,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        // ボタンが押されたときの色
-                        return Colors.blue;
-                      }
-                      // ボタンが通常の状態の色
-                      return const Color.fromARGB(255, 4, 45, 207);
-                    },
+            SizedBox(
+                height: 70,
+                width: 550,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
                   ),
-                ),
-                onPressed: () async {
-                  // print("持ち物登録ボタンが押された");
-                  // print(_selected)
-                  final DayBelongings data = await getBelongingsApiData(
-                    date: _selected != null
-                        ? DateFormat('yyyy-MM-dd').format(_selected!)
-                        : DateFormat('yyyy-MM-dd').format(DateTime.now()),
-                  );
-                  debugPrint("data: $data");
-                  ref
-                      .read(dateNotifierProvider.notifier)
-                      .updateState("$_selected");
+                  onPressed: () async {
+                    final DayBelongings data = await getBelongingsApiData(
+                      date: _selected != null
+                          ? DateFormat('yyyy-MM-dd').format(_selected!)
+                          : DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                    );
+                    debugPrint("data: $data");
+                    ref
+                        .read(dateNotifierProvider.notifier)
+                        .updateState("$_selected");
 
-                  ref
-                      .read(dayBelongingsNotifierProvider.notifier)
-                      .updateState(data);
-                  ref.read(indexNotifierProvider.notifier).updateState(1);
-                },
-                child: const Text(
-                  "持ち物登録を行う",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
+                    ref
+                        .read(dayBelongingsNotifierProvider.notifier)
+                        .updateState(data);
+                    ref.read(indexNotifierProvider.notifier).updateState(1);
+                  },
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center, // 上下の中央揃え
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.fact_check,
+                                  color: Colors.white,
+                                  size: 35,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  "持ち物登録する",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 26),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+            const SizedBox(
+              height: 20,
             ),
+            // const SizedBox(
+            //   height: 40,
+            //   child: Text(
+            //     "生徒の実施履歴",
+            //     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            //   ),
+            // ),
             Column(
               children: [
                 Container(

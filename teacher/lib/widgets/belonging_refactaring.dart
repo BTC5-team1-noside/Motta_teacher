@@ -59,8 +59,8 @@ class Belongings extends ConsumerWidget {
               borderRadius: BorderRadius.circular(10.0),
               color: const Color.fromARGB(255, 255, 255, 255),
             ),
-            height: 400,
-            width: 400,
+            height: 410,
+            width: 390,
             child: Column(
               children: [
                 const SizedBox(

@@ -148,8 +148,8 @@ class PageCheckList extends ConsumerWidget {
             borderRadius: BorderRadius.circular(10.0),
             color: const Color.fromARGB(255, 255, 255, 255),
           ),
-          height: 400,
-          width: 400,
+          height: 410,
+          width: 390,
           child: Column(
             children: [
               const SizedBox(
@@ -194,6 +194,10 @@ class PageCheckList extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    const Color.fromARGB(255, 47, 81, 109), // 背景色を指定
+              ),
               onPressed: () {
                 toChangeDate(dayData, -1);
               },
@@ -203,13 +207,14 @@ class PageCheckList extends ConsumerWidget {
                   Icon(
                     Icons.arrow_back_ios,
                     size: 15,
+                    color: Colors.white,
                   ),
                   SizedBox(
                       width:
                           8), // Adjust the spacing between icon and text as needed
                   Text(
                     '前日',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ],
               ),
@@ -221,27 +226,32 @@ class PageCheckList extends ConsumerWidget {
               "${DateFormat('yyyy年 MM月 dd日').format(timeF)} ($day)", // ここを修正する！！！！
               style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 30,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               width: 80,
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    const Color.fromARGB(255, 47, 81, 109), // 背景色を指定
+              ),
               onPressed: () {
-                toChangeDate(dayData, -1);
+                toChangeDate(dayData, 1);
               },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     '翌日',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
                   SizedBox(width: 8),
                   Icon(
                     Icons.arrow_forward_ios,
                     size: 15,
+                    color: Colors.white,
                   ),
                 ],
               ),
@@ -271,10 +281,6 @@ class PageCheckList extends ConsumerWidget {
             ],
           ),
         ),
-
-        // const SizedBox(
-        //   height: 10,
-        // ),
         //追加の持ち物を入力するText表示（上段）
 
         Container(
@@ -309,6 +315,7 @@ class PageCheckList extends ConsumerWidget {
                         border: Border.all(style: BorderStyle.none),
                       ),
                       child: TextField(
+                        style: const TextStyle(fontSize: 22),
                         controller: itemTextControllers[j],
                         onChanged: (value) {
                           additionalItems[j] = value;
@@ -375,9 +382,27 @@ class PageCheckList extends ConsumerWidget {
                   showDialog(
                       context: context, builder: (_) => const RegisterDialog());
                 },
-                child: Text(
-                  updateButtonText,
-                  style: const TextStyle(fontSize: 26, color: Colors.white),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.add_box,
+                            color: Colors.white,
+                            size: 35,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            updateButtonText,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 26),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -398,10 +423,27 @@ class PageCheckList extends ConsumerWidget {
                   debugPrint('#338:cancel');
                   ref.read(indexNotifierProvider.notifier).updateState(0);
                 },
-                child: const Text(
-                  'キャンセル',
-                  style: TextStyle(fontSize: 26, color: Colors.white),
-                ), //  '登録',
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.cancel,
+                            color: Colors.white,
+                            size: 35,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            "キャンセル",
+                            style: TextStyle(color: Colors.white, fontSize: 26),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
