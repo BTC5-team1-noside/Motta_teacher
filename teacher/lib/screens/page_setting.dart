@@ -78,7 +78,7 @@ class StudentEdit extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 77, 77, 77)),
+                            color: Color.fromARGB(255, 96, 96, 96)),
                       ),
                     ),
                     Table(
@@ -190,7 +190,7 @@ class TimetableEdit extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 77, 77, 77)),
+                      color: Color.fromARGB(255, 96, 96, 96)),
                 ),
               ),
               Table(
@@ -302,7 +302,7 @@ class BelongingsEdit extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 77, 77, 77)),
+                          color: Color.fromARGB(255, 96, 96, 96)),
                     ),
                   ),
                   SizedBox(
@@ -418,7 +418,7 @@ class ItemsEdit extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 77, 77, 77)),
+                        color: Color.fromARGB(255, 96, 96, 96)),
                   ),
                 ),
                 SizedBox(
@@ -557,7 +557,7 @@ class EventEdit extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 77, 77, 77)),
+                      color: Color.fromARGB(255, 96, 96, 96)),
                 ),
               ),
               Table(

@@ -70,7 +70,7 @@ class SubjectDropdown extends ConsumerWidget {
     ];
 
     return DropdownButton(
-      style: const TextStyle(fontSize: 26),
+      style: const TextStyle(fontSize: 22),
       // alignment: Alignment.center,
       isExpanded: true,
       value: dayData.subjects[period].subject_name,

@@ -27,10 +27,10 @@ class PageCheckList extends ConsumerWidget {
             children: [
               Text(
                 "${i + 1}限",
-                style: const TextStyle(color: Colors.black, fontSize: 26),
+                style: const TextStyle(color: Colors.black, fontSize: 22),
               ),
               const SizedBox(
-                width: 20,
+                width: 30,
               ),
               SizedBox(width: 160, child: SubjectDropdown(i)),
             ],
@@ -136,9 +136,9 @@ class PageCheckList extends ConsumerWidget {
     if (dayData.subjects.isEmpty) {
       registerMain = [
         timetable = const Text(
-          "この日は授業が\nありません。",
+          "この日は授業がありません。",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 50),
+          style: TextStyle(fontSize: 20, color: Colors.grey),
         ),
       ];
     } else {
@@ -149,18 +149,31 @@ class PageCheckList extends ConsumerWidget {
             color: const Color.fromARGB(255, 255, 255, 255),
           ),
           height: 410,
-          width: 390,
+          width: 380,
           child: Column(
             children: [
               const SizedBox(
                 height: 10,
               ),
               const SizedBox(
-                height: 50,
+                height: 30,
                 child: Text(
                   "科目",
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 96, 96, 96)),
                 ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              const Divider(
+                color: Color.fromARGB(255, 205, 205, 205),
+                thickness: 1.0,
+              ),
+              const SizedBox(
+                height: 20,
               ),
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,9 +222,7 @@ class PageCheckList extends ConsumerWidget {
                     size: 15,
                     color: Colors.white,
                   ),
-                  SizedBox(
-                      width:
-                          8), // Adjust the spacing between icon and text as needed
+                  SizedBox(width: 8),
                   Text(
                     '前日',
                     style: TextStyle(fontSize: 18, color: Colors.white),
@@ -223,9 +234,9 @@ class PageCheckList extends ConsumerWidget {
               width: 60,
             ),
             Text(
-              "${DateFormat('yyyy年 MM月 dd日').format(timeF)} ($day)", // ここを修正する！！！！
+              "${DateFormat('yyyy年 MM月 dd日').format(timeF)} ($day)",
               style: const TextStyle(
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 64, 64, 64),
                   fontSize: 28,
                   fontWeight: FontWeight.bold),
             ),
@@ -285,46 +296,63 @@ class PageCheckList extends ConsumerWidget {
         Visibility(
           visible: dayData.subjects.isNotEmpty,
           child: Container(
-            width: 800,
-            height: 250,
+            width: 780,
+            height: 230,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
-              color: const Color.fromARGB(255, 221, 231, 244),
+              color: const Color.fromARGB(255, 255, 255, 255),
             ),
             child: Column(
               children: [
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 const SizedBox(
-                  height: 80,
+                  height: 30,
                   child: Text(
                     "個別に追加する持ち物",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 96, 96, 96)),
                   ),
                 ),
-
+                const SizedBox(
+                  height: 5,
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 205, 205, 205),
+                  thickness: 1.0,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     for (int j = 0; j < 3; j++)
                       Container(
-                        width: 250,
+                        width: 240,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: Colors.white,
-                          border: Border.all(style: BorderStyle.none),
+                          border: Border.all(
+                              width: 0.5,
+                              style: BorderStyle.solid,
+                              color: const Color.fromARGB(255, 197, 197, 197)),
                         ),
                         child: TextField(
-                          style: const TextStyle(fontSize: 22),
+                          style: const TextStyle(fontSize: 14),
                           controller: itemTextControllers[j],
                           onChanged: (value) {
                             additionalItems[j] = value;
                           },
                           focusNode: focusNods[j],
                           decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
+                              border: InputBorder.none,
+                              hintText: "ここに持ち物を入力してください",
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(255, 205, 204, 204))),
                         ),
                       ),
                   ],
@@ -339,13 +367,17 @@ class PageCheckList extends ConsumerWidget {
                   children: [
                     for (int j = 3; j < 6; j++)
                       Container(
-                        width: 250,
+                        width: 240,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: Colors.white,
-                          border: Border.all(style: BorderStyle.none),
+                          border: Border.all(
+                              width: 0.5,
+                              style: BorderStyle.solid,
+                              color: const Color.fromARGB(255, 197, 197, 197)),
                         ),
                         child: TextField(
+                          style: const TextStyle(fontSize: 14),
                           controller: itemTextControllers[j],
                           onChanged: (value) {
                             additionalItems[j] = value;
@@ -353,6 +385,9 @@ class PageCheckList extends ConsumerWidget {
                           focusNode: focusNods[j],
                           decoration: const InputDecoration(
                             border: InputBorder.none,
+                            hintText: "ここに持ち物を入力してください",
+                            hintStyle: TextStyle(
+                                color: Color.fromARGB(255, 205, 204, 204)),
                           ),
                         ),
                       ),
