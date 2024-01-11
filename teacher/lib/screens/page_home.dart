@@ -111,6 +111,9 @@ class PageHome extends ConsumerWidget {
       body: Center(
         child: Column(
           children: [
+            const SizedBox(
+              height: 10,
+            ),
             Container(
               height: 450,
               // color: const Color.fromARGB(255, 236, 236, 236),
@@ -160,6 +163,7 @@ class PageHome extends ConsumerWidget {
                   titleTextStyle: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
+                    color: Color.fromARGB(255, 64, 64, 64),
                   ),
                   titleTextFormatter: (date, locale) {
                     return DateFormat("yyyy年 MM月 dd日 (E)", "ja_JP")

@@ -29,8 +29,8 @@ class MainScreen extends ConsumerWidget {
 
     final bar = BottomNavigationBar(
       items: items,
-      unselectedFontSize: 16,
-      selectedFontSize: 16,
+      unselectedFontSize: 12,
+      selectedFontSize: 12,
       // backgroundColor: Colors.blue,
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.blueGrey.shade300,
