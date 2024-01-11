@@ -34,6 +34,7 @@ class Belongings extends ConsumerWidget {
       List<Widget> items = [];
       for (int i = 0; i < itemsTable.length; i++) {
         final item = CheckboxListTile(
+            controlAffinity: ListTileControlAffinity.leading,
             value: checkedItems.contains('${itemsTable[i]}'),
             onChanged: (check) => {
                   onChangedCheckbox('${itemsTable[i]}'),
