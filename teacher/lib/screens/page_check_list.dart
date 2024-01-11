@@ -332,10 +332,11 @@ class PageCheckList extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: 100,
-              width: 200,
+              height: 70,
+              width: 350,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
@@ -347,18 +348,19 @@ class PageCheckList extends ConsumerWidget {
                 },
                 child: Text(
                   updateButtonText,
-                  style: const TextStyle(fontSize: 30),
+                  style: const TextStyle(fontSize: 26, color: Colors.white),
                 ),
               ),
             ),
             const SizedBox(
-              width: 100,
+              width: 20,
             ),
             SizedBox(
-              height: 100,
-              width: 200,
+              height: 70,
+              width: 350,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
@@ -369,7 +371,7 @@ class PageCheckList extends ConsumerWidget {
                 },
                 child: const Text(
                   'キャンセル',
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 26, color: Colors.white),
                 ), //  '登録',
               ),
             ),
