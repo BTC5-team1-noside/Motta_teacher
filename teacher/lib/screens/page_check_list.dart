@@ -188,35 +188,64 @@ class PageCheckList extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(
-          height: 20,
+          height: 10,
         ),
-        //日にち表示（　＜　日付（曜日）　＞　）
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-                onPressed: () {
-                  toChangeDate(dayData, -1);
-                },
-                child: const Text('<')),
+              onPressed: () {
+                toChangeDate(dayData, -1);
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.arrow_back_ios,
+                    size: 15,
+                  ),
+                  SizedBox(
+                      width:
+                          8), // Adjust the spacing between icon and text as needed
+                  Text(
+                    '前日',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(
               width: 80,
             ),
             Text(
-              "${dayData.selectedDate} ($day)",
+              "${DateFormat('yyyy年 MM月 dd日').format(timeF)} ($day)", // ここを修正する！！！！
               style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 32,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               width: 80,
             ),
             ElevatedButton(
-                onPressed: () {
-                  toChangeDate(dayData, 1);
-                },
-                child: const Text('>')),
+              onPressed: () {
+                toChangeDate(dayData, -1);
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '翌日',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 15,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 20),
