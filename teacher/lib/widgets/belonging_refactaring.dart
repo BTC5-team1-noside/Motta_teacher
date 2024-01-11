@@ -70,7 +70,10 @@ class Belongings extends ConsumerWidget {
                   height: 50,
                   child: Text(
                     "日常品",
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 46, 107, 199)),
                   ),
                 ),
                 Column(

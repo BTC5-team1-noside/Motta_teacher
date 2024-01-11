@@ -196,7 +196,7 @@ class PageCheckList extends ConsumerWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor:
-                    const Color.fromARGB(255, 47, 81, 109), // 背景色を指定
+                    const Color.fromARGB(255, 56, 177, 228), // 背景色を指定
               ),
               onPressed: () {
                 toChangeDate(dayData, -1);
@@ -220,7 +220,7 @@ class PageCheckList extends ConsumerWidget {
               ),
             ),
             const SizedBox(
-              width: 80,
+              width: 60,
             ),
             Text(
               "${DateFormat('yyyy年 MM月 dd日').format(timeF)} ($day)", // ここを修正する！！！！
@@ -230,12 +230,12 @@ class PageCheckList extends ConsumerWidget {
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(
-              width: 80,
+              width: 60,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor:
-                    const Color.fromARGB(255, 47, 81, 109), // 背景色を指定
+                    const Color.fromARGB(255, 56, 177, 228), // 背景色を指定
               ),
               onPressed: () {
                 toChangeDate(dayData, 1);
@@ -282,171 +282,180 @@ class PageCheckList extends ConsumerWidget {
           ),
         ),
         //追加の持ち物を入力するText表示（上段）
-
-        Container(
-          width: 800,
-          height: 250,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            color: const Color.fromARGB(255, 221, 231, 244),
-          ),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              const SizedBox(
-                height: 80,
-                child: Text(
-                  "個別に追加する持ち物",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        Visibility(
+          visible: dayData.subjects.isNotEmpty,
+          child: Container(
+            width: 800,
+            height: 250,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: const Color.fromARGB(255, 221, 231, 244),
+            ),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
+                const SizedBox(
+                  height: 80,
+                  child: Text(
+                    "個別に追加する持ち物",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  for (int j = 0; j < 3; j++)
-                    Container(
-                      width: 250,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.white,
-                        border: Border.all(style: BorderStyle.none),
-                      ),
-                      child: TextField(
-                        style: const TextStyle(fontSize: 22),
-                        controller: itemTextControllers[j],
-                        onChanged: (value) {
-                          additionalItems[j] = value;
-                        },
-                        focusNode: focusNods[j],
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (int j = 0; j < 3; j++)
+                      Container(
+                        width: 250,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white,
+                          border: Border.all(style: BorderStyle.none),
+                        ),
+                        child: TextField(
+                          style: const TextStyle(fontSize: 22),
+                          controller: itemTextControllers[j],
+                          onChanged: (value) {
+                            additionalItems[j] = value;
+                          },
+                          focusNode: focusNods[j],
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                    ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              //追加の持ち物を入力するText表示（下段）
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  for (int j = 3; j < 6; j++)
-                    Container(
-                      width: 250,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.white,
-                        border: Border.all(style: BorderStyle.none),
-                      ),
-                      child: TextField(
-                        controller: itemTextControllers[j],
-                        onChanged: (value) {
-                          additionalItems[j] = value;
-                        },
-                        focusNode: focusNods[j],
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                //追加の持ち物を入力するText表示（下段）
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (int j = 3; j < 6; j++)
+                      Container(
+                        width: 250,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white,
+                          border: Border.all(style: BorderStyle.none),
+                        ),
+                        child: TextField(
+                          controller: itemTextControllers[j],
+                          onChanged: (value) {
+                            additionalItems[j] = value;
+                          },
+                          focusNode: focusNods[j],
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                    ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
+
         const SizedBox(
           height: 50,
         ),
 
-        //保存・キャンセルのボタン表示
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 70,
-              width: 350,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
+        Visibility(
+          //保存・キャンセルのボタン表示
+          visible: dayData.subjects.isNotEmpty,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 70,
+                width: 350,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                  ),
+                  onPressed: () {
+                    //保存前にアラート表示
+                    showDialog(
+                        context: context,
+                        builder: (_) => const RegisterDialog());
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.add_box,
+                              color: Colors.white,
+                              size: 35,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              updateButtonText,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 26),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                onPressed: () {
-                  //保存前にアラート表示
-                  showDialog(
-                      context: context, builder: (_) => const RegisterDialog());
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.add_box,
-                            color: Colors.white,
-                            size: 35,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            updateButtonText,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 26),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
               ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            SizedBox(
-              height: 70,
-              width: 350,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
+              const SizedBox(
+                width: 20,
+              ),
+              SizedBox(
+                height: 70,
+                width: 350,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                  ),
+                  onPressed: () {
+                    debugPrint('#338:cancel');
+                    ref.read(indexNotifierProvider.notifier).updateState(0);
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.cancel,
+                              color: Colors.white,
+                              size: 35,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              "キャンセル",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 26),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                onPressed: () {
-                  debugPrint('#338:cancel');
-                  ref.read(indexNotifierProvider.notifier).updateState(0);
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.cancel,
-                            color: Colors.white,
-                            size: 35,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            "キャンセル",
-                            style: TextStyle(color: Colors.white, fontSize: 26),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
