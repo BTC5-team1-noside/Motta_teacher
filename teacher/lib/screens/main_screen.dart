@@ -22,7 +22,7 @@ class MainScreen extends ConsumerWidget {
 
     //ボトムバー
     const items = [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+      BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
       BottomNavigationBarItem(icon: Icon(Icons.fact_check), label: '持ち物登録'),
       BottomNavigationBarItem(icon: Icon(Icons.settings), label: '設定'),
     ];

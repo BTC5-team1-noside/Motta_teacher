@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:teacher/models/timetables.dart';
 
 Future<List<dynamic>> getStudentsApiData() async {
-  const baseUrl = String.fromEnvironment('base_url');
+  // const baseUrl = String.fromEnvironment('base_url');
   final url = Uri.https(
       'motta-9dbb2df4f6d7.herokuapp.com', 'api/v1/teacher/settings/students');
   try {

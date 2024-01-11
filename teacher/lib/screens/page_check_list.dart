@@ -20,13 +20,24 @@ class PageCheckList extends ConsumerWidget {
   List<Widget> generateTimeTable(DayBelongings pathData) {
     List<Widget> rows = [];
     for (int i = 0; i < pathData.subjects.length; i++) {
-      final row = Row(
+      final row = Column(
         children: [
-          Text(
-            "${i + 1}時間目: ",
-            style: const TextStyle(color: Colors.black, fontSize: 32),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "${i + 1}限",
+                style: const TextStyle(color: Colors.black, fontSize: 26),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              SizedBox(width: 160, child: SubjectDropdown(i)),
+            ],
           ),
-          SizedBox(width: 160, child: SubjectDropdown(i)),
+          const SizedBox(
+            height: 10,
+          )
         ],
       );
       rows.add(row);
@@ -132,9 +143,31 @@ class PageCheckList extends ConsumerWidget {
       ];
     } else {
       registerMain = [
-        timetable = Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: generateTimeTable(dayData).toList()),
+        timetable = Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: const Color.fromARGB(255, 255, 255, 255),
+          ),
+          height: 400,
+          width: 400,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              const SizedBox(
+                height: 50,
+                child: Text(
+                  "科目",
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: generateTimeTable(dayData).toList()),
+            ],
+          ),
+        ),
         belongings = Belongings(pathData: dayData)
       ];
     }
@@ -155,7 +188,7 @@ class PageCheckList extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(
-          height: 50,
+          height: 20,
         ),
         //日にち表示（　＜　日付（曜日）　＞　）
         Row(
@@ -167,12 +200,17 @@ class PageCheckList extends ConsumerWidget {
                 },
                 child: const Text('<')),
             const SizedBox(
-              width: 50,
+              width: 80,
             ),
-            Text("${dayData.selectedDate} ($day)",
-                style: const TextStyle(color: Colors.black, fontSize: 32)),
+            Text(
+              "${dayData.selectedDate} ($day)",
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold),
+            ),
             const SizedBox(
-              width: 50,
+              width: 80,
             ),
             ElevatedButton(
                 onPressed: () {
@@ -181,80 +219,114 @@ class PageCheckList extends ConsumerWidget {
                 child: const Text('>')),
           ],
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 20),
         //時間割・日常品の表示
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ...registerMain,
-          ],
+        Container(
+          width: 900,
+          height: 450,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            // color: const Color.fromARGB(255, 200, 244, 249),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ...registerMain,
+                ],
+              ),
+            ],
+          ),
         ),
-        const SizedBox(
-          height: 50,
-        ),
+
+        // const SizedBox(
+        //   height: 10,
+        // ),
         //追加の持ち物を入力するText表示（上段）
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            for (int j = 0; j < 3; j++)
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                  ),
-                ),
-                child: SizedBox(
-                  width: 200,
-                  //参照#94 void textFeildFocusController(int i)
-                  child: TextField(
-                    controller: itemTextControllers[j],
-                    onChanged: (value) {
-                      additionalItems[j] = value;
-                    },
-                    focusNode: focusNods[j],
-                    decoration: InputDecoration(
-                      label: Text("追加${j + 1}"),
-                    ),
-                  ),
+
+        Container(
+          width: 800,
+          height: 250,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: const Color.fromARGB(255, 221, 231, 244),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              const SizedBox(
+                height: 80,
+                child: Text(
+                  "個別に追加する持ち物",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
-          ],
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (int j = 0; j < 3; j++)
+                    Container(
+                      width: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white,
+                        border: Border.all(style: BorderStyle.none),
+                      ),
+                      child: TextField(
+                        controller: itemTextControllers[j],
+                        onChanged: (value) {
+                          additionalItems[j] = value;
+                        },
+                        focusNode: focusNods[j],
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              //追加の持ち物を入力するText表示（下段）
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (int j = 3; j < 6; j++)
+                    Container(
+                      width: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white,
+                        border: Border.all(style: BorderStyle.none),
+                      ),
+                      child: TextField(
+                        controller: itemTextControllers[j],
+                        onChanged: (value) {
+                          additionalItems[j] = value;
+                        },
+                        focusNode: focusNods[j],
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
         const SizedBox(
           height: 50,
         ),
-        //追加の持ち物を入力するText表示（下段）
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            for (int j = 3; j < 6; j++)
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                  ),
-                ),
-                child: SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: itemTextControllers[j],
-                    onChanged: (value) {
-                      additionalItems[j] = value;
-                    },
-                    focusNode: focusNods[j],
-                    decoration: InputDecoration(
-                      label: Text("追加${j + 1}"),
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-        const SizedBox(
-          height: 50,
-        ),
+
         //保存・キャンセルのボタン表示
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

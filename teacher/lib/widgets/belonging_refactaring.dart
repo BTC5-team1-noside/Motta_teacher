@@ -33,16 +33,20 @@ class Belongings extends ConsumerWidget {
     List<Widget> generatesItems(List itemsTable, List checkedItems) {
       List<Widget> items = [];
       for (int i = 0; i < itemsTable.length; i++) {
-        final item = CheckboxListTile(
-            controlAffinity: ListTileControlAffinity.leading,
-            value: checkedItems.contains('${itemsTable[i]}'),
-            onChanged: (check) => {
-                  onChangedCheckbox('${itemsTable[i]}'),
-                },
-            title: Text(
-              itemsTable[i],
-              style: const TextStyle(fontSize: 32),
+        final item = Padding(
+            padding: const EdgeInsets.only(left: 66.0), // パディングを左に追加
+            child: CheckboxListTile(
+              controlAffinity: ListTileControlAffinity.leading,
+              value: checkedItems.contains('${itemsTable[i]}'),
+              onChanged: (check) => {
+                onChangedCheckbox('${itemsTable[i]}'),
+              },
+              title: Text(
+                itemsTable[i],
+                style: const TextStyle(fontSize: 26),
+              ),
             ));
+
         items.add(item);
       }
       return items;
@@ -50,11 +54,30 @@ class Belongings extends ConsumerWidget {
 
     return Column(
       children: [
-        SizedBox(
-            width: 300,
+        Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: const Color.fromARGB(255, 255, 255, 255),
+            ),
+            height: 400,
+            width: 400,
             child: Column(
-              children:
-                  generatesItems(itemsTable, checkedItems.toList()).toList(),
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                const SizedBox(
+                  height: 50,
+                  child: Text(
+                    "日常品",
+                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Column(
+                  children: generatesItems(itemsTable, checkedItems.toList())
+                      .toList(),
+                ),
+              ],
             )),
       ],
     );
