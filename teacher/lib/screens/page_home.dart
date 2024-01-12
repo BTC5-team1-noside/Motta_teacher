@@ -82,6 +82,7 @@ class PageHome extends ConsumerWidget {
 
   late DateTime _focused = DateTime.now();
   DateTime? _selected; // DateTime?型を使用
+  // late DateTime _selected = DateTime(2024, 1, 22); // DateTime?型を使用
 
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
@@ -103,8 +104,7 @@ class PageHome extends ConsumerWidget {
     }
 
     late Future<List<String>> historyDatesFuture;
-    historyDatesFuture =
-        getStudentsHistoryDate(_selected != null ? _selected! : DateTime.now());
+    historyDatesFuture = getStudentsHistoryDate(_selected ?? DateTime.now());
 
     return Scaffold(
       // backgroundColor: const Color.fromARGB(255, 236, 236, 236),
@@ -115,8 +115,9 @@ class PageHome extends ConsumerWidget {
               height: 10,
             ),
             Container(
-              height: 450,
-              // color: const Color.fromARGB(255, 236, 236, 236),
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              // height: 450,
+              // color: const Color.fromARGB(255, 239, 248, 249),
               margin: const EdgeInsets.only(top: 0),
               // color: Colors.amber,
               child: TableCalendar(
@@ -129,13 +130,14 @@ class PageHome extends ConsumerWidget {
                 },
                 daysOfWeekStyle: DaysOfWeekStyle(
                   weekdayStyle: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 20,
                     fontWeight: FontWeight.w600,
+                    color: Color.fromARGB(255, 116, 116, 116),
                   ),
                   weekendStyle: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.red),
                   dowTextFormatter: (date, locale) {
                     switch (date.weekday) {
                       case 1:
@@ -157,7 +159,7 @@ class PageHome extends ConsumerWidget {
                     }
                   },
                 ),
-                rowHeight: 55,
+                rowHeight: 65,
                 daysOfWeekHeight: 40,
                 headerStyle: HeaderStyle(
                   titleTextStyle: const TextStyle(
@@ -196,7 +198,7 @@ class PageHome extends ConsumerWidget {
                           // 同じ月である場合のみアイコンを表示
                           return hasIcon
                               ? Positioned(
-                                  bottom: 7,
+                                  bottom: 15,
                                   child: Container(
                                     margin: const EdgeInsets.all(1),
                                     decoration: const BoxDecoration(
@@ -206,7 +208,7 @@ class PageHome extends ConsumerWidget {
                                     child: const Icon(
                                       Icons.check_circle,
                                       color: Colors.green,
-                                      size: 18,
+                                      size: 30,
                                     ),
                                   ),
                                 )
@@ -218,18 +220,19 @@ class PageHome extends ConsumerWidget {
                   selectedBuilder: (context, date, events) {
                     return Container(
                       margin: const EdgeInsets.all(2.0),
-                      padding: const EdgeInsets.all(2),
-                      alignment: Alignment.topCenter,
-                      decoration: BoxDecoration(
-                        color: Colors.blue, // 選択中の日付の背景色を指定
-                        borderRadius: BorderRadius.circular(5.0),
+                      alignment: Alignment.topLeft,
+                      decoration: const BoxDecoration(
+                        color: Colors.blue,
                       ),
-                      child: Text(
-                        '${date.day}',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white, // 選択中の日付の文字色を指定
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5, top: 1),
+                        child: Text(
+                          '${date.day}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          ),
                         ),
                       ),
                     );
@@ -237,36 +240,41 @@ class PageHome extends ConsumerWidget {
                   defaultBuilder: (context, date, events) {
                     return Container(
                       margin: const EdgeInsets.all(2.0),
-                      padding: const EdgeInsets.all(2),
-                      alignment: Alignment.topCenter,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(5.0),
+                      alignment: Alignment.topLeft,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
                       ),
-                      child: Text(
-                        '${date.day}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5, top: 1),
+                        child: Text(
+                          '${date.day}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: date.weekday == 6 || date.weekday == 7
+                                ? Colors.red
+                                : const Color.fromARGB(255, 116, 116, 116),
+                          ),
                         ),
                       ),
                     );
                   },
-                  outsideBuilder: (context, date, events) {
+                  outsideBuilder: (context, date, focusedDay) {
                     return Container(
                       margin: const EdgeInsets.all(2.0),
-                      padding: const EdgeInsets.all(2),
-                      alignment: Alignment.topCenter,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(5.0),
+                      alignment: Alignment.topLeft,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(85, 255, 255, 255),
                       ),
-                      child: Text(
-                        '${date.day}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          // fontWeight: FontWeight.w600,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5, top: 1),
+                        child: Text(
+                          '${date.day}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromARGB(255, 211, 208, 208),
+                          ),
                         ),
                       ),
                     );
@@ -274,19 +282,19 @@ class PageHome extends ConsumerWidget {
                   todayBuilder: (context, day, focusedDay) {
                     return Container(
                       margin: const EdgeInsets.all(2.0),
-                      padding: const EdgeInsets.all(2),
-                      alignment: Alignment.topCenter,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(
-                            255, 243, 128, 21), // 選択中の日付の背景色を指定
-                        borderRadius: BorderRadius.circular(5.0),
+                      alignment: Alignment.topLeft,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 243, 128, 21),
                       ),
-                      child: Text(
-                        '${day.day}',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white, // 選択中の日付の文字色を指定
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5, top: 1),
+                        child: Text(
+                          '${day.day}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          ),
                         ),
                       ),
                     );
@@ -317,9 +325,12 @@ class PageHome extends ConsumerWidget {
                 },
               ),
             ),
+            const SizedBox(
+              height: 10,
+            ),
             SizedBox(
                 height: 70,
-                width: 550,
+                width: 350,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber,
@@ -372,128 +383,142 @@ class PageHome extends ConsumerWidget {
                   ),
                 )),
             const SizedBox(
-              height: 20,
+              height: 40,
             ),
-            // const SizedBox(
-            //   height: 40,
-            //   child: Text(
-            //     "生徒の実施履歴",
-            //     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            //   ),
-            // ),
-            Column(
-              children: [
-                Container(
-                  height: 460,
-                  width: double.infinity,
-                  // color: Colors.green.shade900,
-                  padding: const EdgeInsets.all(45),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/monitor.png"),
-                        fit: BoxFit.contain),
+            Container(
+              height: 400,
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.white,
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
                   ),
-
-                  child: FutureBuilder<List<Map<String, dynamic>>>(
-                    future: _selected != null
-                        ? getStudents(_selected!)
-                        : getStudents(DateTime.now()),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('エラー: ${snapshot.error}');
-                      } else if (snapshot.data == null) {
-                        return const Text('データがありません');
-                      } else {
-                        final List<Map<String, dynamic>> data = snapshot.data!;
-                        return GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 10,
-                                  childAspectRatio: 1.0,
-                                  mainAxisSpacing: 3.0,
-                                  crossAxisSpacing: 3.0),
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            final el = data[index];
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: el["checkedInventory"]
-                                    ? Colors.white.withOpacity(0.1)
-                                    : Colors.white.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: el["checkedInventory"]
-                                    ? [
-                                        const Icon(
-                                          Icons.face_retouching_natural,
-                                          size: 27,
-                                          color:
-                                              Color.fromARGB(255, 74, 255, 3),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Container(
-                                          width: 60,
-                                          padding: const EdgeInsets.all(2),
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.shade500
-                                                .withOpacity(0),
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
+                  const SizedBox(
+                    height: 30,
+                    child: Text(
+                      "生徒の持ち物確認の実施履歴",
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 96, 96, 96)),
+                    ),
+                  ),
+                  const Divider(
+                    color: Color.fromARGB(255, 205, 205, 205),
+                    thickness: 1.0,
+                  ),
+                  Container(
+                    height: 340,
+                    width: 800,
+                    // color: Colors.amber,
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 5, bottom: 5),
+                    child: FutureBuilder<List<Map<String, dynamic>>>(
+                      future: _selected != null
+                          ? getStudents(_selected)
+                          : getStudents(DateTime.now()),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('エラー: ${snapshot.error}');
+                        } else if (snapshot.data == null) {
+                          return const Text('データがありません');
+                        } else {
+                          final List<Map<String, dynamic>> data =
+                              snapshot.data!;
+                          return GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 7,
+                                    childAspectRatio: 1.7,
+                                    mainAxisSpacing: 3.0,
+                                    crossAxisSpacing: 3.0),
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              final el = data[index];
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: el["checkedInventory"]
+                                      ? Colors.green.withOpacity(0.9)
+                                      : Colors.grey.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: el["checkedInventory"]
+                                      ? [
+                                          const Icon(
+                                              Icons.face_retouching_natural,
+                                              size: 27,
+                                              color:
+                                                  // Color.fromARGB(255, 74, 255, 3),
+                                                  Colors.white),
+                                          const SizedBox(height: 4),
+                                          Container(
+                                            width: 60,
+                                            // padding: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey.shade500
+                                                  .withOpacity(0),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            child: Text(
+                                              el["student_name"].toString(),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          )
+                                        ]
+                                      : [
+                                          const Icon(
+                                            Icons.face,
+                                            size: 27,
+                                            color: Color.fromARGB(
+                                                255, 250, 250, 250),
                                           ),
-                                          child: Text(
-                                            el["student_name"].toString(),
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white,
+                                          const SizedBox(height: 4),
+                                          Container(
+                                            // width: 70,
+                                            // padding: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey.shade500
+                                                  .withOpacity(0),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            child: Text(
+                                              el["student_name"].toString(),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontFamily: "Roboto",
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
-                                        )
-                                      ]
-                                    : [
-                                        const Icon(
-                                          Icons.face,
-                                          size: 27,
-                                          color: Color.fromARGB(
-                                              255, 250, 250, 250),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Container(
-                                          width: 60,
-                                          padding: const EdgeInsets.all(2),
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.shade500
-                                                .withOpacity(0),
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                          ),
-                                          child: Text(
-                                            el["student_name"].toString(),
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontFamily: "Roboto",
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                              ),
-                            );
-                          },
-                        );
-                      }
-                    },
-                  ),
-                )
-              ],
+                                        ],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           ],
         ),
