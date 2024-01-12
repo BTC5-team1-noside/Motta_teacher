@@ -46,27 +46,16 @@ class PageCheckList extends ConsumerWidget {
   }
 
   //追加の持ち物の初期設定❗️バグあり見直し中❗️
-  List<String> generateAdditionalItems(DayBelongings pathData) {
-    List<String> additionalItems = [];
-    if (pathData.isHistoryData) {
-      for (int i = 0; i < pathData.additionalItemNames.length; i++) {
-        if (pathData.additionalItemNames[i].isNotEmpty) {
-          additionalItems.add(pathData.additionalItemNames[i]);
-        } else {
-          additionalItems.add('');
-        }
-      }
-    } else {
-      //変更保存されていないと、再描画の時に入力した内容が消えてしまう❗️
-      additionalItems = List.filled(6, "");
-      for (int i = 0; i < pathData.additionalItemNames.length; i++) {
-        if (pathData.additionalItemNames[i].isNotEmpty) {
-          additionalItems[i] = pathData.additionalItemNames[i];
-        }
-      }
-    }
-    return additionalItems;
-  }
+  // List<String> generateAdditionalItems(DayBelongings pathData) {
+  //   List<String> additionalItems = List.filled(6, "");
+  //   for (int i = 0; i < pathData.additionalItemNames.length; i++) {
+  //     if (pathData.additionalItemNames[i].isNotEmpty) {
+  //       additionalItems[i] = pathData.additionalItemNames[i];
+  //     }
+  //   }
+  //   debugPrint('#68ここは毎回通過$additionalItems');
+  //   return additionalItems;
+  // }
   //追加の持ち物の初期設定❗️バグあり見直し中❗️
 
   //追加の持ち物のTextFeildのフォーカスを管理する変数の初期化
@@ -172,7 +161,7 @@ class PageCheckList extends ConsumerWidget {
       ];
     }
 
-    //前後に移動した日にちの持ち物登録画面へ変更
+    // 前後に移動した日にちの持ち物登録画面へ変更
     void toChangeDate(DayBelongings dayData, int value) async {
       final time =
           DateTime.parse(dayData.selectedDate).add(Duration(days: value));
@@ -433,8 +422,15 @@ class RegisterDialog extends ConsumerWidget {
         TextButton(
           onPressed: () {
             debugPrint("送信します");
+            final additionalItems = generateAdditionalItems(dayData);
+            DayBelongings newSet =
+                dayData.copyWith(additionalItemNames: additionalItems);
+            ref
+                .read(dayBelongingsNotifierProvider.notifier)
+                .updateState(newSet);
             submitNewData();
             Navigator.pop(context);
+
             _showSentDialog(context);
           },
           child: const Text('送信'),
@@ -444,6 +440,7 @@ class RegisterDialog extends ConsumerWidget {
               debugPrint('キャンセルします');
               //❗️❗️画面変更の編集中❗️❗️
               ref.read(indexNotifierProvider.notifier).updateState(1);
+
               Navigator.pop(context);
             },
             child: const Text('キャンセル'))
@@ -471,3 +468,25 @@ void _showSentDialog(BuildContext context) {
     },
   );
 }
+
+//追加の持ち物の初期設定❗️バグあり見直し中❗️
+List<String> generateAdditionalItems(DayBelongings pathData) {
+  List<String> additionalItems = List.filled(6, "");
+  for (int i = 0; i < pathData.additionalItemNames.length; i++) {
+    if (pathData.additionalItemNames[i].isNotEmpty) {
+      additionalItems[i] = pathData.additionalItemNames[i];
+    }
+  }
+  debugPrint('#68ここは毎回通過$additionalItems');
+  return additionalItems;
+}
+//追加の持ち物の初期設定❗️バグあり見直し中❗️
+
+//前後に移動した日にちの持ち物登録画面へ変更
+// void toChangeDate(DayBelongings dayData, int value, WidgetRef ref) async {
+//   debugPrint('this is test test!!');
+//   final time = DateTime.parse(dayData.selectedDate).add(Duration(days: value));
+//   final changingDate = DateFormat('yyyy-MM-dd').format(time);
+//   final DayBelongings data = await getBelongingsApiData(date: changingDate);
+//   ref.read(dayBelongingsNotifierProvider.notifier).updateState(data);
+// }
