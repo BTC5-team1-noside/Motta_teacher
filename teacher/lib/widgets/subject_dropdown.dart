@@ -18,63 +18,118 @@ class SubjectDropdown extends ConsumerWidget {
     //授業の選択肢
     final items = [
       const DropdownMenuItem(
-        // alignment: Alignment.center,
         value: "こくご",
-        child: Text('こくご'), //表示するText
+        child: Text(
+          'こくご',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
       ),
       const DropdownMenuItem(
-        // alignment: Alignment.center,
         value: "さんすう",
-        child: Text('さんすう'), //表示するText
+        child: Text(
+          'さんすう',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
       ),
       const DropdownMenuItem(
-        // alignment: Alignment.center,
         value: "たいいく",
-        child: Text('たいいく'), //表示するText
+        child: Text(
+          'たいいく',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
       ),
       const DropdownMenuItem(
-        // alignment: Alignment.center,
-        value: 'せいかつ', //enum
-        child: Text('せいかつ'), //表示するText
+        value: 'せいかつ',
+        child: Text(
+          'せいかつ',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
       ),
       const DropdownMenuItem(
-        // alignment: Alignment.center,
-        value: "おんがく", //enum
-        child: Text('おんがく'), //表示するText
+        value: "おんがく",
+        child: Text(
+          'おんがく',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
       ),
       const DropdownMenuItem(
-        // alignment: Alignment.center,
-        value: 'がっかつ', //enum
-        child: Text('がっかつ'), //表示するText
+        value: 'がっかつ',
+        child: Text(
+          'がっかつ',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
       ),
       const DropdownMenuItem(
-        // alignment: Alignment.center,
-        value: 'どうとく', //enum
-        child: Text('どうとく'), //表示するText
+        value: 'どうとく',
+        child: Text(
+          'どうとく',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
       ),
       const DropdownMenuItem(
-        // alignment: Alignment.center,
-        value: 'としょ', //enum
-        child: Text('としょ'), //表示するText
+        value: 'としょ',
+        child: Text(
+          'としょ',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
       ),
       const DropdownMenuItem(
-        // alignment: Alignment.center,
-        value: 'ずこう', //enum
-        child: Text('ずこう'), //表示するText
+        value: 'ずこう',
+        child: Text(
+          'ずこう',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
       ),
       const DropdownMenuItem(
-        // alignment: Alignment.center,
-        value: 'じゅぎょう　なし', //enum
-        child: Text('授業なし'), //表示するText
+        value: '授業なし',
+        child: Text(
+          '授業なし',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
       ),
     ];
 
     return DropdownButton(
-      style: const TextStyle(fontSize: 22),
-      // alignment: Alignment.center,
+      style: const TextStyle(fontSize: 20),
+      padding: const EdgeInsets.only(left: 10),
+      itemHeight: 50,
       isExpanded: true,
       value: dayData.subjects[period].subject_name,
       items: items,
+      underline: Container(
+        // 下線を非表示にする
+        height: 0,
+      ),
       onChanged: (newSubject) async {
         final url = Uri.https('motta-9dbb2df4f6d7.herokuapp.com',
             'api/v1/teacher/settings/belongings');

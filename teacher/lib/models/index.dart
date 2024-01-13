@@ -5,7 +5,7 @@ part 'index.g.dart';
 class IndexNotifier extends _$IndexNotifier {
   @override
   int build() {
-    return 0;
+    return 1;
   }
 
   void updateState(newState) {

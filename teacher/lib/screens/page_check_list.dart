@@ -22,21 +22,58 @@ class PageCheckList extends ConsumerWidget {
     for (int i = 0; i < pathData.subjects.length; i++) {
       final row = Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "${i + 1}限",
-                style: const TextStyle(color: Colors.black, fontSize: 22),
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-              SizedBox(width: 160, child: SubjectDropdown(i)),
-            ],
+          Container(
+            decoration: BoxDecoration(
+              // color: const Color.fromARGB(255, 244, 244, 244),
+              // borderRadius: BorderRadius.circular(5.0),
+              color: const Color.fromARGB(255, 255, 255, 255),
+              borderRadius: BorderRadius.circular(5.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            // color: Colors.amber,
+            width: 280,
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 50,
+                  width: 90,
+                  color: Colors.white.withOpacity(0),
+                  child: Center(
+                    child: Text(
+                      "${i + 1}限",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                // const SizedBox(
+                //   width: 30,
+                // ),
+                const SizedBox(
+                  height: double.infinity,
+                  child: VerticalDivider(),
+                ),
+                Container(
+                  color: Colors.white.withOpacity(0),
+                  width: 160,
+                  child: SubjectDropdown(i),
+                )
+              ],
+            ),
           ),
           const SizedBox(
-            height: 5,
+            height: 10,
           )
         ],
       );
@@ -148,7 +185,7 @@ class PageCheckList extends ConsumerWidget {
             borderRadius: BorderRadius.circular(10.0),
             color: const Color.fromARGB(255, 255, 255, 255),
           ),
-          height: 410,
+          height: 450,
           width: 380,
           child: Column(
             children: [
@@ -273,7 +310,7 @@ class PageCheckList extends ConsumerWidget {
         //時間割・日常品の表示
         Container(
           width: 900,
-          height: 450,
+          // height: 550,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             // color: const Color.fromARGB(255, 200, 244, 249),
@@ -291,6 +328,9 @@ class PageCheckList extends ConsumerWidget {
               ),
             ],
           ),
+        ),
+        const SizedBox(
+          height: 30,
         ),
         //追加の持ち物を入力するText表示（上段）
         Visibility(

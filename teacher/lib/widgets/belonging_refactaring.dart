@@ -33,8 +33,24 @@ class Belongings extends ConsumerWidget {
     List<Widget> generatesItems(List itemsTable, List checkedItems) {
       List<Widget> items = [];
       for (int i = 0; i < itemsTable.length; i++) {
-        final item = Padding(
-            padding: const EdgeInsets.only(left: 85.0), // パディングを左に追加
+        final item = Container(
+          padding: const EdgeInsets.only(left: 20),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            borderRadius: BorderRadius.circular(5.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: const Offset(0, 1),
+              ),
+            ],
+          ),
+          width: 280,
+          height: 60,
+          margin: const EdgeInsets.only(bottom: 10),
+          child: Center(
             child: CheckboxListTile(
               controlAffinity: ListTileControlAffinity.leading,
               value: checkedItems.contains('${itemsTable[i]}'),
@@ -44,10 +60,12 @@ class Belongings extends ConsumerWidget {
               activeColor: Colors.green,
               title: Text(
                 itemsTable[i],
-                style: const TextStyle(fontSize: 22),
+                style: const TextStyle(fontSize: 20),
               ),
-            ));
-
+              contentPadding: EdgeInsets.zero, // contentPaddingをゼロに設定
+            ),
+          ),
+        );
         items.add(item);
       }
       return items;
@@ -60,7 +78,7 @@ class Belongings extends ConsumerWidget {
               borderRadius: BorderRadius.circular(10.0),
               color: const Color.fromARGB(255, 255, 255, 255),
             ),
-            height: 410,
+            height: 450,
             width: 380,
             child: Column(
               children: [
