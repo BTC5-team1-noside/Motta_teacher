@@ -181,7 +181,7 @@ class PageHome extends ConsumerWidget {
                     final formattedDate = DateFormat('yyyy-MM-dd').format(day);
 
                     // ここで選択された日付と同じ月であるかどうかを確認
-                    debugPrint("$day.month");
+                    // debugPrint("$day.month");
 
                     return FutureBuilder<List<String>>(
                       future: historyDatesFuture,

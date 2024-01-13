@@ -116,6 +116,7 @@ class PageCheckList extends ConsumerWidget {
 
     //持ち物データの状態管理
     final DayBelongings dayData = ref.watch(dayBelongingsNotifierProvider);
+    ref.watch(indexNotifierProvider);
 
     //追加の持ち物を格納する変数/❗️バグあり見直し中❗️
     var additionalItems = generateAdditionalItems(dayData);
@@ -461,8 +462,23 @@ class PageCheckList extends ConsumerWidget {
                   onPressed: () {
                     //保存前にアラート表示
                     showDialog(
-                        context: context,
-                        builder: (_) => const RegisterDialog());
+                      context: context,
+                      builder: (_) => const RegisterDialog(),
+                    );
+                    // 再レンダリングのお試し中！
+                    //     .then(
+                    //   (value) {
+                    //     if (value != null && value) {
+                    //       debugPrint("きてる？？？？");
+                    //       ref
+                    //           .read(dayBelongingsNotifierProvider.notifier)
+                    //           .updateState(1);
+                    //     } else {
+                    //       debugPrint("きてない！");
+                    //       debugPrint("$value");
+                    //     }
+                    //   },
+                    // );
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -544,7 +560,6 @@ class RegisterDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DayBelongings dayData = ref.watch(dayBelongingsNotifierProvider);
-    final newValue = ref.refresh(dayBelongingsNotifierProvider);
 
     //データベースへ情報を更新
     void submitNewData() async {
@@ -575,13 +590,11 @@ class RegisterDialog extends ConsumerWidget {
           final resStatus = response.statusCode;
           final decodedRes = await json.decode(response.body);
           debugPrint("post結果: $resStatus,${decodedRes['message']}");
-          // ref.invalidate(newValue);
         } catch (error) {
           debugPrint(error.toString());
           throw Exception('Failed to load data: $error');
         }
       }
-      // ref.refresh(dayBelongingsNotifierProvider);
     }
 
     return CupertinoAlertDialog(
@@ -590,7 +603,7 @@ class RegisterDialog extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: () {
-            // debugPrint("送信します");
+            debugPrint("保存した");
             submitNewData();
             Navigator.pop(context);
             _showSentDialog(context);
@@ -604,7 +617,6 @@ class RegisterDialog extends ConsumerWidget {
           onPressed: () {
             debugPrint('キャンセルします');
             //❗️❗️画面変更の編集中❗️❗️
-            ref.read(indexNotifierProvider.notifier).updateState(1);
             Navigator.pop(context);
           },
           child: const Text(
