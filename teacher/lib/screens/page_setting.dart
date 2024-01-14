@@ -12,6 +12,7 @@ import 'package:teacher/models/timetables.dart';
 import 'package:teacher/widgets/timetables_data.dart';
 // import "package:http/http.dart" as http;
 // import 'dart:convert';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // class PageSettings extends StatelessWidget {
 class PageSettings extends ConsumerWidget {
@@ -56,7 +57,10 @@ class StudentEdit extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // データがまだ取得されていない場合の処理
-          return const CircularProgressIndicator();
+          return const SpinKitFadingCircle(
+            color: Colors.grey,
+            size: 100.0,
+          );
         } else if (snapshot.hasError) {
           // エラーが発生した場合の処理
           return Text('Error: ${snapshot.error}');
@@ -170,7 +174,10 @@ class TimetableEdit extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // データがまだ取得されていない場合の処理
-          return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+          return const SpinKitFadingCircle(
+            color: Colors.grey,
+            size: 100.0,
+          );
         } else if (snapshot.hasError) {
           // エラーが発生した場合の処理
           return Text('Error: ${snapshot.error}');
@@ -280,7 +287,10 @@ class BelongingsEdit extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // データがまだ取得されていない場合の処理
-            return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+            return const SpinKitFadingCircle(
+              color: Colors.grey,
+              size: 100.0,
+            );
           } else if (snapshot.hasError) {
             // エラーが発生した場合の処理
             return Text('Error: ${snapshot.error}');
@@ -396,7 +406,10 @@ class ItemsEdit extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // データがまだ取得されていない場合の処理
-          return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+          return const SpinKitFadingCircle(
+            color: Colors.grey,
+            size: 100.0,
+          );
         } else if (snapshot.hasError) {
           // エラーが発生した場合の処理
           return Text('Error: ${snapshot.error}');
@@ -536,7 +549,10 @@ class EventEdit extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // データがまだ取得されていない場合の処理
-          return const CircularProgressIndicator(); // 例: ローディングインジケータを表示
+          return const SpinKitFadingCircle(
+            color: Colors.grey,
+            size: 100.0,
+          );
         } else if (snapshot.hasError) {
           // エラーが発生した場合の処理
           return Text('Error: ${snapshot.error}');
