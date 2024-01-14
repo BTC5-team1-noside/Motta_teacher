@@ -18,6 +18,7 @@ import "package:teacher/models/date.dart";
 import "package:http/http.dart" as http;
 import "dart:convert";
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 Future<List<Map<String, dynamic>>> getStudents(DateTime? selectedDate) async {
   final formatDate = DateFormat("yyyy-MM-dd");
@@ -188,7 +189,10 @@ class PageHome extends ConsumerWidget {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
+                          return const SpinKitFadingCircle(
+                            color: Colors.grey,
+                            size: 30.0,
+                          );
                         } else if (snapshot.hasError) {
                           return Text('エラー: ${snapshot.error}');
                         } else {
@@ -424,7 +428,10 @@ class PageHome extends ConsumerWidget {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
+                          return const SpinKitFadingCircle(
+                            color: Colors.grey,
+                            size: 100.0,
+                          );
                         } else if (snapshot.hasError) {
                           return Text('エラー: ${snapshot.error}');
                         } else if (snapshot.data == null) {
